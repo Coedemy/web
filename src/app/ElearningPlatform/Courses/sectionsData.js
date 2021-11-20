@@ -5,7 +5,7 @@ const sources = {
   test: 'http://media.w3.org/2010/05/video/movie_300.webm'
 }
 
-const courseSectionsList = [
+const sectionsData = [
   {
     id: '1',
     title: 'Fundamental Ideas Around Microservices',
@@ -92,4 +92,4 @@ const courseSectionsList = [
   },
 ]
 
-export default courseSectionsList
+export default sectionsData

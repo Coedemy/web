@@ -12,7 +12,7 @@ import {
 import NoteIcon from '@mui/icons-material/Note'
 import QuizIcon from '@mui/icons-material/Quiz'
 
-import courseSectionsList from './courseSectionsList'
+import sectionsData from './sectionsData'
 import CourseVideo from './CourseVideo'
 
 const Accordion = styled((props) => (
@@ -78,7 +78,7 @@ const CourseSectionsList = () => {
   return (
     <div>
       {
-        courseSectionsList.map(section => (
+        sectionsData.map(section => (
           <Accordion expanded={expanded === section.id} onChange={handleChange(section.id)} key={section.id}>
             <AccordionSummary>
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
