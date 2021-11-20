@@ -11,7 +11,6 @@ const InvoiceTable = () => {
   const history = useHistory()
 
   const onRowClick = (data) => {
-    console.log(data)
     console.log('hello')
   }
 

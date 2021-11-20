@@ -12,7 +12,6 @@ const ExpenseTable = () => {
 
   const onRowClick = (data) => {
     console.log(data)
-    console.log('hello')
   }
 
   const columns = [
