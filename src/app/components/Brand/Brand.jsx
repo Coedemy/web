@@ -7,45 +7,45 @@ import { MatxLogo } from 'app/components'
 import useSettings from 'app/hooks/useSettings'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
-    brand: {
-        padding: '20px 18px 20px 29px',
-    },
-    hideOnCompact: {
-        display: 'none',
-    },
+  brand: {
+    padding: '20px 18px 20px 29px',
+  },
+  hideOnCompact: {
+    display: 'none',
+  },
 }))
 
 const Brand = ({ children }) => {
-    const classes = useStyles()
-    const { settings } = useSettings()
-    const leftSidebar = settings.layout1Settings.leftSidebar
-    const { mode } = leftSidebar
+  const classes = useStyles()
+  const { settings } = useSettings()
+  const leftSidebar = settings.layout1Settings.leftSidebar
+  const { mode } = leftSidebar
 
-    return (
-        <div
-            className={clsx('flex items-center justify-between', classes.brand)}
+  return (
+    <div
+      className={clsx('flex items-center justify-between', classes.brand)}
+    >
+      <Link to='/' className="flex items-center">
+        <MatxLogo />
+        <span
+          className={clsx({
+            'text-18 ml-2 font-medium sidenavHoverShow': true,
+            [classes.hideOnCompact]: mode === 'compact',
+          })}
         >
-            <Link to='/' className="flex items-center">
-                <MatxLogo />
-                <span
-                    className={clsx({
-                        'text-18 ml-2 font-medium sidenavHoverShow': true,
-                        [classes.hideOnCompact]: mode === 'compact',
-                    })}
-                >
-                    Matx
-                </span>
-            </Link>
-            <div
-                className={clsx({
-                    sidenavHoverShow: true,
-                    [classes.hideOnCompact]: mode === 'compact',
-                })}
-            >
-                {children || null}
-            </div>
-        </div>
-    )
+          Matx
+        </span>
+      </Link>
+      <div
+        className={clsx({
+          sidenavHoverShow: true,
+          [classes.hideOnCompact]: mode === 'compact',
+        })}
+      >
+        {children || null}
+      </div>
+    </div>
+  )
 }
 
 export default Brand

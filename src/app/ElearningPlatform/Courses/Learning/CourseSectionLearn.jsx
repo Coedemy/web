@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { styled, useTheme } from '@mui/material/styles'
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
 import MuiAccordion from '@mui/material/Accordion'
@@ -7,13 +8,13 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 import {
   Typography, List, ListItem, ListItemIcon, ListItemText,
-  Box, Button, Dialog,  DialogContent, DialogActions, useMediaQuery
+  Box, useMediaQuery
 } from '@mui/material'
 import NoteIcon from '@mui/icons-material/Note'
 import QuizIcon from '@mui/icons-material/Quiz'
+import slugify from 'slugify'
 
-import sectionsData from '../fakeData/sectionsData'
-import CourseVideo from './CourseVideo'
+import sectionsData from '../../fakeData/sectionsData'
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -51,23 +52,11 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }))
 
-const CourseSectionsList = () => {
+const CourseSectionsList = ({ chooseVideo }) => {
 
-  const [videoSrc, setVideoSrc] = useState()
-  const [open, setOpen] = useState(false)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
 
-  const handleClickOpen = (lecture) => {
-    if (lecture.type !== 'video') return
-    setVideoSrc(lecture.videoSrc)
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    console.log(open)
-    setOpen(false)
-  }
 
   const [expanded, setExpanded] = useState('')
 
@@ -93,42 +82,21 @@ const CourseSectionsList = () => {
               >
                 {
                   section.lectures.map(lecture => (
-                    <div key={lecture.id}>
-                      <ListItem disablePadding onClick={handleClickOpen.bind(this, lecture)}>
+                    <Link to={`/courses/learn/${slugify(lecture.title)}`} key={lecture.id}>
+                      <ListItem disablePadding onClick={chooseVideo.bind(this, lecture)}>
                         <ListItemIcon>
                           {lecture.type === 'video' ? <PlayCircleOutlineIcon /> : lecture.type === 'article' ? <NoteIcon /> : <QuizIcon />}
                         </ListItemIcon>
                         <ListItemText primary={lecture.title} />
                         <Typography>06:15</Typography>
                       </ListItem>
-                    </div>
+                    </Link>
                   ))}
               </List>
             </AccordionDetails>
           </Accordion>
         ))
       }
-
-      <Dialog
-        fullScreen={fullScreen}
-        fullWidth={true}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogContent>
-          <CourseVideo videoSrc={videoSrc} />
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Disagree
-          </Button>
-          <Button onClick={handleClose} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
-
     </div >
   )
 }

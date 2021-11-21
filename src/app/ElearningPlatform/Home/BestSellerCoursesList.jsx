@@ -2,22 +2,21 @@ import React from 'react'
 import { Typography, Grid, Box } from '@mui/material'
 
 import CourseItem from './CourseItem'
-import coursesDataList from './coursesDataList'
+import coursesDataList from '../fakeData/coursesDataList'
 
 const gap = 8
 
 const BestSellerCoursesList = () => {
-  console.log(coursesDataList)
   return (
     <div>
       <Typography variant='h5' style={{ fontWeight: 600, marginBottom: 2 * gap }}>Hot and new courses in English</Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {
-          coursesDataList[0].courses.slice(0, 6).map(course => (
-            <Grid item xs={2} key={course.id}>
+          coursesDataList.slice(0, 6).map(course => (
+            <Grid item xs={3} key={course.id}>
               <CourseItem course={course} />
             </Grid>
-          ))
+          ))  
         }
       </Grid>
     </div>

@@ -3,13 +3,13 @@ import { Grid, Box } from '@mui/material'
 
 import CourseItem from './CourseItem'
 
-const CoursesList = ({ category }) => {
+const CoursesList = ({ courses }) => {
   return (
-    <Box sx={{ flexGrow: 1, border: '1px solid lightgray', padding: '28px' }}>
-      <Grid container spacing={2}>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={3}>
         {
-          category.courses.map(course => (
-            <Grid item xs={2} key={course.id}>
+          courses.map(course => (
+            <Grid item xs={4} key={course.id}>
               <CourseItem course={course} />
             </Grid>
           ))

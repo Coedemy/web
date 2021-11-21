@@ -107,9 +107,9 @@ const Layout1 = () => {
             <div className="relative flex-grow">
               <MatxSuspense>{renderRoutes(routes)}</MatxSuspense>
             </div>
-            {settings.footer.show && !settings.footer.fixed && (
+            {/* {settings.footer.show && !settings.footer.fixed && (
               <Footer />
-            )}
+            )} */}
           </Scrollbar>
         )}
 
@@ -126,9 +126,9 @@ const Layout1 = () => {
               {/* <img src={bgImageUrl} style={{ width: '100%', height: '80vh', opacity: 0.95, filter: 'brightness(80%)' }} /> */}
               <MatxSuspense>{renderRoutes(routes)}</MatxSuspense>
             </div>
-            {settings.footer.show && !settings.footer.fixed && (
+            {/* {settings.footer.show && !settings.footer.fixed && (
               <Footer />
-            )}
+            )} */}
           </div>
         )}
 

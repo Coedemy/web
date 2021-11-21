@@ -1,23 +1,8 @@
 import React from 'react'
 import { Box, Grid, Typography, Rating } from '@mui/material'
-import CheckIcon from '@mui/icons-material/Check';
-import styled from 'styled-components'
-
-import { formatToVND } from 'app/utils/formatter'
-import coursesDataList from '../Home/coursesDataList'
-
-const RatingNumber = styled.strong`
-  font-size: 14px;
-  color: goldenrod;
-  margin-right: 8px;
-`
-
-const UndelinedText = styled.span`
-  text-decoration: underline;
-`
+import CheckIcon from '@mui/icons-material/Check'
 
 const CourseGoal = () => {
-  const course = coursesDataList[0].courses[0]
 
   return (
     <Grid container spacing={2} style={{ border: '1px solid lightgray', padding: 32, paddingTop: 16, marginTop: 32 }}>

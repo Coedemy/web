@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const gap = 16
+const HORIZONTAL_MARGIN = 200
 
 const HomeWrapper = styled.div`
   min-height: 100%;
@@ -11,10 +12,7 @@ const HomeWrapper = styled.div`
 `
 
 const HomeContentWrapper = styled.div`
-  min-width: 80%;
-  margin-left: ${5 * gap}px;
-  margin-right: ${5 * gap}px;
-  margin-top: ${3 * gap}px;
+  max-width: 70%;
 `
 
 const AppLayout = ({ children }) => {

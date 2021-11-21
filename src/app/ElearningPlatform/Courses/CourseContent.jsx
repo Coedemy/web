@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
-import { Box, Grid, Typography, Button, Dialog, DialogTitle, DialogContentText, DialogContent, DialogActions, useMediaQuery } from '@mui/material'
+import React from 'react'
+import { Box, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import sectionsData from '../Home/coursesDataList'
-import CourseSectionsList from './sectionsData'
+import CourseSectionsList from './CourseSectionsList'
 
 const CourseContent = () => {
-  const course = sectionsData[0].courses[0]
 
   const theme = useTheme()
   return (

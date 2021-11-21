@@ -6,11 +6,12 @@ import LanguageIcon from '@mui/icons-material/Language';
 import styled from 'styled-components'
 
 import { formatToVND } from 'app/utils/formatter'
-import coursesDataList from '../Home/coursesDataList'
+import coursesDataList from '../fakeData/coursesDataList'
+import { orange } from 'app/utils/color';
 
 const RatingNumber = styled.strong`
   font-size: 14px;
-  color: goldenrod;
+  color: ${orange};
   margin-right: 8px;
 `
 
@@ -19,7 +20,7 @@ const UndelinedText = styled.span`
 `
 
 const CourseBanner = () => {
-  const course = coursesDataList[0].courses[0]
+  const course = coursesDataList[0]
 
   return (
     <Grid container spacing={2} style={{ backgroundColor: '#212944', padding: 32, color: 'white' }}>

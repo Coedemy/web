@@ -1,13 +1,25 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { Card, CardContent, CardMedia, Typography, Rating, Box, Chip } from '@mui/material'
+import { Card, CardContent, CardMedia, Rating, Box, Chip } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 
 import { formatToVND } from 'app/utils/formatter'
+import { orange } from 'app/utils/color'
 
 const CourseTitle = styled.strong`
   font-size: 18px;
+  overflow: hidden;
+  color: ${orange};
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`
+
+const CourseDescription = styled.strong`
+  font-size: 14px;
+  font-weight: normal;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -16,12 +28,13 @@ const CourseTitle = styled.strong`
 `
 
 const CoursePrice = styled.strong`
-  font-size: 18px;
+  font-size: 14px;
+  color: ${orange};
 `
 
 const RatingNumber = styled.strong`
   font-size: 14px;
-  color: goldenrod;
+  color: ${orange};
   margin-right: 8px;
 `
 
@@ -36,17 +49,19 @@ const CourseItem = ({ course }) => {
         courseImage: course.courseImage
       }
     }}>
-      <Card sx={{ maxWidth: 345, minHeight: 325 }}>
+      <Card sx={{ minHeight: 325, borderRadius: 2 }}>
         <CardMedia
           component='img'
           alt='green iguana'
-          height='160'
+          height='200'
           image={course.courseImage}
           sx={{ border: '1px solid lightgray' }}
         />
         <CardContent>
           <CourseTitle>{course.title}</CourseTitle>
-          <Typography variant='body1' color='text.secondary' noWrap>{course.instructor}</Typography>
+          <Box sx={{ marginBottom: '8px' }} />
+          <CourseDescription>{course.description}</CourseDescription>
+          <Box sx={{ marginBottom: '8px' }} />
           <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <RatingNumber>{course.stars}</RatingNumber>
             <Rating
@@ -59,11 +74,15 @@ const CourseItem = ({ course }) => {
             />
             <Box sx={{ ml: 1 }}>({formatToVND(course.numberOfRating)})</Box>
           </Box>
-          <CoursePrice>
-            {
-              course.price === 0 ? <Chip label='Free' color='success' /> : `$${course.price}.99`
-            }
-          </CoursePrice>
+          <Box sx={{ marginBottom: '8px' }} />
+          <Box sx={{display: 'flex', flexDirection: 'row',  alignItems: 'center', justifyContent: 'space-between'}}>
+            <Box>{course.instructor}</Box>
+            <CoursePrice>
+              {
+                course.price === 0 ? <Chip label='Free' color='success' /> : `$${course.price}.99`
+              }
+            </CoursePrice>
+          </Box>
         </CardContent>
       </Card>
     </Link>
