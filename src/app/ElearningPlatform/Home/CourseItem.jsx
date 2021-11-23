@@ -49,10 +49,10 @@ const CourseItem = ({ course }) => {
         courseImage: course.courseImage
       }
     }}>
-      <Card sx={{ minHeight: 325, borderRadius: 2 }}>
+      <Card sx={{ minHeight: 410, borderRadius: 2 }}>
         <CardMedia
           component='img'
-          alt='green iguana'
+          alt="course's image"
           height='200'
           image={course.courseImage}
           sx={{ border: '1px solid lightgray' }}
@@ -66,13 +66,13 @@ const CourseItem = ({ course }) => {
             <RatingNumber>{course.stars}</RatingNumber>
             <Rating
               name="text-feedback"
-              value={course.stars}
+              value={course.averageRating}
               readOnly
               precision={0.5}
               size='small'
               emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
-            <Box sx={{ ml: 1 }}>({formatToVND(course.numberOfRating)})</Box>
+            <Box sx={{ ml: 1 }}>({formatToVND(course.reviews.length)})</Box>
           </Box>
           <Box sx={{ marginBottom: '8px' }} />
           <Box sx={{display: 'flex', flexDirection: 'row',  alignItems: 'center', justifyContent: 'space-between'}}>

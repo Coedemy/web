@@ -1,14 +1,16 @@
 import { combineReducers } from 'redux'
-import ScrumBoardReducer from './ScrumBoardReducer'
-import NotificationReducer from './NotificationReducer'
-import EcommerceReducer from './EcommerceReducer'
-import NavigationReducer from './NavigationReducer'
+import scrumBoardReducer from './ScrumBoardReducer'
+import notificationReducer from './NotificationReducer'
+import ecommerceReducer from './EcommerceReducer'
+import navigationReducer from './NavigationReducer'
+import courseReducer from './courseReducer'
 
 const RootReducer = combineReducers({
-    notifications: NotificationReducer,
-    navigations: NavigationReducer,
-    scrumboard: ScrumBoardReducer,
-    ecommerce: EcommerceReducer,
+  notifications: notificationReducer,
+  navigations: navigationReducer,
+  scrumboard: scrumBoardReducer,
+  ecommerce: ecommerceReducer,
+  courses: courseReducer
 })
 
 export default RootReducer

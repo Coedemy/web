@@ -35,7 +35,7 @@ const HomePage = () => {
               <MenuItem value=''>
                 All
               </MenuItem>
-              {categories.map(c => <MenuItem sx={{ backgroundColor: 'white' }} value={c.id}>{c.title}</MenuItem>)}
+              {categories.map(c => <MenuItem sx={{ backgroundColor: 'white' }} value={c.id} key={c.id}>{c.title}</MenuItem>)}
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -49,7 +49,7 @@ const HomePage = () => {
               <MenuItem value=''>
                 All
               </MenuItem>
-              {categories.map(c => <MenuItem sx={{ backgroundColor: 'white' }} value={c.id}>{c.title}</MenuItem>)}
+              {categories.map(c => <MenuItem sx={{ backgroundColor: 'white' }} value={c.id} key={c.id}>{c.title}</MenuItem>)}
             </Select>
           </FormControl>
         </Box>
@@ -71,6 +71,7 @@ const HomePage = () => {
       </Box>
       <Box sx={{ marginBottom: 4 }} />
       <CoursesList courses={courseDataList} />
+      <Box sx={{ marginBottom: 4 }} />
     </AppLayout>
   )
 }
