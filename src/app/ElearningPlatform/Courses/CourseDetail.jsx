@@ -9,21 +9,22 @@ import CourseContent from './CourseContent'
 
 const CourseDetail = () => {
   const location = useLocation()
-  const { courseId, courseImage } = location.state
+  const { course } = location.state
 
+  console.log(location)
   return (
     <Box>
       <AppLayout>
         <Grid container spacing={2}>
           <Grid item xs={9}>
-            <CourseBanner />
-            <CourseGoal />
-            <CourseContent />
+            <CourseBanner course={course} />
+            <CourseGoal course={course} />
+            <CourseContent course={course} />
           </Grid>
           <Grid item xs={3}>
-            This is {courseId}
+            This is {course._id}
             <Grid item>
-              <img style={{ width: '100%' }} src={courseImage} />
+              <img style={{ width: '100%' }} src={course.courseImage} />
             </Grid>
           </Grid>
         </Grid>

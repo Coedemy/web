@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { Card, CardContent, CardMedia, Rating, Box, Chip } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
@@ -38,17 +38,9 @@ const RatingNumber = styled.strong`
   margin-right: 8px;
 `
 
-
 const CourseItem = ({ course }) => {
 
   return (
-    <Link to={{
-      pathname: `/courses/${course.id}`,
-      state: {
-        courseId: course.id,
-        courseImage: course.courseImage
-      }
-    }}>
       <Card sx={{ minHeight: 410, borderRadius: 2 }}>
         <CardMedia
           component='img'
@@ -85,7 +77,6 @@ const CourseItem = ({ course }) => {
           </Box>
         </CardContent>
       </Card>
-    </Link>
   )
 }
 

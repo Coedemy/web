@@ -8,6 +8,7 @@ import {
 const initialState = {
   coursesList: [],
   courseCategoriesList: [],
+  currentCourse: {}
 }
 
 const courseReducer = function (state = initialState, action) {
@@ -23,6 +24,13 @@ const courseReducer = function (state = initialState, action) {
       return {
         ...state,
         courseCategoriesList: [...action.payload],
+      }
+    }
+
+    case GET_COURSE_DETAIL: {
+      return {
+        ...state,
+        currentCourse: { ...action.payload },
       }
     }
       

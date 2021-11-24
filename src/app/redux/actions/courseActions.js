@@ -25,10 +25,10 @@ export const getCategoriesList = () => (dispatch) => {
 }
 
 export const getCourseDetail = (id) => (dispatch) => {
-  // httpRequest({ endpoint: `/courses/${id}`}).then((res) => {
-  //   dispatch({
-  //     type: GET_COURSE_DETAIL,
-  //     payload: res.data,
-  //   })
-  // })
+  httpRequest({ endpoint: `/courses/${id}`}).then((res) => {
+    dispatch({
+      type: GET_COURSE_DETAIL,
+      payload: res.data.course,
+    })
+  })
 }

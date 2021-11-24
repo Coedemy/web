@@ -13,7 +13,7 @@ const HomeWrapper = styled.div`
 `
 
 const HomeContentWrapper = styled.div`
-  max-width: 70%;
+  width: 70%;
 `
 
 const AppLayout = ({ children }) => {
