@@ -9,7 +9,7 @@ import { Player, ControlBar } from 'video-react'
 //   test: 'http://media.w3.org/2010/05/video/movie_300.webm'
 // }
 
-const CourseLearnVideo = ({ videoSrc, poster, playerRef }) => {
+const CourseLearnVideo = ({ videoUrl, poster, playerRef }) => {
 
   useEffect(() => {
     pause()
@@ -80,7 +80,7 @@ const CourseLearnVideo = ({ videoSrc, poster, playerRef }) => {
         width={1000}
         height={500}
       >
-        <source src={videoSrc} />
+        <source src={videoUrl} />
         <ControlBar autoHide={false} />
       </Player>
     </Box>

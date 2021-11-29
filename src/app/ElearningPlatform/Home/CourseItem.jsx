@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import { Card, CardContent, CardMedia, Rating, Box, Chip } from '@mui/material'
+import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 
 import { formatToVND } from 'app/utils/formatter'
@@ -22,6 +21,7 @@ const CourseDescription = styled.strong`
   font-weight: normal;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -41,7 +41,8 @@ const RatingNumber = styled.strong`
 const CourseItem = ({ course }) => {
 
   return (
-      <Card sx={{ minHeight: 410, borderRadius: 2 }}>
+    <Button sx={{ padding: '0' }}>
+      <Card sx={{ borderRadius: 2 }}>
         <CardMedia
           component='img'
           alt="course's image"
@@ -50,9 +51,11 @@ const CourseItem = ({ course }) => {
           sx={{ border: '1px solid lightgray' }}
         />
         <CardContent>
-          <CourseTitle>{course.title}</CourseTitle>
-          <Box sx={{ marginBottom: '8px' }} />
-          <CourseDescription>{course.description}</CourseDescription>
+          <Box sx={{height: '120px'}}>
+            <CourseTitle>{course.title}</CourseTitle>
+            <Box sx={{ marginBottom: '8px' }} />
+            <CourseDescription>{course.description}</CourseDescription>
+          </Box>
           <Box sx={{ marginBottom: '8px' }} />
           <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <RatingNumber>{course.stars}</RatingNumber>
@@ -68,7 +71,8 @@ const CourseItem = ({ course }) => {
           </Box>
           <Box sx={{ marginBottom: '8px' }} />
           <Box sx={{display: 'flex', flexDirection: 'row',  alignItems: 'center', justifyContent: 'space-between'}}>
-            <Box>{course.instructor}</Box>
+            {/* <Box>{course.instructor}</Box> */}
+            <Typography>Tran Phuong Duy</Typography>
             <CoursePrice>
               {
                 course.price === 0 ? <Chip label='Free' color='success' /> : `$${course.price}.99`
@@ -77,6 +81,7 @@ const CourseItem = ({ course }) => {
           </Box>
         </CardContent>
       </Card>
+    </Button>
   )
 }
 

@@ -4,7 +4,7 @@ const axiosClient = axios.create({
   baseURL: process.env.REACT_APP_SYSTEM_URL,
 })
 
-const httpRequest = ({
+const httpRequest = async ({
   endpoint,
   method = 'get',
   bodyParameters,
@@ -24,10 +24,12 @@ const httpRequest = ({
   }
 
   if (method === 'get' || method === 'GET') {
-    return axiosClient[method](endpoint, config)
+    const response = await axiosClient[method](endpoint, config)
+    return response.data
   }
 
-  return axiosClient[method](endpoint, bodyParameters, config)
+  const response = await axiosClient[method](endpoint, bodyParameters, config)
+  return response.data
 }
 
 export default httpRequest
