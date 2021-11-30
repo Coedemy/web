@@ -14,6 +14,8 @@ import NoteIcon from '@mui/icons-material/Note'
 import QuizIcon from '@mui/icons-material/Quiz'
 
 // import CourseVideo from './CourseVideo'
+import { formatTime } from 'app/utils/time'
+import { calculateTotalHoursOfSection } from './services/duration'
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -104,7 +106,7 @@ const CourseCurriculum = ({ course }) => {
               <AccordionSummary>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
                   <Typography><b>{section.title}</b></Typography>
-                  <Typography>{section.lectures.length} Lectures • 3hr 34min</Typography>
+                  <Typography>{section.lectures.length} Lectures</Typography>
                 </Box>
               </AccordionSummary>
               <AccordionDetails sx={{ padding: 0 }}>
@@ -120,8 +122,8 @@ const CourseCurriculum = ({ course }) => {
                             <ListItem disablePadding key={lecture._id}>
                               <ListItemIcon className='item-icon'>
                                 {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : lecture.type === 'ARTICLE' ? <NoteIcon /> : <QuizIcon />}
-                              </ListItemIcon>
-                              <ListItemText primary={`${lecture.title} (06:05)`} />
+                            </ListItemIcon>
+                            <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : 0})`} />
                               {lecture.canPreview ? <Button size='small' variant='contained'>Preview</Button> : <Button size='small' variant='contained' disabled>Start</Button>}
                             </ListItem>
                         </LectureItemButton>

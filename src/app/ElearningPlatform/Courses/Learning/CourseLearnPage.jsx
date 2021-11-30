@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { Box } from '@mui/material'
@@ -15,13 +15,25 @@ const CourseLearnPage = () => {
   const history = useHistory()
   const location = useLocation()
   const [poster, setPoster] = useState()
-  const [videoUrl, setVideoUrl] = useState('http://media.w3.org/2010/05/sintel/trailer.mp4')
+  const [videoUrl, setVideoUrl] = useState()
   const [lecture, setLecture] = useState()
 
   const { slug, lectureId } = useParams()
   const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug } }))
 
-  const chooseVideo = (lecture) => {
+  useEffect(() => {
+    if (!isLoading) {
+      data.course.sections.map(section => section.lectures.map(lecture => {
+        if (lecture._id === lectureId && lecture.content.lectureContentType === 'VIDEO') {
+          setVideoUrl(lecture.content.video.url)
+          setTimeout(1000)
+          playerRef.current.load()
+        }
+      }))
+    }
+  }, [isLoading])
+
+  const chooseLecture = (lecture) => {
     const pathnameArray = location.pathname.split('/')
     pathnameArray.pop()
     
@@ -33,9 +45,10 @@ const CourseLearnPage = () => {
     }
     else {
       setLecture(lecture)
-      setVideoUrl(lecture.content.videoUrl)
+      setVideoUrl(lecture.content.video.url)
       setPoster(lecture.courseImage)
     }
+    setTimeout(1000)
     playerRef.current.load()
   }
 
@@ -44,7 +57,7 @@ const CourseLearnPage = () => {
       <Box sx={{ flex: 3 }}>
         <CourseLearnVideo videoUrl={videoUrl} playerRef={playerRef} poster={poster} />
         <Box sx={{ pl: 3, pr: 3 }}>
-          <CourseLearnTabs lecture={lecture} />
+          {isLoading ? <MatxLoading /> : <CourseLearnTabs course={data.course} lecture={lecture} />}
         </Box>
       </Box>
       <Box sx={{ flex: 1, backgroundColor: 'white', padding: '2px' }}>
@@ -54,7 +67,7 @@ const CourseLearnPage = () => {
           ) : (
             <>
               <Box sx={{ p: 2, fontSize: '1.2rem' }}><b>Course Content</b></Box>
-              <CourseLearnSections chooseVideo={chooseVideo} course={data.course} />
+              <CourseLearnSections chooseLecture={chooseLecture} course={data.course} />
             </>
           )
         }

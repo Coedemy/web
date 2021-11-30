@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+
 import { styled } from '@mui/material/styles'
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
 import MuiAccordion from '@mui/material/Accordion'
@@ -13,6 +14,7 @@ import NoteIcon from '@mui/icons-material/Note'
 import QuizIcon from '@mui/icons-material/Quiz'
 
 // import CourseLearnVideo from './CourseLearnVideo'
+import { formatTime } from 'app/utils/time'
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -63,7 +65,7 @@ const LectureList = styled(List)(({ theme }) => ({
   }
 }))
 
-const CourseLearnSections = ({ course, chooseVideo }) => {
+const CourseLearnSections = ({ course, chooseLecture }) => {
   const [lectureCode, setLectureCode] = useState('')
   const history = useHistory()
   const location = useLocation()
@@ -76,7 +78,7 @@ const CourseLearnSections = ({ course, chooseVideo }) => {
 
   const selectLecture = ({ lecture }) => {
     setLectureCode(`course${course._id}-lecture${lecture._id}`)
-    chooseVideo(lecture)
+    chooseLecture(lecture)
   }
 
   return (
@@ -100,7 +102,7 @@ const CourseLearnSections = ({ course, chooseVideo }) => {
                         <ListItemIcon>
                           {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : lecture.type === 'ARTICLE' ? <NoteIcon /> : <QuizIcon />}
                         </ListItemIcon>
-                        <ListItemText primary={`${lecture.title} (06:15)`} />
+                        <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : 0})`} />
                       </ListItem>
                     </ListItemButton>
                   ))}
