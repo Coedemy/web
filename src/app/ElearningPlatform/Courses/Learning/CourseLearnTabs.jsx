@@ -44,7 +44,7 @@ function a11yProps(index) {
   }
 }
 
-const CourseLearnTabs = ({ lecture }) => {
+const CourseLearnTabs = ({ course, lecture }) => {
   const theme = useTheme()
   const [value, setValue] = React.useState(0)
 
@@ -77,7 +77,7 @@ const CourseLearnTabs = ({ lecture }) => {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          {lecture ? <CourseLearnOverview overview={lecture.description} /> : <div/> }
+          <CourseLearnOverview course={course} />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <CourseLearnQA />

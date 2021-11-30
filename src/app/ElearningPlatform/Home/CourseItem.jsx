@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { Card, CardContent, CardMedia, Rating, Box, Chip } from '@mui/material'
+import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 
 import { formatToVND } from 'app/utils/formatter'
@@ -22,6 +21,7 @@ const CourseDescription = styled.strong`
   font-weight: normal;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -38,45 +38,41 @@ const RatingNumber = styled.strong`
   margin-right: 8px;
 `
 
-
 const CourseItem = ({ course }) => {
 
   return (
-    <Link to={{
-      pathname: `/courses/${course.id}`,
-      state: {
-        courseId: course.id,
-        courseImage: course.courseImage
-      }
-    }}>
-      <Card sx={{ minHeight: 325, borderRadius: 2 }}>
+    <Button sx={{ padding: '0' }}>
+      <Card sx={{ borderRadius: 2 }}>
         <CardMedia
           component='img'
-          alt='green iguana'
+          alt="course's image"
           height='200'
           image={course.courseImage}
           sx={{ border: '1px solid lightgray' }}
         />
         <CardContent>
-          <CourseTitle>{course.title}</CourseTitle>
-          <Box sx={{ marginBottom: '8px' }} />
-          <CourseDescription>{course.description}</CourseDescription>
+          <Box sx={{height: '120px'}}>
+            <CourseTitle>{course.title}</CourseTitle>
+            <Box sx={{ marginBottom: '8px' }} />
+            <CourseDescription>{course.description}</CourseDescription>
+          </Box>
           <Box sx={{ marginBottom: '8px' }} />
           <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <RatingNumber>{course.stars}</RatingNumber>
             <Rating
               name="text-feedback"
-              value={course.stars}
+              value={course.averageRating}
               readOnly
               precision={0.5}
               size='small'
               emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
-            <Box sx={{ ml: 1 }}>({formatToVND(course.numberOfRating)})</Box>
+            <Box sx={{ ml: 1 }}>({formatToVND(course.reviews.length)})</Box>
           </Box>
           <Box sx={{ marginBottom: '8px' }} />
           <Box sx={{display: 'flex', flexDirection: 'row',  alignItems: 'center', justifyContent: 'space-between'}}>
-            <Box>{course.instructor}</Box>
+            {/* <Box>{course.instructor}</Box> */}
+            <Typography>Tran Phuong Duy</Typography>
             <CoursePrice>
               {
                 course.price === 0 ? <Chip label='Free' color='success' /> : `$${course.price}.99`
@@ -85,7 +81,7 @@ const CourseItem = ({ course }) => {
           </Box>
         </CardContent>
       </Card>
-    </Link>
+    </Button>
   )
 }
 

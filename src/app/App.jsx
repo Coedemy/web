@@ -11,14 +11,20 @@ import sessionRoutes from './views/sessions/SessionRoutes'
 import AuthGuard from './auth/AuthGuard'
 import { AuthProvider } from 'app/contexts/JWTAuthContext'
 import { SettingsProvider } from 'app/contexts/SettingsContext'
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 
-
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
 import 'video-react/dist/video-react.css'
 
-// import CarouselCoursesList from './ElearningPlatform/Home/CarouselCoursesList'
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 const App = () => {
   return (
     <AppContext.Provider value={{ routes }}>
@@ -30,21 +36,23 @@ const App = () => {
               <Router history={history}>
                 <AuthProvider>
                   <MatxSuspense>
-                    <Switch>
-                      {/* AUTHENTICATION PAGES (SIGNIN, SIGNUP ETC.) */}
-                      {sessionRoutes.map((item, i) => (
-                        <Route
-                          key={i}
-                          path={item.path}
-                          component={item.component}
-                        />
-                      ))}
-                      {/* AUTH PROTECTED DASHBOARD PAGES */}
-                      <AuthGuard>
-                        <MatxLayout />{' '}
-                        {/* RETURNS <Layout1/> component */}
-                      </AuthGuard>
-                    </Switch>
+                    <QueryClientProvider client={queryClient}>
+                      <Switch>
+                        {/* AUTHENTICATION PAGES (SIGNIN, SIGNUP ETC.) */}
+                        {sessionRoutes.map((item, i) => (
+                          <Route
+                            key={i}
+                            path={item.path}
+                            component={item.component}
+                          />
+                        ))}
+                        {/* AUTH PROTECTED DASHBOARD PAGES */}
+                        <AuthGuard>
+                          <MatxLayout />{' '}
+                          {/* RETURNS <Layout1/> component */}
+                        </AuthGuard>
+                      </Switch>
+                    </QueryClientProvider>
                   </MatxSuspense>
                 </AuthProvider>
               </Router>
