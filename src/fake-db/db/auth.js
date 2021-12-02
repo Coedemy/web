@@ -10,7 +10,7 @@ const userList = [
         role: 'SA',
         name: 'Tran Phuong Duy',
         username: 'tran_phuong_duy',
-        email: 'tpd@ui-lib.com',
+        email: 'tpd@gmail.com',
         avatar: '/assets/images/face-6.jpg',
         age: 25,
     },

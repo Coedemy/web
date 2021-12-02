@@ -43,7 +43,7 @@ function ShoppingCart({ container }) {
   const { settings } = useSettings()
 
   if (!cartListLoaded) {
-    dispatch(getCartList(user.id))
+    if (user) dispatch(getCartList(user.id))
     cartListLoaded = true
   }
 

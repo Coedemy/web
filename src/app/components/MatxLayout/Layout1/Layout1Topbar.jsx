@@ -1,21 +1,24 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
   Icon,
   IconButton,
-  MenuItem,
-  Avatar,
   useMediaQuery,
-  Hidden,
-} from '@material-ui/core'
+  Box,
+  Button
+} from '@mui/material'
 import clsx from 'clsx'
+
 import { MatxMenu, MatxSearchBox, MatxLogo } from 'app/components'
 import NotificationBar2 from 'app/components/NotificationBar2/NotificationBar2'
 import useAuth from 'app/hooks/useAuth'
 import useSettings from 'app/hooks/useSettings'
 import { NotificationProvider } from 'app/contexts/NotificationContext'
 
+import AuthenticatedUserActions from './AuthenticatedUserActions'
+import UnauthenticatedUserActions from './UnauthenticatedUserActions'
 import NotificationBar from '../../NotificationBar/NotificationBar'
 import ShoppingCart from '../../ShoppingCart/ShoppingCart'
 import Wishlist from '../../Wishlist/Wishlist'
@@ -69,12 +72,13 @@ const Layout1Topbar = () => {
   const theme = useTheme()
   const classes = useStyles()
   const { settings, updateSettings } = useSettings()
-  const { logout, user } = useAuth()
+  const { user } = useAuth()
   const isMdScreen = useMediaQuery(theme.breakpoints.down('md'))
   const fixed = settings?.layout1Settings?.topbar?.fixed
   const leftSidebar = settings.layout1Settings.leftSidebar
   const { mode } = leftSidebar
   const { mode: topbarMode } = leftSidebar
+  const authReducer = useSelector(state => state.auth)
 
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({
@@ -106,10 +110,10 @@ const Layout1Topbar = () => {
   return (
     <div className={classes.topbar}>
       <div className={clsx({ 'topbar-hold': true, fixed: fixed })}>
-        <div className="flex justify-between items-center h-full">
-          <div className="flex">
-            <div className="hide-on-mobile">
-              <Link to='/' className="flex items-center">
+        <div className='flex justify-between items-center h-full'>
+          <div className='flex'>
+            <div className='hide-on-mobile'>
+              <Link to='/' className='flex items-center'>
                 <MatxLogo />
                 <span
                   className={clsx({
@@ -140,65 +144,24 @@ const Layout1Topbar = () => {
               </IconButton>
             </div>
           </div>
-          <div className="flex items-center">
+          <div className='flex items-center'>
             <MatxSearchBox />
             {/* <NotificationProvider>
 							<NotificationBar />
 						</NotificationProvider> */}
-
             {/* <NotificationBar2 /> */}
-            <div className="hide-on-mobile">
+            <div className='hide-on-mobile'>
               <IconButton>
                 <Icon>person</Icon>
               </IconButton>
             </div>
 
-            <Wishlist />
+            {/* {authReducer.accessToken ? <Wishlist /> : <></>} */}
 
-            <ShoppingCart />
+            {/* <ShoppingCart /> */}
 
-            <MatxMenu
-              menuButton={
-                <div className={classes.userMenu}>
-                  <Hidden xsDown>
-                    <span>
-                      Hi <strong>{user.name}</strong>
-                    </span>
-                  </Hidden>
-                  <Avatar
-                    className="cursor-pointer"
-                    src={user.avatar}
-                  />
-                </div>
-              }
-            >
-              <MenuItem>
-                <Link className={classes.menuItem} to="/">
-                  <Icon> home </Icon>
-                  <span className="pl-4"> Home </span>
-                </Link>
-              </MenuItem>
-              <MenuItem>
-                <Link
-                  className={classes.menuItem}
-                  to="/page-layouts/user-profile"
-                >
-                  <Icon> person </Icon>
-                  <span className="pl-4"> Profile </span>
-                </Link>
-              </MenuItem>
-              <MenuItem className={classes.menuItem}>
-                <Icon> settings </Icon>
-                <span className="pl-4"> Settings </span>
-              </MenuItem>
-              <MenuItem
-                onClick={logout}
-                className={classes.menuItem}
-              >
-                <Icon> power_settings_new </Icon>
-                <span className="pl-4"> Logout </span>
-              </MenuItem>
-            </MatxMenu>
+            {/* show username, wishlist and mylearning with authenticated users */}
+            {authReducer.accessToken ? <AuthenticatedUserActions user={authReducer.user} /> : <UnauthenticatedUserActions />}
           </div>
         </div>
       </div>
