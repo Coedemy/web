@@ -39,7 +39,7 @@ function ShoppingCart({ container }) {
   const dispatch = useDispatch()
   const history = useHistory()
   const { user } = useAuth()
-  const { cartList } = useSelector((state) => state.ecommerce)
+  const { cart } = useSelector((state) => state.user)
   const { settings } = useSettings()
 
   if (!cartListLoaded) {
@@ -61,17 +61,17 @@ function ShoppingCart({ container }) {
   useEffect(() => {
     let total = 0
 
-    cartList.forEach((product) => {
+    cart.forEach((product) => {
       total += product.price * product.amount
     })
 
     setTotalCost(total)
-  }, [cartList])
+  }, [cart])
 
   return (
     <Fragment>
       <IconButton onClick={handleDrawerToggle}>
-        <Badge color="secondary" badgeContent={cartList.length}>
+        <Badge color="secondary" badgeContent={cart.length}>
           <Icon>shopping_cart</Icon>
         </Badge>
       </IconButton>
@@ -96,11 +96,11 @@ function ShoppingCart({ container }) {
             </div>
 
             <div className="flex-grow overflow-auto">
-              {cartList.map((product) => (
+              {cart.map((course) => (
                 <Link
-                  to={`/courses/learn/${slugify(product.title, { lower: true })}`}
+                  to={`/courses/learn/${slugify(course.title, { lower: true })}`}
                   onClick={handleDrawerToggle}
-                  key={product.id}
+                  key={course.id}
                   className="mini-cart__item flex items-center py-2 px-2"
                 >
                   {/* <div className="flex flex-column mr-1">
@@ -141,16 +141,16 @@ function ShoppingCart({ container }) {
                   <div className="mr-2">
                     <img
                       className="w-48"
-                      src={product.imgUrl}
-                      alt={product.title}
+                      src={course.courseImage}
+                      alt={course.title}
                     />
                   </div>
                   <div className="mr-2 text-center flex-grow flex-column">
                     <h6 className="m-0 mb-1 ellipsis w-120">
-                      {product.title}
+                      {course.title}
                     </h6>
                     <small className="text-muted">
-                      ${product.price} x {product.amount}
+                      {/* ${course.price} x {course.amount} */}
                     </small>
                   </div>
                   <IconButton
@@ -158,8 +158,8 @@ function ShoppingCart({ container }) {
                     onClick={() =>
                       dispatch(
                         deleteProductFromCart(
-                          user.userId,
-                          product.id
+                          user._id,
+                          course._id
                         )
                       )
                     }

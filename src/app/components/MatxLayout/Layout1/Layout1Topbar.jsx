@@ -158,7 +158,7 @@ const Layout1Topbar = () => {
 
             {/* {authReducer.accessToken ? <Wishlist /> : <></>} */}
 
-            {/* <ShoppingCart /> */}
+            <ShoppingCart />
 
             {/* show username, wishlist and mylearning with authenticated users */}
             {authReducer.accessToken ? <AuthenticatedUserActions user={authReducer.user} /> : <UnauthenticatedUserActions />}
