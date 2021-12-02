@@ -35,6 +35,12 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 	},
 }))
 
+const MessageStatus = {
+	SUCCESS: 'SUCCESS',
+	ERROR: 'ERROR',
+	INIT: 'INIT'
+}
+
 const JwtLogin = () => {
 	const classes = useStyles()
 	const history = useHistory()
@@ -43,7 +49,7 @@ const JwtLogin = () => {
 		email: 'chuongtangkhanh@gmail.com',
 		password: 'password'
 	})
-	const [message, setMessage] = useState('')
+	const [message, setMessage] = useState({ status: MessageStatus.INIT, text: '' })
 
 	const { mutate, isLoading } = useMutation(loginWithEmail, {
 		mutationKey: 'loginWithEmail',
@@ -53,9 +59,11 @@ const JwtLogin = () => {
 	const onLoginSuccessfully = async (data) => {
 		const { user, accessToken } = data
 		const { username } = user
-		setMessage(`Welcome, ${username}`)
-		dispatch(loginSuccess({ user, accessToken }))
-		history.push('/')
+		setMessage({ status: MessageStatus.SUCCESS, text: `Welcome, ${username}` })
+		setTimeout(() => {
+			dispatch(loginSuccess({ user, accessToken }))
+			history.push('/')
+		}, 1000)
 	}
 
 	const onError = (err) => {
@@ -63,10 +71,10 @@ const JwtLogin = () => {
 
 		switch (errorStatus) {
 			case 401:
-				setMessage(`Wrong password!`)
+				setMessage({ status: MessageStatus.ERROR, text: `Wrong password!` })
 				break
 			case 409:
-				setMessage(`This email does not exist!`)
+				setMessage({ status: MessageStatus.ERROR, text: `This email does not exist!` })
 				break
 			default:
 				break
@@ -76,12 +84,13 @@ const JwtLogin = () => {
 
 	const onLogin = (event) => {
 		try {
-
 			if (userInfo.email.length <= 5) {
-				return setMessage('Email field must be at least 5 characters long!')
+				setMessage({ status: MessageStatus.ERROR, text: 'Email field must be at least 5 characters long!' })
+				return
 			}
-			if (userInfo.password.length <= 5) {
-				return setMessage('Email field must be at least 5 characters long!')
+			else if (userInfo.password.length <= 5) {
+				setMessage({ status: MessageStatus.ERROR, text: 'Email field must be at least 5 characters long!' })
+				return
 			}
 
 			dispatch(startLogin())
@@ -91,7 +100,7 @@ const JwtLogin = () => {
 				onError: onError,
 			})
 		} catch (err) {
-			setMessage(err)
+			setMessage({ status: MessageStatus.ERROR, text: err.message })
 		}
 	}
 
@@ -184,9 +193,13 @@ const JwtLogin = () => {
 									label='Remeber me'
 								/>
 
-								{message && (
-									<p className='text-error'>{message}</p>
-								)}
+								{
+									message.status === MessageStatus.INIT ? <></> : MessageStatus.SUCCESS ? (
+										<p className='text-error'>{message.text}</p>
+									) : (
+										<p className='text-error'>{message.text}</p>
+									)
+								}
 
 								<div className='flex flex-wrap items-center mb-4'>
 									<div className='relative'>
