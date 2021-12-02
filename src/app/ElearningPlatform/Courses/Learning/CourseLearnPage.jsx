@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { useQuery } from 'react-query'
 import { Box } from '@mui/material'
 
 import { MatxLoading } from 'app/components'
 import { searchCourse } from 'app/http/course'
+import { loadCurrentLecture } from 'app/redux-toolkit/slices/lectureSlice'
 
 import CourseLearnSections from './CourseLearnSections'
 import CourseLearnVideo from './CourseLearnVideo'
@@ -12,6 +14,7 @@ import CourseLearnTabs from './CourseLearnTabs'
 
 const CourseLearnPage = () => {
   const playerRef = useRef()
+  const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation()
   const [poster, setPoster] = useState()
@@ -26,6 +29,7 @@ const CourseLearnPage = () => {
       data.course.sections.map(section => section.lectures.map(lecture => {
         if (lecture._id === lectureId && lecture.content.lectureContentType === 'VIDEO') {
           setVideoUrl(lecture.content.video.url)
+          dispatch(loadCurrentLecture({ lectureId: lecture._id, isVideo: true }))
           setTimeout(1000)
           playerRef.current.load()
         }
@@ -36,7 +40,7 @@ const CourseLearnPage = () => {
   const chooseLecture = (lecture) => {
     const pathnameArray = location.pathname.split('/')
     pathnameArray.pop()
-    
+
     const lectureUrl = pathnameArray.join('/') + '/' + lecture._id
     history.push(lectureUrl)
     if (lecture.content.lectureContentType !== 'VIDEO') {
@@ -45,6 +49,7 @@ const CourseLearnPage = () => {
     }
     else {
       setLecture(lecture)
+      dispatch(loadCurrentLecture({ lectureId: lecture._id, isVideo: true, playerRef }))
       setVideoUrl(lecture.content.video.url)
       setPoster(lecture.courseImage)
     }

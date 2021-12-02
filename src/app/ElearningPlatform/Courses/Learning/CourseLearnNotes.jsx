@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { TextField, Box, Icon, Button, FormControl, Select, MenuItem } from '@mui/material'
+
+import { formatTime } from 'app/utils/time'
 
 import CourseLearnTextEditor from './CourseLearnTextEditor'
 
@@ -8,22 +11,22 @@ const sortModeItems = ['Sort By Most Recent', 'Sort By Oldest']
 
 const CourseLearnNotes = () => {
   const [content, setContent] = useState('')
-
   const [curSearchMode, setCurSearchMode] = useState(searchModeItems[0])
   const [curSortMode, setCurSortMode] = useState(sortModeItems[0])
 
-  const handleChange = (event) => {
-    setCurSearchMode(event.target.value)
-  }
+  const lectureReducer = useSelector(state => state.lecture)
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       <Box sx={{ width: '80%' }}>
         <Box>
+          <Button variant='outlined'>Create a Note at {formatTime(lectureReducer.currentLecture.currentTime)}</Button>
+        </Box>
+        <Box>
           <FormControl sx={{ m: 2, ml: 0, minWidth: 150 }}>
             <Select
               value={curSearchMode}
-              onChange={handleChange}
+              onChange={(event) => setCurSearchMode(event.target.value)}
               displayEmpty
               size='small'
               inputProps={{ 'aria-label': 'Without label' }}
@@ -33,15 +36,16 @@ const CourseLearnNotes = () => {
           </FormControl>
           <FormControl sx={{ m: 2, ml: 0, minWidth: 150 }}>
             <Select
-              value={curSearchMode}
-              onChange={handleChange}
+              value={curSortMode}
+              onChange={(event) => setCurSortMode(event.target.value)}
               displayEmpty
               size='small'
               inputProps={{ 'aria-label': 'Without label' }}
             >
-              {sortModeItems.map((c, index) => <MenuItem sx={{ backgroundColor: 'white' }} value={sortModeItems[index]} key={searchModeItems[index]}>{sortModeItems[index]}</MenuItem>)}
+              {sortModeItems.map((c, index) => <MenuItem sx={{ backgroundColor: 'white' }} value={sortModeItems[index]} key={sortModeItems[index]}>{sortModeItems[index]}</MenuItem>)}
             </Select>
           </FormControl>
+
         </Box>
         <Box>
           <TextField

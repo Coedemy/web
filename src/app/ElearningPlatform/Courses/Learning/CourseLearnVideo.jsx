@@ -1,12 +1,39 @@
 import React, { useEffect } from 'react'
-import {Box} from '@mui/material'
-import { Player, ControlBar } from 'video-react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Box } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { Player, ControlBar, BigPlayButton, ReplayControl, VolumeMenuButton } from 'video-react'
+
+import { trackTime } from 'app/redux-toolkit/slices/lectureSlice'
+
+const VIDEO_HEIGHT = 600
+
+const PlayerContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  height: `${VIDEO_HEIGHT}px`,
+  backgroundColor: '#f7f7f7'
+}))
 
 const CourseLearnVideo = ({ videoUrl, poster, playerRef }) => {
-
+  const dispatch = useDispatch()
+  const lectureReducer = useSelector(state => state.lecture)
   useEffect(() => {
     pause()
+    playerRef.current.subscribeToStateChange(handleStateChange)
   }, [])
+  console.log(lectureReducer.currentLecture.currentTime)
+
+  const handleStateChange = (state, prevState) => {
+    if (lectureReducer.currentLecture.isVideo) {
+      const previousTime = lectureReducer.currentLecture.currentTime
+      const currentTime = parseInt(state.currentTime)
+      const videoIsPlaying = previousTime !== currentTime
+      if (videoIsPlaying) {
+        dispatch(trackTime(currentTime))
+      }
+    }
+  }
 
   // const setMuted = (muted) => {
   //   return () => {
@@ -65,18 +92,23 @@ const CourseLearnVideo = ({ videoUrl, poster, playerRef }) => {
   //   }
   // }
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', height: '500px', backgroundColor: '#f7f7f7'}}>
+    <PlayerContainer>
       <Player
         ref={playerRef}
         poster={poster}
         fluid={false}
-        width={1000}
-        height={500}
+        width='100%'
+        height='100%'
+        src={videoUrl}
+        className='react-player'
       >
-        <source src={videoUrl} />
-        <ControlBar autoHide={false} />
+        <ControlBar autoHide={false}>
+          <ReplayControl seconds={10} order={2.2} />
+          <VolumeMenuButton vertical />
+        </ControlBar>
+        <BigPlayButton position='center' />
       </Player>
-    </Box>
+    </PlayerContainer>
   )
 }
 
