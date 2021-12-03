@@ -8,7 +8,7 @@ const authSlice = createSlice({
     user: {
       email: null,
       username: null,
-      userId: null,
+      userId: null
     },
     error: null,
   },

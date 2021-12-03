@@ -16,6 +16,7 @@ import clsx from 'clsx'
 
 import { loginWithEmail } from 'app/http/auth'
 import { loginSuccess, startLogin, loginFail } from 'app/redux-toolkit/slices/authSlice'
+import { loadCart } from 'app/redux-toolkit/slices/userSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
 	cardHolder: {
@@ -61,6 +62,7 @@ const JwtLogin = () => {
 		const { username } = user
 		setMessage({ status: MessageStatus.SUCCESS, text: `Welcome, ${username}` })
 		setTimeout(() => {
+			dispatch(loadCart())
 			dispatch(loginSuccess({ user, accessToken }))
 			history.push('/')
 		}, 1000)

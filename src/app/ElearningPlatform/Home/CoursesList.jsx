@@ -18,11 +18,9 @@ const CoursesList = ({ courses }) => {
       <Grid container spacing={3}>
         {
           isLoading ? <MatxLoading /> : (
-            data?.courses.map(course => ((
+            data?.courses.map((course, index) => ((
               <Grid item xs={4} key={course._id}>
-                <Link to={`/courses/${course.slug}`}>
-                  <CourseItem course={course} />
-                </Link>
+                <CourseItem course={course} index={index} />
               </Grid>
             )))
           )

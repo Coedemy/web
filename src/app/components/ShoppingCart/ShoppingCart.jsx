@@ -1,18 +1,24 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon, Badge, IconButton, Drawer, Button } from '@material-ui/core'
+import { Icon, Badge, IconButton, Drawer, Button, Box, Typography, Divider } from '@material-ui/core'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import slugify from 'slugify'
+import styled from 'styled-components'
 import clsx from 'clsx'
 
-import {
-  getCartList,
-  deleteProductFromCart,
-  updateCartAmount,
-} from 'app/redux/actions/EcommerceActions'
 import useSettings from 'app/hooks/useSettings'
-import useAuth from 'app/hooks/useAuth'
+import { orange } from 'app/utils/color'
+import { removeFromCart } from 'app/redux-toolkit/slices/userSlice'
+
+const CourseTitle = styled.strong`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-align: left
+`
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   miniCart: {
@@ -29,7 +35,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
-let cartListLoaded = false
+// let cartListLoaded = false
 
 function ShoppingCart({ container }) {
   const [totalCost, setTotalCost] = useState(0)
@@ -38,40 +44,32 @@ function ShoppingCart({ container }) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory()
-  const { user } = useAuth()
-  const { cartList } = useSelector((state) => state.ecommerce)
+  const { cart } = useSelector((state) => state.user)
   const { settings } = useSettings()
-
-  if (!cartListLoaded) {
-    if (user) dispatch(getCartList(user.id))
-    cartListLoaded = true
-  }
 
   const handleDrawerToggle = () => {
     setPanelOpen(!panelOpen)
   }
 
   const handleCheckoutClick = () => {
-    if (totalCost > 0) {
-      history.push('/ecommerce/checkout')
-      setPanelOpen(false)
-    }
+    history.push('/ecommerce/checkout')
+    setPanelOpen(false)
   }
 
   useEffect(() => {
     let total = 0
 
-    cartList.forEach((product) => {
-      total += product.price * product.amount
+    cart.forEach((course) => {
+      total += course.price
     })
 
     setTotalCost(total)
-  }, [cartList])
+  }, [cart])
 
   return (
-    <Fragment>
+    <>
       <IconButton onClick={handleDrawerToggle}>
-        <Badge color="secondary" badgeContent={cartList.length}>
+        <Badge color='secondary' badgeContent={cart.length}>
           <Icon>shopping_cart</Icon>
         </Badge>
       </IconButton>
@@ -79,7 +77,7 @@ function ShoppingCart({ container }) {
       <ThemeProvider theme={settings.themes[settings.activeTheme]}>
         <Drawer
           container={container}
-          variant="temporary"
+          variant='temporary'
           anchor={'right'}
           open={panelOpen}
           onClose={handleDrawerToggle}
@@ -90,90 +88,89 @@ function ShoppingCart({ container }) {
           <div
             className={clsx('flex-column h-full', classes.miniCart)}
           >
-            <div className="cart__topbar elevation-z6 flex items-center p-1 mb-2 pl-4">
-              <Icon color="primary">shopping_cart</Icon>
-              <h5 className="ml-2 my-0 font-medium">Shopping Cart</h5>
+            <div className='cart__topbar elevation-z6 flex items-center p-1 mb-2 pl-4'>
+              <Icon color='primary'>shopping_cart</Icon>
+              <h5 className='ml-2 my-0 font-medium'>Shopping Cart</h5>
             </div>
 
-            <div className="flex-grow overflow-auto">
-              {cartList.map((product) => (
-                <Link
-                  to={`/courses/learn/${slugify(product.title, { lower: true })}`}
-                  onClick={handleDrawerToggle}
-                  key={product.id}
-                  className="mini-cart__item flex items-center py-2 px-2"
-                >
-                  {/* <div className="flex flex-column mr-1">
-										<IconButton
-											size="small"
-											onClick={() =>
-												dispatch(
-													updateCartAmount(
-														user.id,
-														product.id,
-														product.amount + 1
-													)
-												)
-											}
-										>
-											<Icon className="cursor-pointer">
-												keyboard_arrow_up
-											</Icon>
-										</IconButton>
-										<IconButton
-											disabled={!(product.amount - 1)}
-											size="small"
-											onClick={() =>
-												dispatch(
-													updateCartAmount(
-														user.id,
-														product.id,
-														product.amount - 1
-													)
-												)
-											}
-										>
-											<Icon className="cursor-pointer">
-												keyboard_arrow_down
-											</Icon>
-										</IconButton>
-									</div> */}
-                  <div className="mr-2">
-                    <img
-                      className="w-48"
-                      src={product.imgUrl}
-                      alt={product.title}
-                    />
-                  </div>
-                  <div className="mr-2 text-center flex-grow flex-column">
-                    <h6 className="m-0 mb-1 ellipsis w-120">
-                      {product.title}
-                    </h6>
-                    <small className="text-muted">
-                      ${product.price} x {product.amount}
-                    </small>
-                  </div>
-                  <IconButton
-                    size="small"
-                    onClick={() =>
-                      dispatch(
-                        deleteProductFromCart(
-                          user.userId,
-                          product.id
+            <div className='flex-grow overflow-auto'>
+              {cart.map((course) => (
+                <Box>
+                  <Box key={course._id} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Link
+                      to={`/courses/learn/${slugify(course.title, { lower: true })}`}
+                      onClick={handleDrawerToggle}
+                      className='mini-cart__item flex items-center py-2 px-2'
+                    >
+                      {/* <div className='flex flex-column mr-1'>
+                    <IconButton
+                      size='small'
+                      onClick={() =>
+                        dispatch(
+                          updateCartAmount(
+                            user.id,
+                            product.id,
+                            product.amount + 1
+                          )
                         )
-                      )
-                    }
-                  >
-                    <Icon fontSize="small">clear</Icon>
-                  </IconButton>
-                </Link>
+                      }
+                    >
+                      <Icon className='cursor-pointer'>
+                        keyboard_arrow_up
+                      </Icon>
+                    </IconButton>
+                    <IconButton
+                      disabled={!(product.amount - 1)}
+                      size='small'
+                      onClick={() =>
+                        dispatch(
+                          updateCartAmount(
+                            user.id,
+                            product.id,
+                            product.amount - 1
+                          )
+                        )
+                      }
+                    >
+                      <Icon className='cursor-pointer'>
+                        keyboard_arrow_down
+                      </Icon>
+                    </IconButton>
+                  </div> */}
+                      <div className='mr-2'>
+                        <img
+                          className='w-60 h-60'
+                          src={course.courseImage}
+                          alt={course.title}
+                        />
+                      </div>
+                      <div className='text-center flex-grow flex-column'>
+                        <CourseTitle className='m-0 mb-1'>
+                          {course.title}
+                        </CourseTitle>
+                        <Typography className='text-left mb-1'>Tran Phuong Duy</Typography>
+                        <h6 className='text-left text-14' style={{ color: orange }}>
+                          ${course.price}.99
+                        </h6>
+                      </div>
+                    </Link>
+                    <IconButton
+                      size='small'
+                      onClick={() => dispatch(removeFromCart({ id: course._id }))}
+                    >
+                      <Icon fontSize='small'>clear</Icon>
+                    </IconButton>
+                  </Box>
+                  <Divider />
+                </Box>
               ))}
             </div>
 
+            <Box sx={{ p: 2 }}><h4>Total: ${totalCost}.99</h4></Box>
             <Button
-              className="w-full border-radius-0"
-              variant="contained"
-              color="primary"
+              className='w-full border-radius-0'
+              variant='contained'
+              color='primary'
               onClick={handleCheckoutClick}
             >
               {/* Checkout (${totalCost.toFixed(2)}) */}
@@ -182,7 +179,7 @@ function ShoppingCart({ container }) {
           </div>
         </Drawer>
       </ThemeProvider>
-    </Fragment>
+    </>
   )
 }
 
