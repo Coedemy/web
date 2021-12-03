@@ -1,5 +1,5 @@
 import { themeColors } from './themeColors'
-import { createTheme } from '@material-ui/core/styles'
+import { createTheme } from '@mui/material/styles'
 import { forEach, merge } from 'lodash'
 import themeOptions from './themeOptions'
 

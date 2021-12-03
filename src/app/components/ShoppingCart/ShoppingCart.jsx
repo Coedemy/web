@@ -52,7 +52,7 @@ function ShoppingCart({ container }) {
   }
 
   const handleCheckoutClick = () => {
-    history.push('/ecommerce/checkout')
+    history.push('/cart')
     setPanelOpen(false)
   }
 

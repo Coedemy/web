@@ -5,6 +5,21 @@ const homeRouter = [
     path: '/',
     exact: true,
     component: React.lazy(() => import('./HomePage')),
+  },
+  {
+    path: '/wishlist',
+    exact: true,
+    component: React.lazy(() => import('./WishlistPage')),
+  },
+  {
+    path: '/cart',
+    exact: true,
+    component: React.lazy(() => import('./ShoppingCart')),
+  },
+  {
+    path: '/cart/checkout',
+    exact: true,
+    component: React.lazy(() => import('./Checkout')),
   }
 ]
 

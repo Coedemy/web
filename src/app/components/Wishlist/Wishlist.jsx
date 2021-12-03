@@ -51,7 +51,7 @@ function Wishlist({ container }) {
 
 	const handleCheckoutClick = () => {
 		if (totalCost > 0) {
-			history.push('/ecommerce/checkout')
+			history.push('/wishlist')
 			setPanelOpen(false)
 		}
 	}
