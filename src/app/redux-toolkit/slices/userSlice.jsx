@@ -11,31 +11,58 @@ const userSlice = createSlice({
   },
   reducers: {
     loadCart: (state, action) => {
-      const userInfoJSON = localStorage.getItem('userInfo')
-      if (userInfoJSON) state.cart = JSON.parse(userInfoJSON).cart
+      const cartJSON = localStorage.getItem('cart')
+      try {
+        const cart = JSON.parse(cartJSON)
+        if (cart) {
+          state.cart = [...cart]
+        }
+        else {
+          localStorage.setItem('cart', JSON.stringify([]))
+          state.cart = []
+        }
+      }
+      catch {
+        localStorage.setItem('cart', JSON.stringify([]))
+        state.cart = []
+      }
+
       return state
     },
 
     addToCart: (state, action) => {
       const { item } = action.payload
+      const cartJSON = localStorage.getItem('cart')
+      try {
+        const cart = JSON.parse(cartJSON)
+        if (!cart) cart = []
+        cart.push(item)
 
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      if (!userInfo.cart) userInfo.cart = []
-      userInfo.cart.push(item)
-      localStorage.setItem('userInfo', JSON.stringify(userInfo))
-
-      state.cart = userInfo.cart
+        localStorage.setItem('cart', JSON.stringify(cart))
+        state.cart = cart
+      }
+      catch {
+        localStorage.setItem('cart', JSON.stringify([]))
+        state.cart = []
+      }
       return state
     },
 
     removeFromCart: (state, action) => {
       const { id } = action.payload
+      const cartJSON = localStorage.getItem('cart')
+      try {
+        let cart = JSON.parse(cartJSON)
+        if (!cart) cart = []
+        cart = cart.filter(course => course._id !== id)
 
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      userInfo.cart.filter(item => item._id !== id)
-      localStorage.setItem('userInfo', JSON.stringify(userInfo))
-
-      state.cart = userInfo.cart
+        localStorage.setItem('cart', JSON.stringify(cart))
+        state.cart = cart
+      }
+      catch {
+        localStorage.setItem('cart', JSON.stringify([]))
+        state.cart = []
+      }
       return state
     }
   }

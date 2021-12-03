@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { styled as muiStyled } from '@mui/material/styles'
 import styled from 'styled-components'
@@ -44,28 +44,38 @@ const RatingNumber = styled.strong`
 `
 
 const LightTooltip = muiStyled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
+  <Tooltip {...props} classes={{ popper: className }} arrow />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: theme.palette.common.white,
     color: 'rgba(0, 0, 0, 0.87)',
-    boxShadow: theme.shadows[1],
+    boxShadow: theme.shadows[3],
   },
 }))
 
 const CourseInfoModal = ({ course }) => {
   const dispatch = useDispatch()
+  const userReducer = useSelector(state => state.user)
 
   const handleAddToCart = () => {
     dispatch(addToCart({ item: course }))
   }
 
+  console.log(userReducer.cart)
+
   return (
-    <Card sx={{ p: 2 }}>
+    <Box sx={{ p: 2 }}>
       <Typography>{course.description}</Typography>
       <Box sx={{ m: 4 }} />
-      <Button onClick={handleAddToCart} variant='contained'>Add To Cart</Button>
-    </Card >
+      {
+        userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
+          <Button variant='contained'>Go to cart</Button>
+        ) : (
+          <Button onClick={handleAddToCart} variant='contained'>Add To Cart</Button>
+        )
+      }
+
+    </Box>
   )
 }
 

@@ -1,5 +1,5 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
@@ -22,6 +22,7 @@ import UnauthenticatedUserActions from './UnauthenticatedUserActions'
 import NotificationBar from '../../NotificationBar/NotificationBar'
 import ShoppingCart from '../../ShoppingCart/ShoppingCart'
 import Wishlist from '../../Wishlist/Wishlist'
+import { loadCart } from 'app/redux-toolkit/slices/userSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   topbar: {
@@ -70,6 +71,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 
 const Layout1Topbar = () => {
   const theme = useTheme()
+  const dispatch = useDispatch()
   const classes = useStyles()
   const { settings, updateSettings } = useSettings()
   const { user } = useAuth()
@@ -79,6 +81,10 @@ const Layout1Topbar = () => {
   const { mode } = leftSidebar
   const { mode: topbarMode } = leftSidebar
   const authReducer = useSelector(state => state.auth)
+
+  useEffect(() => {
+    dispatch(loadCart())
+  }, [])
 
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({
