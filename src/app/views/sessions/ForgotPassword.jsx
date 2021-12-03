@@ -78,7 +78,7 @@ const ForgotPassword = () => {
                                         Reset Password
                                     </Button>
                                     <span className="ml-4 mr-2">or</span>
-                                    <Link to="/session/signin">
+                                    <Link to="/signin">
                                         <Button className="capitalize">
                                             Sign in
                                         </Button>

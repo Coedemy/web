@@ -5,19 +5,19 @@ import JwtLogin from './login/JwtLogin'
 
 const sessionRoutes = [
     {
-        path: '/session/signup',
+        path: '/signup',
         component: JwtRegister,
     },
     {
-        path: '/session/signin',
+        path: '/signin',
         component: JwtLogin,
     },
     {
-        path: '/session/forgot-password',
+        path: '/forgot-password',
         component: ForgotPassword,
     },
     {
-        path: '/session/404',
+        path: '/404',
         component: NotFound,
     },
 ]

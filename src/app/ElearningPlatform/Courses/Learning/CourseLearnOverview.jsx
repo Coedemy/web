@@ -1,14 +1,15 @@
 import React from 'react'
 import { Box, Typography, Divider, Button } from '@mui/material'
 
-const CourseLearnOverview = ({ overview }) => {
+const CourseLearnOverview = ({ course }) => {
+  console.log({course})
   return (
     <Box>
       <Typography variant='h5' gutterBottom component='div' sx={{ fontWeight: 'bold' }}>
         About this course
       </Typography>
       <Typography variant='body1' gutterBottom>
-        {overview}
+        {course.subtitle}
       </Typography>
       <Divider sx={{ mt: 4, mb: 2 }} />
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -18,12 +19,12 @@ const CourseLearnOverview = ({ overview }) => {
         <Box sx={{ flex: 1 }}>
           <Typography variant='body1' gutterBottom>Skill level: All Levels</Typography>
           <Typography variant='body1' gutterBottom>Students: 61597</Typography>
-          <Typography variant='body1' gutterBottom>Languages: English</Typography>
+          <Typography variant='body1' gutterBottom>Languages: {course.language}</Typography>
           <Typography variant='body1' gutterBottom>Captions: Yes</Typography>
         </Box>
         <Box sx={{ flex: 1 }}>
-          <Typography variant='body1' gutterBottom>Lectures: 639</Typography>
-          <Typography variant='body1' gutterBottom>Video: 54.5 total hours</Typography>
+          <Typography variant='body1' gutterBottom>Lectures: {course.totalLectures}</Typography>
+          <Typography variant='body1' gutterBottom>Video: {parseFloat(course.totalHours / 3600).toFixed(1)} total hours</Typography>
         </Box>
       </Box>
       <Divider sx={{ mt: 4, mb: 2 }} />
@@ -42,7 +43,7 @@ const CourseLearnOverview = ({ overview }) => {
           <Typography variant='body1' gutterBottom>Descriptions</Typography>
         </Box>
         <Box sx={{ flex: 2 }}>
-          <Typography variant='body1' gutterBottom>Skill level: All Levels</Typography>
+          <Typography variant='body1' gutterBottom>{course.description}</Typography>
         </Box>
       </Box>
       <Divider sx={{ mt: 4, mb: 2 }} />

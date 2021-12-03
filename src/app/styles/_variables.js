@@ -6,7 +6,7 @@ export const variableStyles = makeStyles((theme) => ({
         ':root': {
             '--topbar-mobile-width': '220px',
             '--topbar-height': '64px',
-            '--sidenav-width': '260px',
+            '--sidenav-width': '300px',
             '--navbar-height': '60px',
             '--sidenav-button-width': '220px',
             '--sidenav-compact-width': '80px',

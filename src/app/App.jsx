@@ -5,20 +5,27 @@ import { Router, Switch, Route, BrowserRouter } from 'react-router-dom'
 import AppContext from './contexts/AppContext'
 import history from 'history.js'
 import routes from './RootRoutes'
-import { Store } from './redux/Store'
+// import { Store } from './redux/Store'
+import Store from './redux-toolkit/store'
 import { GlobalCss, MatxSuspense, MatxTheme, MatxLayout } from 'app/components'
 import sessionRoutes from './views/sessions/SessionRoutes'
 import AuthGuard from './auth/AuthGuard'
 import { AuthProvider } from 'app/contexts/JWTAuthContext'
 import { SettingsProvider } from 'app/contexts/SettingsContext'
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 
-
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
 import 'video-react/dist/video-react.css'
 
-// import CarouselCoursesList from './ElearningPlatform/Home/CarouselCoursesList'
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 const App = () => {
   return (
     <AppContext.Provider value={{ routes }}>
@@ -28,8 +35,9 @@ const App = () => {
             <GlobalCss />
             <BrowserRouter basename={process.env.PUBLIC_URL}>
               <Router history={history}>
-                <AuthProvider>
-                  <MatxSuspense>
+                {/* <AuthProvider> */}
+                <MatxSuspense>
+                  <QueryClientProvider client={queryClient}>
                     <Switch>
                       {/* AUTHENTICATION PAGES (SIGNIN, SIGNUP ETC.) */}
                       {sessionRoutes.map((item, i) => (
@@ -45,8 +53,9 @@ const App = () => {
                         {/* RETURNS <Layout1/> component */}
                       </AuthGuard>
                     </Switch>
-                  </MatxSuspense>
-                </AuthProvider>
+                  </QueryClientProvider>
+                </MatxSuspense>
+                {/* </AuthProvider> */}
               </Router>
             </BrowserRouter>
           </MatxTheme>

@@ -289,22 +289,22 @@ export const navigations = [
       {
         name: 'Sign in',
         iconText: 'SI',
-        path: '/session/signin',
+        path: '/signin',
       },
       {
         name: 'Sign up',
         iconText: 'SU',
-        path: '/session/signup',
+        path: '/signup',
       },
       {
         name: 'Forgot Password',
         iconText: 'FP',
-        path: '/session/forgot-password',
+        path: '/forgot-password',
       },
       {
         name: 'Error',
         iconText: '404',
-        path: '/session/404',
+        path: '/404',
       },
     ],
   },

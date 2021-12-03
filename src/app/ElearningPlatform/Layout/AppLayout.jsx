@@ -5,6 +5,7 @@ const gap = 16
 const HORIZONTAL_MARGIN = 200
 
 const HomeWrapper = styled.div`
+  background-color: white;
   min-height: 100%;
   display: flex;
   flex-direction: column;
@@ -12,7 +13,7 @@ const HomeWrapper = styled.div`
 `
 
 const HomeContentWrapper = styled.div`
-  max-width: 70%;
+  width: 70%;
 `
 
 const AppLayout = ({ children }) => {
