@@ -53,7 +53,7 @@ function ShoppingCart({ container }) {
 
   const handleCheckoutClick = () => {
     if (totalCost > 0) {
-      history.push('/ecommerce/checkout')
+      history.push('/cart')
       setPanelOpen(false)
     }
   }

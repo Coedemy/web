@@ -6,6 +6,7 @@ import AppLayout from '../Layout/AppLayout'
 import CourseBanner from './CourseBanner'
 import CourseGoal from './CourseGoal'
 import CourseContent from './CourseContent'
+import CourseInfo from './CoursesInfo'
 
 const CourseDetail = () => {
   const location = useLocation()
@@ -15,16 +16,13 @@ const CourseDetail = () => {
     <Box>
       <AppLayout>
         <Grid container spacing={2}>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <CourseBanner />
             <CourseGoal />
             <CourseContent />
           </Grid>
-          <Grid item xs={3}>
-            This is {courseId}
-            <Grid item>
-              <img style={{ width: '100%' }} src={courseImage} />
-            </Grid>
+          <Grid item xs={4}>
+            <CourseInfo />
           </Grid>
         </Grid>
       </AppLayout>
