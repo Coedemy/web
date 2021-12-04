@@ -22,7 +22,6 @@ import UnauthenticatedUserActions from './UnauthenticatedUserActions'
 import NotificationBar from '../../NotificationBar/NotificationBar'
 import ShoppingCart from '../../ShoppingCart/ShoppingCart'
 import Wishlist from '../../Wishlist/Wishlist'
-import { loadCart } from 'app/redux-toolkit/slices/userSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   topbar: {
@@ -81,10 +80,6 @@ const Layout1Topbar = () => {
   const { mode } = leftSidebar
   const { mode: topbarMode } = leftSidebar
   const authReducer = useSelector(state => state.auth)
-
-  useEffect(() => {
-    dispatch(loadCart())
-  }, [])
 
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({

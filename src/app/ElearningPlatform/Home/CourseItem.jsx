@@ -61,15 +61,13 @@ const CourseInfoModal = ({ course }) => {
     dispatch(addToCart({ item: course }))
   }
 
-  console.log(userReducer.cart)
-
   return (
     <Box sx={{ p: 2 }}>
       <Typography>{course.description}</Typography>
       <Box sx={{ m: 4 }} />
       {
         userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
-          <Button variant='contained'>Go to cart</Button>
+          <Link to='/cart'><Button variant='contained'>Go to cart</Button></Link>
         ) : (
           <Button onClick={handleAddToCart} variant='contained'>Add To Cart</Button>
         )

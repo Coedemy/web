@@ -14,12 +14,17 @@ const httpRequest = async ({
   let config
 
   if (requireToken) {
-    const accessToken = JSON.parse(localStorage.getItem('authInfo'))[
-      'accessToken'
-    ]
-    config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      params: query,
+    const userInfoJSON = localStorage.getItem('userInfo')
+    if (userInfoJSON) {
+      const userInfo = JSON.parse(userInfoJSON)
+      const accessToken = userInfo.accessToken
+
+      if (accessToken) {
+        config = {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          params: query,
+        }
+      }
     }
   }
 

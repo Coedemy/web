@@ -95,8 +95,8 @@ function ShoppingCart({ container }) {
 
             <div className='flex-grow overflow-auto'>
               {cart.map((course) => (
-                <Box>
-                  <Box key={course._id} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Box key={course._id}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Link
                       to={`/courses/learn/${slugify(course.title, { lower: true })}`}
                       onClick={handleDrawerToggle}

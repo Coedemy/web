@@ -10,7 +10,7 @@ const userSlice = createSlice({
     error: null,
   },
   reducers: {
-    loadCart: (state, action) => {
+    loadUserProperties: (state, action) => {
       const cartJSON = localStorage.getItem('cart')
       try {
         const cart = JSON.parse(cartJSON)
@@ -22,10 +22,11 @@ const userSlice = createSlice({
           state.cart = []
         }
       }
-      catch {
+      catch (err) {
         localStorage.setItem('cart', JSON.stringify([]))
         state.cart = []
       }
+      state.isLoading = false
 
       return state
     },
@@ -35,15 +36,15 @@ const userSlice = createSlice({
       const cartJSON = localStorage.getItem('cart')
       try {
         const cart = JSON.parse(cartJSON)
-        if (!cart) cart = []
+
         cart.push(item)
 
         localStorage.setItem('cart', JSON.stringify(cart))
         state.cart = cart
       }
       catch {
-        localStorage.setItem('cart', JSON.stringify([]))
-        state.cart = []
+        localStorage.setItem('cart', JSON.stringify([item]))
+        state.cart = [item]
       }
       return state
     },
@@ -70,7 +71,7 @@ const userSlice = createSlice({
 
 const { reducer, actions } = userSlice
 export const {
-  loadCart,
+  loadUserProperties,
   addToCart,
   removeFromCart
 } = actions

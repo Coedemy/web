@@ -1,11 +1,12 @@
-import React, {
-	useContext,
-	useEffect,
-	useState
-} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect, useLocation } from 'react-router-dom'
+import { useMutation } from 'react-query'
+import { useLocation } from 'react-router-dom'
+
 import { loginSuccess } from 'app/redux-toolkit/slices/authSlice'
+import { loadUserProperties } from 'app/redux-toolkit/slices/userSlice'
+import { authenticateFail } from 'app/redux-toolkit/slices/authSlice'
+import { initializeUserProperties } from 'app/http/user'
 
 // const getUserRoleAuthStatus = (pathname, user, routes) => {
 // 	const matched = routes.find((r) => r.path === pathname)
@@ -20,16 +21,43 @@ import { loginSuccess } from 'app/redux-toolkit/slices/authSlice'
 
 const AuthGuard = ({ children }) => {
 
+	const { mutate, isLoading } = useMutation(initializeUserProperties, {
+		mutationKey: 'initializeUserProperties',
+	})
+	const userReducer = useSelector(state => state.user)
 	const [previouseRoute, setPreviousRoute] = useState(null)
 	const { pathname } = useLocation()
 	const dispatch = useDispatch()
 
+	const onLoadSuccessfully = async (data) => {
+		const { cart } = data
+		localStorage.setItem('cart', JSON.stringify(cart))
+		dispatch(loadUserProperties())
+	}
+
+	const onError = (err) => {
+		dispatch(authenticateFail(err))
+	}
+
 	useEffect(() => {
+		dispatch(loadUserProperties())
 		const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 		if (!userInfo || !userInfo.accessToken) return
 		const { user, accessToken } = userInfo
+		console.log('Login 1')
 		dispatch(loginSuccess({ user, accessToken }))
 	}, [])
+
+	useEffect(() => {
+		const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+		if (!userReducer.isLoading && userInfo && userInfo.accessToken) {
+			mutate({ cart: userReducer.cart }, {
+				onSuccess: onLoadSuccessfully,
+				onError: onError,
+			})
+		}
+	}, [userReducer.isLoading])
 
 	// const { routes } = useContext(AppContext)
 	// const isUserRoleAuthenticated = getUserRoleAuthStatus(pathname, user, routes)

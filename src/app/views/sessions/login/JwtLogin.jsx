@@ -15,8 +15,7 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import clsx from 'clsx'
 
 import { loginWithEmail } from 'app/http/auth'
-import { loginSuccess, startLogin, loginFail } from 'app/redux-toolkit/slices/authSlice'
-import { loadCart } from 'app/redux-toolkit/slices/userSlice'
+import { startAuthenticate, authenticateFail } from 'app/redux-toolkit/slices/authSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
 	cardHolder: {
@@ -47,7 +46,7 @@ const JwtLogin = () => {
 	const history = useHistory()
 
 	const [userInfo, setUserInfo] = useState({
-		email: 'chuongtangkhanh@gmail.com',
+		email: 'chuongtangkhanh2104@gmail.com',
 		password: 'password'
 	})
 	const [message, setMessage] = useState({ status: MessageStatus.INIT, text: '' })
@@ -61,9 +60,9 @@ const JwtLogin = () => {
 		const { user, accessToken } = data
 		const { username } = user
 		setMessage({ status: MessageStatus.SUCCESS, text: `Welcome, ${username}` })
+		console.log("Login 1")
+		localStorage.setItem('userInfo', JSON.stringify({ user, accessToken }))
 		setTimeout(() => {
-			dispatch(loadCart())
-			dispatch(loginSuccess({ user, accessToken }))
 			history.push('/')
 		}, 1000)
 	}
@@ -81,7 +80,7 @@ const JwtLogin = () => {
 			default:
 				break
 		}
-		dispatch(loginFail(err))
+		dispatch(authenticateFail(err))
 	}
 
 	const onLogin = (event) => {
@@ -95,7 +94,7 @@ const JwtLogin = () => {
 				return
 			}
 
-			dispatch(startLogin())
+			dispatch(startAuthenticate())
 
 			mutate(userInfo, {
 				onSuccess: onLoginSuccessfully,
@@ -111,18 +110,6 @@ const JwtLogin = () => {
 		temp[name] = value
 		setUserInfo(temp)
 	}
-
-	// const handleFormSubmit = async (event) => {
-	// 	setLoading(true)
-	// 	try {
-	// 		await login(userInfo.email, userInfo.password)
-	// 		history.push('/')
-	// 	} catch (e) {
-	// 		console.log(e)
-	// 		setMessage(e.message)
-	// 		setLoading(false)
-	// 	}
-	// }
 
 	return (
 		<div
@@ -156,8 +143,8 @@ const JwtLogin = () => {
 									value={userInfo.email}
 									validators={['required', 'isEmail']}
 									errorMessages={[
-										'this field is required',
-										'email is not valid',
+										'This field is required',
+										'Email is not valid',
 									]}
 								/>
 								<TextValidator
@@ -170,7 +157,7 @@ const JwtLogin = () => {
 									type='password'
 									value={userInfo.password}
 									validators={['required']}
-									errorMessages={['this field is required']}
+									errorMessages={['This field is required']}
 								/>
 								<FormControlLabel
 									className='mb-3 min-w-288'
@@ -197,7 +184,7 @@ const JwtLogin = () => {
 
 								{
 									message.status === MessageStatus.INIT ? <></> : MessageStatus.SUCCESS ? (
-										<p className='text-error'>{message.text}</p>
+										<p className='text-green'>{message.text}</p>
 									) : (
 										<p className='text-error'>{message.text}</p>
 									)

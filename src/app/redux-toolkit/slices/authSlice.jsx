@@ -13,7 +13,7 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {
-    startLogin: (state, action) => {
+    startAuthenticate: (state, action) => {
       state.isLoading = true
     },
 
@@ -27,11 +27,10 @@ const authSlice = createSlice({
         user: { userId: userId || _id, username, email }
       }
 
-      localStorage.setItem('userInfo', JSON.stringify(state))
       return state
     },
 
-    loginFail: (state, { error }) => {
+    authenticateFail: (state, { error }) => {
       state = {
         isLoading: false,
         username: null,
@@ -49,8 +48,9 @@ const authSlice = createSlice({
         accessToken: null,
         error: null,
       }
-      console.log("SA logou")
+      console.log('SA logou')
       localStorage.removeItem('userInfo')
+      localStorage.removeItem('cart')
       return state
     },
 
@@ -64,9 +64,9 @@ const authSlice = createSlice({
 
 const { reducer, actions } = authSlice
 export const {
-  startLogin,
+  startAuthenticate,
   loginSuccess,
-  loginFail,
+  authenticateFail,
   logout,
   changeProfile,
 } = actions

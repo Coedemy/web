@@ -12,6 +12,7 @@ import {
 import { MatxMenu } from 'app/components'
 // import { loginWithEmail } from 'app/http/auth'
 import { logout } from 'app/redux-toolkit/slices/authSlice'
+import { loadUserProperties } from 'app/redux-toolkit/slices/userSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   userMenu: {
@@ -46,40 +47,41 @@ const AuthenticatedUserActions = ({ user }) => {
             </span>
           </Hidden>
           <Avatar
-            className="cursor-pointer"
+            className='cursor-pointer'
             src={user.avatar}
           />
         </div>
       }
     >
       <MenuItem>
-        <Link className={classes.menuItem} to="/">
+        <Link className={classes.menuItem} to='/'>
           <Icon> home </Icon>
-          <span className="pl-4"> Home </span>
+          <span className='pl-4'> Home </span>
         </Link>
       </MenuItem>
       <MenuItem>
         <Link
           className={classes.menuItem}
-          to="/page-layouts/user-profile"
+          to='/page-layouts/user-profile'
         >
           <Icon> person </Icon>
-          <span className="pl-4"> Profile </span>
+          <span className='pl-4'> Profile </span>
         </Link>
       </MenuItem>
       <MenuItem className={classes.menuItem}>
         <Icon> settings </Icon>
-        <span className="pl-4"> Settings </span>
+        <span className='pl-4'> Settings </span>
       </MenuItem>
       <MenuItem
         onClick={() => {
-          console.log("logout")
+          console.log('logout')
           dispatch(logout())
+          dispatch(loadUserProperties())
         }}
         className={classes.menuItem}
       >
         <Icon> power_settings_new </Icon>
-        <span className="pl-4"> Logout </span>
+        <span className='pl-4'> Logout </span>
       </MenuItem>
     </MatxMenu>
   )

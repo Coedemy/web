@@ -22,7 +22,7 @@ const HomePage = () => {
   return (
     <AppLayout>
       <Box sx={{ marginBottom: 4 }} />
-      <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent: 'space-between'}}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <Select

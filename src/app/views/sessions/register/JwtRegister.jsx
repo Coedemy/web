@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useMutation } from 'react-query'
 import {
 	Card,
 	Checkbox,
@@ -10,8 +13,9 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { Link } from 'react-router-dom'
-import useAuth from 'app/hooks/useAuth'
-import history from 'history.js'
+
+import { signupWithEmail } from 'app/http/auth'
+import { loginSuccess, startAuthenticate, authenticateFail } from 'app/redux-toolkit/slices/authSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
 	cardHolder: {
@@ -24,28 +28,81 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 	},
 }))
 
+const MessageStatus = {
+	SUCCESS: 'SUCCESS',
+	ERROR: 'ERROR',
+	INIT: 'INIT'
+}
+
 const JwtRegister = () => {
-	const [state, setState] = useState({})
 	const classes = useStyles()
-	const { register } = useAuth()
+	const [userInfo, setUserInfo] = useState({
+		username: 'khanhchuong',
+		email: 'chuongtangkhanh2104@gmail.com',
+		password: 'password'
+	})
+	const [message, setMessage] = useState({ status: MessageStatus.INIT, text: '' })
+	const { mutate, isLoading } = useMutation(signupWithEmail, {
+		mutationKey: 'signupWithEmail',
+	})
+	const dispatch = useDispatch()
+	const history = useHistory()
 
 	const handleChange = ({ target: { name, value } }) => {
-		setState({
-			...state,
+		setUserInfo({
+			...userInfo,
 			[name]: value,
 		})
 	}
 
+	const onRegisterSuccessfully = async (data) => {
+		const { user, accessToken } = data
+		const { username } = user
+		setMessage({ status: MessageStatus.SUCCESS, text: `Welcome, ${username}` })
+
+		console.log("Register 1")
+		localStorage.setItem('userInfo', JSON.stringify({ user, accessToken }))
+		setTimeout(() => {
+			history.push('/')
+		}, 1000)
+	}
+
+	const onError = (err) => {
+		const errorStatus = err.response.status
+
+		switch (errorStatus) {
+			case 409:
+				setMessage({ status: MessageStatus.ERROR, text: `Email already exist! Please select another email!` })
+				break
+			default:
+				break
+		}
+		dispatch(authenticateFail(err))
+	}
+
 	const handleFormSubmit = (event) => {
 		try {
-			register(state.email, state.username, state.password)
-			history.push('/')
-		} catch (e) {
-			console.log(e)
+			if (userInfo.email.length <= 5) {
+				setMessage({ status: MessageStatus.ERROR, text: 'Email field must be at least 5 characters long!' })
+				return
+			}
+			else if (userInfo.password.length <= 5) {
+				setMessage({ status: MessageStatus.ERROR, text: 'Email field must be at least 5 characters long!' })
+				return
+			}
+
+			dispatch(startAuthenticate())
+			mutate(userInfo, {
+				onSuccess: onRegisterSuccessfully,
+				onError: onError,
+			})
+
+		} catch (err) {
+			setMessage({ status: MessageStatus.ERROR, text: err.message })
 		}
 	}
 
-	let { username, email, password, agreement } = state
+	let { username, email, password, agreement } = userInfo
 
 	return (
 		<div
@@ -78,7 +135,7 @@ const JwtRegister = () => {
 									name='username'
 									value={username || ''}
 									validators={['required']}
-									errorMessages={['this field is required']}
+									errorMessages={['This field is required']}
 								/>
 								<TextValidator
 									className='mb-6 w-full'
@@ -91,8 +148,8 @@ const JwtRegister = () => {
 									value={email || ''}
 									validators={['required', 'isEmail']}
 									errorMessages={[
-										'this field is required',
-										'email is not valid',
+										'This field is required',
+										'Email is not valid',
 									]}
 								/>
 								<TextValidator
@@ -105,7 +162,7 @@ const JwtRegister = () => {
 									type='password'
 									value={password || ''}
 									validators={['required']}
-									errorMessages={['this field is required']}
+									errorMessages={['This field is required']}
 								/>
 								<FormControlLabel
 									className='mb-4'
@@ -126,6 +183,13 @@ const JwtRegister = () => {
 									}
 									label='I have read and agree to the terms of service.'
 								/>
+								{
+									message.status === MessageStatus.INIT ? <></> : MessageStatus.SUCCESS ? (
+										<p className='text-green'>{message.text}</p>
+									) : (
+										<p className='text-error'>{message.text}</p>
+									)
+								}
 								<div className='flex items-center'>
 									<Button
 										className='capitalize'

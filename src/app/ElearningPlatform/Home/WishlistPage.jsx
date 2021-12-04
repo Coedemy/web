@@ -23,20 +23,20 @@ const WishlistPage = () => {
 				<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', flexDirection: 'row', marginLeft: 30 }}>My Learning</Typography>
 				<Box sx={{ width: '100%', typography: 'body1', color: 'white' }}>
 					<TabContext value={value}>
-						<Box sx={{ marginLeft: 70}}>
-							<TabList onChange={handleChange} aria-label="lab API tabs example">
-								<Tab label="All courses" value="1" style={{ color: 'white', textColor:'secondary'}}/>
-								<Tab label="My List" value="2" style={{ color: 'white', textColor: 'secondary'}}/>
-								<Tab label="Wishlist" value="3" style={{ color: 'white'}}/>
-								<Tab label="Archived" value="4" style={{ color: 'white'}}/>
+						<Box sx={{ marginLeft: 70 }}>
+							<TabList onChange={handleChange} aria-label='lab API tabs example'>
+								<Tab label='All courses' value='1' style={{ color: 'white', textColor: 'secondary' }} />
+								<Tab label='My List' value='2' style={{ color: 'white', textColor: 'secondary' }} />
+								<Tab label='Wishlist' value='3' style={{ color: 'white' }} />
+								<Tab label='Archived' value='4' style={{ color: 'white' }} />
 							</TabList>
 						</Box>
 					</TabContext>
 				</Box>
 			</Grid >
-		<AppLayout>		
-			<Box sx={{ marginBottom: 4}} />
-				<Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent: 'space-between', marginLeft: 100 }}>					
+			<AppLayout>
+				<Box sx={{ marginBottom: 4 }} />
+				<Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
 					<Box>
 						<TextField
 							variant='outlined'
@@ -44,18 +44,19 @@ const WishlistPage = () => {
 							size='small'
 							fullWidth
 							InputProps={{
-							startAdornment: (
-								<Icon className='mr-3' fontSize='small'>
-								search
-								</Icon>
-							),
+								startAdornment: (
+									<Icon className='mr-3' fontSize='small'>
+										search
+									</Icon>
+								),
 							}}
 						/>
 					</Box>
 				</Box>
-			<Box sx={{ marginBottom: 4 }} />
-			<CoursesList courses={courseDataList} />
-		</AppLayout>
+				<Box sx={{ marginBottom: 4 }} />
+				<CoursesList courses={courseDataList} />
+				<Box sx={{ marginBottom: 4 }} />
+			</AppLayout>
 		</Box>
 	)
 }
