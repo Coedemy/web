@@ -18,6 +18,7 @@ import mapRoutes from './views/map/MapRoutes'
 
 import homeRouter from './ElearningPlatform/Home/HomeRouter'
 import coursesRouter from './ElearningPlatform/Courses/CoursesRouter'
+import instructorRouter from './ElearningPlatform/Instructor/InstructorRouter'
 
 const redirectRoute = [
   {
@@ -37,6 +38,7 @@ const routes = [
   ...dashboardRoutes,
   ...materialRoutes,
   ...utilitiesRoutes,
+  ...instructorRouter,
   // ...financeRoutes,
   // ...chatRoutes,
   // ...schedulingRoutes,

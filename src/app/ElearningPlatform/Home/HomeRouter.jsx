@@ -4,23 +4,22 @@ const homeRouter = [
   {
     path: '/',
     exact: true,
-    title: 'Home',
-    component: React.lazy(() => import('./HomePage')),
+    component: React.lazy(() => import('./HomePage'))
   },
   {
     path: '/wishlist',
     exact: true,
-    component: React.lazy(() => import('./WishlistPage')),
+    component: React.lazy(() => import('./WishlistPage'))
   },
   {
     path: '/cart',
     exact: true,
-    component: React.lazy(() => import('./ShoppingCartPage')),
+    component: React.lazy(() => import('./ShoppingCartPage'))
   },
   {
     path: '/cart/checkout',
     exact: true,
-    component: React.lazy(() => import('./Checkout')),
+    component: React.lazy(() => import('./Checkout'))
   }
 ]
 

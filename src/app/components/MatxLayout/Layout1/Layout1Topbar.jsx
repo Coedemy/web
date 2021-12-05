@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
-  Icon,
   IconButton,
   useMediaQuery
 } from '@mui/material'
@@ -73,11 +72,9 @@ const Layout1Topbar = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const { settings, updateSettings } = useSettings()
-  const { user } = useAuth()
   const isMdScreen = useMediaQuery(theme.breakpoints.down('md'))
   const fixed = settings?.layout1Settings?.topbar?.fixed
   const leftSidebar = settings.layout1Settings.leftSidebar
-  const { mode } = leftSidebar
   const { mode: topbarMode } = leftSidebar
   const authReducer = useSelector(state => state.auth)
 
@@ -140,9 +137,11 @@ const Layout1Topbar = () => {
 						</NotificationProvider> */}
             {/* <NotificationBar2 /> */}
             <div className='hide-on-mobile'>
-              <IconButton>
-                <PersonIcon />
-              </IconButton>
+              <Link to='/instructor'>
+                <IconButton>
+                  <PersonIcon />
+                </IconButton>
+              </Link>
             </div>
 
             {authReducer.accessToken ? <Wishlist /> : <></>}
