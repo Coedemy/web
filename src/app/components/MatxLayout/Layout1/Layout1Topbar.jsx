@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
   Icon,
   IconButton,
-  useMediaQuery,
-  Box,
-  Button
+  useMediaQuery
 } from '@mui/material'
 import clsx from 'clsx'
+import MenuIcon from '@mui/icons-material/Menu'
+import PersonIcon from '@mui/icons-material/Person'
 
 import { MatxMenu, MatxSearchBox, MatxLogo } from 'app/components'
 import NotificationBar2 from 'app/components/NotificationBar2/NotificationBar2'
@@ -110,8 +110,8 @@ const Layout1Topbar = () => {
 
   return (
     <div className={classes.topbar}>
-      <div className={clsx({ 'topbar-hold': true, fixed: fixed })}>
-        <div className='flex justify-between items-center h-full'>
+      <div className={clsx({ 'topbar-hold': true, fixed: fixed })} style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className='flex justify-between items-center h-full' style={{ width: '80%' }}>
           <div className='flex'>
             <div className='hide-on-mobile'>
               <Link to='/' className='flex items-center'>
@@ -129,19 +129,7 @@ const Layout1Topbar = () => {
               <IconButton
                 onClick={handleSidebarToggle}
               >
-                <Icon>menu</Icon>
-              </IconButton>
-
-              <IconButton>
-                <Icon>mail_outline</Icon>
-              </IconButton>
-
-              <IconButton>
-                <Icon>web_asset</Icon>
-              </IconButton>
-
-              <IconButton>
-                <Icon>star_outline</Icon>
+                <MenuIcon />
               </IconButton>
             </div>
           </div>
@@ -153,11 +141,11 @@ const Layout1Topbar = () => {
             {/* <NotificationBar2 /> */}
             <div className='hide-on-mobile'>
               <IconButton>
-                <Icon>person</Icon>
+                <PersonIcon />
               </IconButton>
             </div>
 
-            {/* {authReducer.accessToken ? <Wishlist /> : <></>} */}
+            {authReducer.accessToken ? <Wishlist /> : <></>}
 
             <ShoppingCart />
 

@@ -10,7 +10,7 @@ import clsx from 'clsx'
 import useSettings from 'app/hooks/useSettings'
 import { orange } from 'app/utils/color'
 import { removeFromCart } from 'app/redux-toolkit/slices/userSlice'
-import { updateCart } from 'app/http/user'
+import { updateCartRequest } from 'app/http/user'
 
 const CourseTitle = styled.strong`
   overflow: hidden;
@@ -47,7 +47,7 @@ function ShoppingCart({ container }) {
   const history = useHistory()
   const { cart } = useSelector((state) => state.user)
   const { settings } = useSettings()
-  const { mutate, isLoading } = useMutation(updateCart, {
+  const { mutate, isLoading } = useMutation(updateCartRequest, {
     mutationKey: 'updateCart',
   })
 

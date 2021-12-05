@@ -10,7 +10,7 @@ import { removeFromCart } from 'app/redux-toolkit/slices/userSlice'
 import { orange } from 'app/utils/color'
 import { formatToVND } from 'app/utils/formatter'
 import { MatxLoading } from 'app/components'
-import { updateCart } from 'app/http/user'
+import { updateCartRequest } from 'app/http/user'
 import CoursesList from './CoursesList'
 import AppLayout from '../Layout/AppLayout'
 import courseDataList from '../fakeData/coursesDataList'
@@ -21,12 +21,11 @@ const RatingNumber = styled.strong`
   margin-right: 8px;
 `
 
-
 function ShoppingCart() {
 	const [totalCost, setTotalCost] = useState(0)
 	const [panelOpen, setPanelOpen] = useState(false)
 	const userReducer = useSelector(state => state.user)
-	const { mutate, isLoading } = useMutation(updateCart, {
+	const { mutate, isLoading } = useMutation(updateCartRequest, {
 		mutationKey: 'updateCart',
 	})
 
