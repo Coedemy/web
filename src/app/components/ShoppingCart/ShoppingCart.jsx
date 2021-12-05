@@ -36,7 +36,6 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
-// let cartListLoaded = false
 
 function ShoppingCart({ container }) {
   const [totalCost, setTotalCost] = useState(0)

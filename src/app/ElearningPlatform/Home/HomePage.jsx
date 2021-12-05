@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 import { Box, FormControl, Select, MenuItem, TextField, Icon, Typography } from '@mui/material'
 
 import CoursesList from './CoursesList'
 import courseDataList from '../fakeData/coursesDataList'
-import HomeContent from './HomeContent'
 import AppLayout from '../Layout/AppLayout'
 
 const categories = [
@@ -13,6 +13,9 @@ const categories = [
   { id: 3, title: 'IT & Software' }]
 
 const HomePage = () => {
+  useEffect(() => {
+    document.title = 'Coedemy'
+  }, [])
   const [curCategory, setCurCategory] = useState('')
 
   const handleChange = (event) => {
@@ -21,6 +24,10 @@ const HomePage = () => {
 
   return (
     <AppLayout>
+      <Helmet>
+        <title>Coedemy</title>
+        <meta name='Coedemy' content='Coedemy' />
+      </Helmet>
       <Box sx={{ marginBottom: 4 }} />
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box>

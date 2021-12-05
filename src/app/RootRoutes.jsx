@@ -23,13 +23,13 @@ const redirectRoute = [
   {
     path: '/',
     exact: true,
-    component: () => <Redirect to="/dashboard/default" />,
+    component: () => <Redirect to='/dashboard/default' />,
   }
 ]
 
 const errorRoute = [
   {
-    component: () => <Redirect to="/404" />,
+    component: () => <Redirect to='/404' />,
   }
 ]
 

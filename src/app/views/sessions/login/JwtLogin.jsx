@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import {
 	Card,
 	Checkbox,
 	FormControlLabel,
 	Grid,
 	Button,
-	CircularProgress,
-} from '@material-ui/core'
+	CircularProgress
+} from '@mui/material'
 import { makeStyles } from '@material-ui/core/styles'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import clsx from 'clsx'
@@ -60,7 +61,7 @@ const JwtLogin = () => {
 		const { user, accessToken } = data
 		const { username } = user
 		setMessage({ status: MessageStatus.SUCCESS, text: `Welcome, ${username}` })
-		console.log("Login 1")
+		console.log('Login 1')
 		localStorage.setItem('userInfo', JSON.stringify({ user, accessToken }))
 		setTimeout(() => {
 			history.push('/')
@@ -118,6 +119,10 @@ const JwtLogin = () => {
 				classes.cardHolder
 			)}
 		>
+			<Helmet>
+				<title>Login</title>
+				<meta name='Login' content='Login' />
+			</Helmet>
 			<Card className={classes.card}>
 				<Grid container>
 					<Grid item lg={5} md={5} sm={5} xs={12}>
@@ -183,7 +188,7 @@ const JwtLogin = () => {
 								/>
 
 								{
-									message.status === MessageStatus.INIT ? <></> : MessageStatus.SUCCESS ? (
+									(message.status === MessageStatus.INIT) ? <></> : (message.status === MessageStatus.SUCCESS) ? (
 										<p className='text-green'>{message.text}</p>
 									) : (
 										<p className='text-error'>{message.text}</p>

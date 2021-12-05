@@ -2,20 +2,22 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useMutation } from 'react-query'
+import { Helmet } from 'react-helmet'
 import {
 	Card,
 	Checkbox,
 	FormControlLabel,
 	Grid,
 	Button,
-} from '@material-ui/core'
+	CircularProgress
+} from '@mui/material'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { Link } from 'react-router-dom'
 
 import { signupWithEmail } from 'app/http/auth'
-import { loginSuccess, startAuthenticate, authenticateFail } from 'app/redux-toolkit/slices/authSlice'
+import { startAuthenticate, authenticateFail } from 'app/redux-toolkit/slices/authSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
 	cardHolder: {
@@ -25,6 +27,13 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 		maxWidth: 800,
 		borderRadius: 12,
 		margin: '1rem',
+	},
+	buttonProgress: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		marginTop: -12,
+		marginLeft: -12,
 	},
 }))
 
@@ -111,6 +120,10 @@ const JwtRegister = () => {
 				classes.cardHolder
 			)}
 		>
+			<Helmet>
+				<title>Sign up</title>
+				<meta name='Sign up' content='Sign up' />
+			</Helmet>
 			<Card className={classes.card}>
 				<Grid container>
 					<Grid item lg={5} md={5} sm={5} xs={12}>
@@ -184,20 +197,28 @@ const JwtRegister = () => {
 									label='I have read and agree to the terms of service.'
 								/>
 								{
-									message.status === MessageStatus.INIT ? <></> : MessageStatus.SUCCESS ? (
-										<p className='text-green'>{message.text}</p>
+									(message.status === MessageStatus.INIT) ? <></> : (message.status === MessageStatus.SUCCESS) ? (
+										<p className='text-error'>{message.text}</p>
 									) : (
 										<p className='text-error'>{message.text}</p>
 									)
 								}
 								<div className='flex items-center'>
 									<Button
-										className='capitalize'
 										variant='contained'
 										color='primary'
 										type='submit'
+										disabled={isLoading}
 									>
 										Sign up
+										{isLoading && (
+											<CircularProgress
+												size={24}
+												className={
+													classes.buttonProgress
+												}
+											/>
+										)}
 									</Button>
 									<span className='mx-2 ml-5'>or</span>
 									<Link to='/signin'>

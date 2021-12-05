@@ -1,17 +1,16 @@
-import '../fake-db'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { Router, Switch, Route, BrowserRouter } from 'react-router-dom'
-import AppContext from './contexts/AppContext'
 import history from 'history.js'
-import routes from './RootRoutes'
-// import { Store } from './redux/Store'
-import Store from './redux-toolkit/store'
+
 import { GlobalCss, MatxSuspense, MatxTheme, MatxLayout } from 'app/components'
+import { SettingsProvider } from 'app/contexts/SettingsContext'
+import AppContext from './contexts/AppContext'
+import routes from './RootRoutes'
+import Store from './redux-toolkit/store'
 import sessionRoutes from './views/sessions/SessionRoutes'
 import AuthGuard from './auth/AuthGuard'
-import { AuthProvider } from 'app/contexts/JWTAuthContext'
-import { SettingsProvider } from 'app/contexts/SettingsContext'
+import '../fake-db'
 import {
   QueryClient,
   QueryClientProvider,

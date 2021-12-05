@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import { Box, Grid, Typography, TextField, Icon } from '@mui/material'
 import Tab from '@mui/material/Tab'
 import TabContext from '@mui/lab/TabContext'
@@ -20,6 +21,10 @@ const WishlistPage = () => {
 	}
 	return (
 		<Box>
+			<Helmet>
+				<title>Wishlist</title>
+				<meta name='Wishlist' content='Wishlist' />
+			</Helmet>
 			<Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, marginTop: 5, paddingTop: 30 }}>
 				<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', flexDirection: 'row', marginLeft: 30 }}>My Learning</Typography>
 				<Box sx={{ width: '100%', typography: 'body1', color: 'white', display: 'flex', justifyContent: 'center' }}>

@@ -4,6 +4,7 @@ const homeRouter = [
   {
     path: '/',
     exact: true,
+    title: 'Home',
     component: React.lazy(() => import('./HomePage')),
   },
   {
