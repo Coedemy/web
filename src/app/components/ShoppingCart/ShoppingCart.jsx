@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
+import { useMutation } from 'react-query'
 import { useHistory, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Icon, Badge, IconButton, Drawer, Button, Box, Typography, Divider } from '@material-ui/core'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
-import slugify from 'slugify'
 import styled from 'styled-components'
 import clsx from 'clsx'
 
 import useSettings from 'app/hooks/useSettings'
 import { orange } from 'app/utils/color'
 import { removeFromCart } from 'app/redux-toolkit/slices/userSlice'
+import { updateCart } from 'app/http/user'
 
 const CourseTitle = styled.strong`
   overflow: hidden;
@@ -46,6 +47,9 @@ function ShoppingCart({ container }) {
   const history = useHistory()
   const { cart } = useSelector((state) => state.user)
   const { settings } = useSettings()
+  const { mutate, isLoading } = useMutation(updateCart, {
+    mutationKey: 'updateCart',
+  })
 
   const handleDrawerToggle = () => {
     setPanelOpen(!panelOpen)
@@ -54,6 +58,11 @@ function ShoppingCart({ container }) {
   const handleCheckoutClick = () => {
     history.push('/cart')
     setPanelOpen(false)
+  }
+
+  const handleRemoveCourse = (courseId) => {
+    dispatch(removeFromCart({ id: courseId }))
+    mutate({ courseId, updateType: 'remove' })
   }
 
   useEffect(() => {
@@ -98,7 +107,7 @@ function ShoppingCart({ container }) {
                 <Box key={course._id}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Link
-                      to={`/courses/learn/${slugify(course.title, { lower: true })}`}
+                      to={`/courses/${course.slug}`}
                       onClick={handleDrawerToggle}
                       className='mini-cart__item flex items-center py-2 px-2'
                     >
@@ -156,7 +165,7 @@ function ShoppingCart({ container }) {
                     </Link>
                     <IconButton
                       size='small'
-                      onClick={() => dispatch(removeFromCart({ id: course._id }))}
+                      onClick={handleRemoveCourse.bind(this, course._id)}
                     >
                       <Icon fontSize='small'>clear</Icon>
                     </IconButton>

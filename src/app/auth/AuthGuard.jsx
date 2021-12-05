@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom'
 import { loginSuccess } from 'app/redux-toolkit/slices/authSlice'
 import { loadUserProperties } from 'app/redux-toolkit/slices/userSlice'
 import { authenticateFail } from 'app/redux-toolkit/slices/authSlice'
-import { initializeUserProperties } from 'app/http/user'
+import { initCart } from 'app/http/user'
 
 // const getUserRoleAuthStatus = (pathname, user, routes) => {
 // 	const matched = routes.find((r) => r.path === pathname)
@@ -21,8 +21,8 @@ import { initializeUserProperties } from 'app/http/user'
 
 const AuthGuard = ({ children }) => {
 
-	const { mutate, isLoading } = useMutation(initializeUserProperties, {
-		mutationKey: 'initializeUserProperties',
+	const { mutate, isLoading } = useMutation(initCart, {
+		mutationKey: 'initCart',
 	})
 	const userReducer = useSelector(state => state.user)
 	const [previouseRoute, setPreviousRoute] = useState(null)

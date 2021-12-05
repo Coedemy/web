@@ -1,15 +1,17 @@
-import * as React from 'react'
+import React from 'react'
+import { useMutation } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { styled as muiStyled } from '@mui/material/styles'
-import styled from 'styled-components'
 import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom } from '@mui/material'
 import { tooltipClasses } from '@mui/material/Tooltip'
 import StarIcon from '@mui/icons-material/Star'
+import styled from 'styled-components'
 
 import { formatToVND } from 'app/utils/formatter'
 import { orange } from 'app/utils/color'
 import { addToCart } from 'app/redux-toolkit/slices/userSlice'
+import { updateCart } from 'app/http/user'
 
 const CourseTitle = styled.strong`
   font-size: 18px;
@@ -56,9 +58,16 @@ const LightTooltip = muiStyled(({ className, ...props }) => (
 const CourseInfoModal = ({ course }) => {
   const dispatch = useDispatch()
   const userReducer = useSelector(state => state.user)
+  const authReducer = useSelector(state => state.auth)
+  const { mutate, isLoading } = useMutation(updateCart, {
+    mutationKey: 'updateCart',
+  })
 
   const handleAddToCart = () => {
     dispatch(addToCart({ item: course }))
+    if (authReducer.accessToken) {
+      mutate({ courseId: course._id, updateType: 'add' })
+    }
   }
 
   return (
@@ -72,7 +81,6 @@ const CourseInfoModal = ({ course }) => {
           <Button onClick={handleAddToCart} variant='contained'>Add To Cart</Button>
         )
       }
-
     </Box>
   )
 }

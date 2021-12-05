@@ -14,7 +14,7 @@ const homeRouter = [
   {
     path: '/cart',
     exact: true,
-    component: React.lazy(() => import('./ShoppingCart')),
+    component: React.lazy(() => import('./ShoppingCartPage')),
   },
   {
     path: '/cart/checkout',
