@@ -12,7 +12,7 @@ import {
 import { MatxMenu } from 'app/components'
 // import { loginWithEmail } from 'app/http/auth'
 import { logout } from 'app/redux-toolkit/slices/authSlice'
-import { loadUserProperties } from 'app/redux-toolkit/slices/userSlice'
+import { loadCart } from 'app/redux-toolkit/slices/userSlice'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   userMenu: {
@@ -76,7 +76,7 @@ const AuthenticatedUserActions = ({ user }) => {
         onClick={() => {
           console.log('logout')
           dispatch(logout())
-          dispatch(loadUserProperties())
+          dispatch(loadCart())
         }}
         className={classes.menuItem}
       >

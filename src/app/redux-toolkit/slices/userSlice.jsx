@@ -10,7 +10,19 @@ const userSlice = createSlice({
     error: null,
   },
   reducers: {
-    loadUserProperties: (state, action) => {
+    loadAuthenticatedUserProperties: (state, action) => {
+      const userProps = action.payload
+      if (userProps) {
+        state.wishlist = [...userProps.wishlist]
+        state.myLearning = [...userProps.myLearning]
+      }
+      state.isLoading = false
+
+      return state
+    },
+
+    loadCart: (state, action) => {
+      state.isLoading = true
       const cartJSON = localStorage.getItem('cart')
       try {
         const cart = JSON.parse(cartJSON)
@@ -65,13 +77,27 @@ const userSlice = createSlice({
         state.cart = []
       }
       return state
+    },
+
+    toggleFavorite: (state, action) => {
+      const { course } = action.payload
+      const wishlist = state.wishlist
+      const filterWishlist = wishlist.filter(c => c._id !== course._id)
+      if (wishlist.length === filterWishlist.length) {
+        filterWishlist.push(course)
+      }
+      console.log({ wishlist, filterWishlist })
+      state.wishlist = filterWishlist
+      return state
     }
   }
 })
 
 const { reducer, actions } = userSlice
 export const {
-  loadUserProperties,
+  loadAuthenticatedUserProperties,
+  toggleFavorite,
+  loadCart,
   addToCart,
   removeFromCart
 } = actions

@@ -1,36 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Box, Grid, Typography, TextField, Icon } from '@mui/material'
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import Tab from '@mui/material/Tab'
+import TabContext from '@mui/lab/TabContext'
+import TabList from '@mui/lab/TabList'
+import TabPanel from '@mui/lab/TabPanel'
+
+import CourseItem from './CourseItem'
 import AppLayout from '../Layout/AppLayout'
-
-
 import courseDataList from '../fakeData/coursesDataList'
-import CoursesList from './CoursesList';
 
 
 const WishlistPage = () => {
-	const [value, setValue] = React.useState('1');
+	const [value, setValue] = useState('1')
+	const { wishlist } = useSelector((state) => state.user)
 
 	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
+		setValue(newValue)
+	}
 	return (
 		<Box>
 			<Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, marginTop: 5, paddingTop: 30 }}>
 				<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', flexDirection: 'row', marginLeft: 30 }}>My Learning</Typography>
-				<Box sx={{ width: '100%', typography: 'body1', color: 'white' }}>
+				<Box sx={{ width: '100%', typography: 'body1', color: 'white', display: 'flex', justifyContent: 'center' }}>
 					<TabContext value={value}>
-						<Box sx={{ marginLeft: 70 }}>
-							<TabList onChange={handleChange} aria-label='lab API tabs example'>
-								<Tab label='All courses' value='1' style={{ color: 'white', textColor: 'secondary' }} />
-								<Tab label='My List' value='2' style={{ color: 'white', textColor: 'secondary' }} />
-								<Tab label='Wishlist' value='3' style={{ color: 'white' }} />
-								<Tab label='Archived' value='4' style={{ color: 'white' }} />
-							</TabList>
-						</Box>
+						<TabList onChange={handleChange} aria-label='lab API tabs example'>
+							<Tab label='All courses' value='1' style={{ color: 'white', textColor: 'secondary' }} />
+							<Tab label='My List' value='2' style={{ color: 'white', textColor: 'secondary' }} />
+							<Tab label='Wishlist' value='3' style={{ color: 'white' }} />
+							<Tab label='Archived' value='4' style={{ color: 'white' }} />
+						</TabList>
 					</TabContext>
 				</Box>
 			</Grid >
@@ -54,7 +53,17 @@ const WishlistPage = () => {
 					</Box>
 				</Box>
 				<Box sx={{ marginBottom: 4 }} />
-				<CoursesList courses={courseDataList} />
+				<Box sx={{ flexGrow: 1 }}>
+					<Grid container spacing={3}>
+						{
+							wishlist.map((course, index) => ((
+								<Grid item xs={4} key={course._id}>
+									<CourseItem course={course} index={index} />
+								</Grid>
+							)))
+						}
+					</Grid>
+				</Box >
 				<Box sx={{ marginBottom: 4 }} />
 			</AppLayout>
 		</Box>

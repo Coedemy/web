@@ -1,17 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { styled as muiStyled } from '@mui/material/styles'
-import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom } from '@mui/material'
+import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom, Icon, IconButton } from '@mui/material'
 import { tooltipClasses } from '@mui/material/Tooltip'
 import StarIcon from '@mui/icons-material/Star'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import styled from 'styled-components'
 
 import { formatToVND } from 'app/utils/formatter'
 import { orange } from 'app/utils/color'
-import { addToCart } from 'app/redux-toolkit/slices/userSlice'
-import { updateCart } from 'app/http/user'
+import { addToCart, toggleFavorite } from 'app/redux-toolkit/slices/userSlice'
+import { toggleFavoriteRequest, updateCartRequest } from 'app/http/user'
 
 const CourseTitle = styled.strong`
   font-size: 18px;
@@ -59,14 +61,26 @@ const CourseInfoModal = ({ course }) => {
   const dispatch = useDispatch()
   const userReducer = useSelector(state => state.user)
   const authReducer = useSelector(state => state.auth)
-  const { mutate, isLoading } = useMutation(updateCart, {
+  const { mutate: mutateUpdateCart } = useMutation(updateCartRequest, {
     mutationKey: 'updateCart',
   })
+
+  const { mutate: mutateToggleFavorite } = useMutation(toggleFavoriteRequest, {
+    mutationKey: 'toggleFavorite',
+  })
+
 
   const handleAddToCart = () => {
     dispatch(addToCart({ item: course }))
     if (authReducer.accessToken) {
-      mutate({ courseId: course._id, updateType: 'add' })
+      mutateUpdateCart({ courseId: course._id, updateType: 'add' })
+    }
+  }
+
+  const toggleFavoriteButton = (course) => {
+    if (authReducer.accessToken) {
+      dispatch(toggleFavorite({ course }))
+      mutateToggleFavorite({ courseId: course._id })
     }
   }
 
@@ -74,13 +88,20 @@ const CourseInfoModal = ({ course }) => {
     <Box sx={{ p: 2 }}>
       <Typography>{course.description}</Typography>
       <Box sx={{ m: 4 }} />
-      {
-        userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
-          <Link to='/cart'><Button variant='contained'>Go to cart</Button></Link>
-        ) : (
-          <Button onClick={handleAddToCart} variant='contained'>Add To Cart</Button>
-        )
-      }
+      <Box>
+        {
+          userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
+            <Link to='/cart'><Button variant='contained'>Go to cart</Button></Link>
+          ) : (
+            <Button onClick={handleAddToCart} variant='contained'>Add To Cart</Button>
+          )
+        }
+        <IconButton onClick={toggleFavoriteButton.bind(this, course)}>
+          {
+            userReducer.wishlist.some(c => c._id === course._id) ? <FavoriteIcon fontSize='large' /> : <FavoriteBorderIcon fontSize='large' />
+          }
+        </IconButton>
+      </Box>
     </Box>
   )
 }

@@ -4,9 +4,9 @@ import { useMutation } from 'react-query'
 import { useLocation } from 'react-router-dom'
 
 import { loginSuccess } from 'app/redux-toolkit/slices/authSlice'
-import { loadUserProperties } from 'app/redux-toolkit/slices/userSlice'
+import { loadCart, loadAuthenticatedUserProperties } from 'app/redux-toolkit/slices/userSlice'
 import { authenticateFail } from 'app/redux-toolkit/slices/authSlice'
-import { initCart } from 'app/http/user'
+import { loadCartRequest, loadAuthenticatedUserPropertiesRequest } from 'app/http/user'
 
 // const getUserRoleAuthStatus = (pathname, user, routes) => {
 // 	const matched = routes.find((r) => r.path === pathname)
@@ -21,18 +21,25 @@ import { initCart } from 'app/http/user'
 
 const AuthGuard = ({ children }) => {
 
-	const { mutate, isLoading } = useMutation(initCart, {
-		mutationKey: 'initCart',
+	const { mutate: mutateLoadCart } = useMutation(loadCartRequest, {
+		mutationKey: 'loadCart',
+	})
+	const { mutate: mutateLoadAuthenticatedUserProperties } = useMutation(loadAuthenticatedUserPropertiesRequest, {
+		mutationKey: 'loadAuthenticatedUserProperties',
 	})
 	const userReducer = useSelector(state => state.user)
 	const [previouseRoute, setPreviousRoute] = useState(null)
 	const { pathname } = useLocation()
 	const dispatch = useDispatch()
 
-	const onLoadSuccessfully = async (data) => {
+	const onLoadCartSuccessfully = async (data) => {
 		const { cart } = data
 		localStorage.setItem('cart', JSON.stringify(cart))
-		dispatch(loadUserProperties())
+		dispatch(loadCart())
+	}
+
+	const onLoadPropertiesSuccessfully = async (data) => {
+		dispatch(loadAuthenticatedUserProperties(data))
 	}
 
 	const onError = (err) => {
@@ -40,7 +47,7 @@ const AuthGuard = ({ children }) => {
 	}
 
 	useEffect(() => {
-		dispatch(loadUserProperties())
+		dispatch(loadCart())
 		const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 		if (!userInfo || !userInfo.accessToken) return
 		const { user, accessToken } = userInfo
@@ -52,8 +59,12 @@ const AuthGuard = ({ children }) => {
 		const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
 		if (!userReducer.isLoading && userInfo && userInfo.accessToken) {
-			mutate({ cart: userReducer.cart }, {
-				onSuccess: onLoadSuccessfully,
+			mutateLoadCart({ cart: userReducer.cart }, {
+				onSuccess: onLoadCartSuccessfully,
+				onError: onError,
+			})
+			mutateLoadAuthenticatedUserProperties({}, {
+				onSuccess: onLoadPropertiesSuccessfully,
 				onError: onError,
 			})
 		}
