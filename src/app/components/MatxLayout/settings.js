@@ -6,7 +6,7 @@ import { themes } from '../MatxTheme/initThemes'
 export const MatxLayoutSettings = {
     activeLayout: 'layout1', // layout1, layout2
     activeTheme: 'blue', // View all valid theme colors inside MatxTheme/themeColors.js
-    perfectScrollbar: false,
+    perfectScrollbar: true,
 
     themes: themes,
     layout1Settings, // open Layout1/Layout1Settings.js

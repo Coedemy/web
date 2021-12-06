@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
   IconButton,
@@ -70,6 +70,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 const Layout1Topbar = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
+  const location = useLocation()
   const classes = useStyles()
   const { settings, updateSettings } = useSettings()
   const isMdScreen = useMediaQuery(theme.breakpoints.down('md'))
@@ -105,29 +106,56 @@ const Layout1Topbar = () => {
     updateSidebarMode({ mode })
   }
 
+  const showSidebarOnInstructorRoutes = () => {
+    if (location.pathname.split('/')[1] === 'instructor') {
+      console.log('instructor')
+      updateSidebarMode({ mode: 'compact' })
+    }
+    else {
+      console.log('home')
+      updateSidebarMode({ mode: 'close' })
+    }
+  }
+
+  useEffect(() => {
+    showSidebarOnInstructorRoutes()
+  }, [location])
+
+  useEffect(() => {
+    setTimeout(() => {
+      showSidebarOnInstructorRoutes()
+    }, [100])
+  }, [])
+
   return (
     <div className={classes.topbar}>
       <div className={clsx({ 'topbar-hold': true, fixed: fixed })} style={{ display: 'flex', justifyContent: 'center' }}>
         <div className='flex justify-between items-center h-full' style={{ width: '80%' }}>
           <div className='flex'>
             <div className='hide-on-mobile'>
-              <Link to='/' className='flex items-center'>
-                <MatxLogo />
-                <span
-                  className={clsx({
-                    'text-18 ml-2 font-medium sidenavHoverShow': true,
-                    [classes.hideOnCompact]: topbarMode === 'compact',
-                  })}
-                >
-                  Matx
-                </span>
-              </Link>
+              {
+                settings.layout1Settings.leftSidebar.mode === 'compact' ? (
+                  <></>
+                ) : (
+                  <Link to='/' className='flex items-center'>
+                    <MatxLogo />
+                    <span
+                      className={clsx({
+                        'text-18 ml-2 font-medium sidenavHoverShow': true,
+                        [classes.hideOnCompact]: topbarMode === 'compact',
+                      })}
+                    >
+                      Coedemy
+                    </span>
+                  </Link>
+                  // <IconButton
+                  //   onClick={handleSidebarToggle}
+                  // >
+                  //   <MenuIcon />
+                  // </IconButton>
+                )
+              }
 
-              <IconButton
-                onClick={handleSidebarToggle}
-              >
-                <MenuIcon />
-              </IconButton>
             </div>
           </div>
           <div className='flex items-center'>
@@ -152,8 +180,8 @@ const Layout1Topbar = () => {
             {authReducer.accessToken ? <AuthenticatedUserActions user={authReducer.user} /> : <UnauthenticatedUserActions />}
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 }
 

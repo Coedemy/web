@@ -33,7 +33,7 @@ const Brand = ({ children }) => {
             [classes.hideOnCompact]: mode === 'compact',
           })}
         >
-          Matx
+          Coedemy
         </span>
       </Link>
       <div

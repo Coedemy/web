@@ -88,14 +88,14 @@ const Layout1Sidenav = () => {
 		<div className={classes.sidenav}>
 			<div className='flex-column relative h-full'>
 				<Brand>
-					<Hidden smDown>
+					{/* <Hidden smDown>
 						<Switch
 							onChange={handleSidenavToggle}
 							checked={leftSidebar.mode !== 'full'}
 							color='secondary'
 							size='small'
 						/>
-					</Hidden>
+					</Hidden> */}
 				</Brand>
 				<Sidenav />
 			</div>

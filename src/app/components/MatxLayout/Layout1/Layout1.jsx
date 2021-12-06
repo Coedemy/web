@@ -23,7 +23,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
       verticalAlign: 'top',
       marginLeft: width,
       transition: 'all 0.3s ease',
-      // [theme.breakpoints.up("sm")]: {
+      // [theme.breakpoints.up('sm')]: {
       marginRight: secondarySidebar.open ? 50 : 0,
       // },
     }
@@ -78,12 +78,6 @@ const Layout1 = () => {
 
   return (
     <div className={clsx('bg-white', layoutClasses)}>
-      {showSidenav && sidenavMode !== 'close' && (
-        <SidenavTheme>
-          <Layout1Sidenav />
-        </SidenavTheme>
-      )}
-
       <div
         className={clsx(
           'flex-grow flex-column relative overflow-hidden h-full-screen',
@@ -92,19 +86,24 @@ const Layout1 = () => {
       >
         {layout1Settings.topbar.show && layout1Settings.topbar.fixed && (
           <ThemeProvider theme={topbarTheme}>
-            <Layout1Topbar fixed={true} className="elevation-z8" />
+            <Layout1Topbar fixed={true} className='elevation-z8' />
           </ThemeProvider>
         )}
 
         {settings.perfectScrollbar && (
-          <Scrollbar className="flex-grow flex-column relative h-full">
+          <Scrollbar className='flex-grow flex-column relative h-full'>
             {layout1Settings.topbar.show &&
               !layout1Settings.topbar.fixed && (
                 <ThemeProvider theme={topbarTheme}>
                   <Layout1Topbar />
                 </ThemeProvider>
               )}
-            <div className="relative flex-grow">
+            <div className='relative flex-grow'>
+              {showSidenav && sidenavMode !== 'close' && (
+                <SidenavTheme>
+                  <Layout1Sidenav />
+                </SidenavTheme>
+              )}
               <MatxSuspense>{renderRoutes(routes)}</MatxSuspense>
             </div>
             {/* {settings.footer.show && !settings.footer.fixed && (
@@ -114,14 +113,14 @@ const Layout1 = () => {
         )}
 
         {!settings.perfectScrollbar && (
-          <div className="flex-grow flex-column relative h-full scroll-y">
+          <div className='flex-grow flex-column relative h-full scroll-y'>
             {layout1Settings.topbar.show &&
               !layout1Settings.topbar.fixed && (
                 <ThemeProvider theme={topbarTheme}>
                   <Layout1Topbar />
                 </ThemeProvider>
               )}
-            <div className="relative flex-grow">
+            <div className='relative flex-grow'>
 
               {/* <img src={bgImageUrl} style={{ width: '100%', height: '80vh', opacity: 0.95, filter: 'brightness(80%)' }} /> */}
               <MatxSuspense>{renderRoutes(routes)}</MatxSuspense>
