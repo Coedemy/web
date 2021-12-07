@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconButton, Icon } from '@material-ui/core'
 import MatxCustomizer from '../MatxCustomizer/MatxCustomizer'
-import ShoppingCart from '../ShoppingCart/ShoppingCart'
+import ShoppingCart from '../ShoppingCartButton/ShoppingCartButton'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { ChatHead } from 'app/components'

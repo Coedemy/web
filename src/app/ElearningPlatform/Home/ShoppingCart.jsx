@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
 import StarIcon from '@mui/icons-material/Star'
 import { Box, Button, Divider, Grid, Rating, Typography, IconButton, Icon, TextField, Card, CardContent } from '@mui/material'
 import styled from 'styled-components'
@@ -49,10 +48,6 @@ function ShoppingCart() {
 
 	return (
 		<Box>
-			<Helmet>
-				<title>Shopping Cart</title>
-				<meta name='Shopping Cart' content='Shopping Cart' />
-			</Helmet>
 			<Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, marginTop: 5, paddingTop: 30 }}>
 				<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', flexDirection: 'row', marginLeft: 30 }}>Shopping Cart</Typography>
 			</Grid >

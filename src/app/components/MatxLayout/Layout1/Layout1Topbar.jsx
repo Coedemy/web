@@ -7,7 +7,6 @@ import {
   useMediaQuery
 } from '@mui/material'
 import clsx from 'clsx'
-import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
 
 import { MatxMenu, MatxSearchBox, MatxLogo } from 'app/components'
@@ -18,9 +17,7 @@ import { NotificationProvider } from 'app/contexts/NotificationContext'
 
 import AuthenticatedUserActions from './AuthenticatedUserActions'
 import UnauthenticatedUserActions from './UnauthenticatedUserActions'
-import NotificationBar from '../../NotificationBar/NotificationBar'
-import ShoppingCart from '../../ShoppingCart/ShoppingCart'
-import Wishlist from '../../Wishlist/Wishlist'
+import { NotificationBar, ShoppingCartButton, WishlistButton, MyLearningButton } from 'app/components'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   topbar: {
@@ -89,22 +86,22 @@ const Layout1Topbar = () => {
     })
   }
 
-  const handleSidebarToggle = () => {
-    let { layout1Settings } = settings
-    let mode
+  // const handleSidebarToggle = () => {
+  //   let { layout1Settings } = settings
+  //   let mode
 
-    if (isMdScreen) {
-      mode =
-        layout1Settings.leftSidebar.mode === 'close'
-          ? 'mobile'
-          : 'close'
-    } else {
-      mode =
-        layout1Settings.leftSidebar.mode === 'full' ? 'close' : 'full'
-    }
+  //   if (isMdScreen) {
+  //     mode =
+  //       layout1Settings.leftSidebar.mode === 'close'
+  //         ? 'mobile'
+  //         : 'close'
+  //   } else {
+  //     mode =
+  //       layout1Settings.leftSidebar.mode === 'full' ? 'close' : 'full'
+  //   }
 
-    updateSidebarMode({ mode })
-  }
+  //   updateSidebarMode({ mode })
+  // }
 
   const showSidebarOnInstructorRoutes = () => {
     if (location.pathname.split('/')[1] === 'instructor') {
@@ -155,7 +152,6 @@ const Layout1Topbar = () => {
                   // </IconButton>
                 )
               }
-
             </div>
           </div>
           <div className='flex items-center'>
@@ -171,17 +167,16 @@ const Layout1Topbar = () => {
                 </IconButton>
               </Link>
             </div>
-
-            {authReducer.accessToken ? <Wishlist /> : <></>}
-
-            <ShoppingCart />
+            {authReducer.accessToken ? <MyLearningButton /> : <></>}
+            {authReducer.accessToken ? <WishlistButton /> : <></>}
+            <ShoppingCartButton />
 
             {/* show username, wishlist and mylearning with authenticated users */}
             {authReducer.accessToken ? <AuthenticatedUserActions user={authReducer.user} /> : <UnauthenticatedUserActions />}
           </div>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   )
 }
 

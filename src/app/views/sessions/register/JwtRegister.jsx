@@ -198,7 +198,7 @@ const JwtRegister = () => {
 								/>
 								{
 									(message.status === MessageStatus.INIT) ? <></> : (message.status === MessageStatus.SUCCESS) ? (
-										<p className='text-error'>{message.text}</p>
+										<p className='text-green'>{message.text}</p>
 									) : (
 										<p className='text-error'>{message.text}</p>
 									)

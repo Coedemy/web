@@ -10,7 +10,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 import {
   Typography, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Box
 } from '@mui/material'
-import NoteIcon from '@mui/icons-material/Note'
+import ArticleIcon from '@mui/icons-material/Article'
 import QuizIcon from '@mui/icons-material/Quiz'
 
 // import CourseLearnVideo from './CourseLearnVideo'
@@ -93,18 +93,33 @@ const CourseLearnSections = ({ course, chooseLecture }) => {
               <LectureList aria-label='contacts' dense={true} autoFocus={true} >
                 {
                   section.lectures.map(lecture => (
-                    <ListItemButton
-                      selected={lectureCode === `course${course._id}-lecture${lecture._id}`}
-                      onClick={selectLecture.bind(this, { lecture })}
-                      key={lecture._id}
-                    >
-                      <ListItem disablePadding>
-                        <ListItemIcon>
-                          {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : lecture.type === 'ARTICLE' ? <NoteIcon /> : <QuizIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : 0})`} />
-                      </ListItem>
-                    </ListItemButton>
+                    lecture.canPreview ? (
+                      <ListItemButton
+                        selected={lectureCode === `course${course._id}-lecture${lecture._id}`}
+                        onClick={selectLecture.bind(this, { lecture })}
+                        key={lecture._id}
+                      >
+                        <ListItem disablePadding>
+                          <ListItemIcon>
+                            {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : (lecture.content.lectureContentType === 'ARTICLE') ? <ArticleIcon /> : <QuizIcon />}
+                          </ListItemIcon>
+                          <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : 0})`} />
+                        </ListItem>
+                      </ListItemButton>
+                    ) : (
+                      <ListItemButton
+                        selected={lectureCode === `course${course._id}-lecture${lecture._id}`}
+                        onClick={selectLecture.bind(this, { lecture })}
+                        key={lecture._id}
+                      >
+                        <ListItem disablePadding>
+                          <ListItemIcon>
+                            {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : (lecture.content.lectureContentType === 'ARTICLE') ? <ArticleIcon /> : <QuizIcon />}
+                          </ListItemIcon>
+                          <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : 0})`} />
+                        </ListItem>
+                      </ListItemButton>
+                    )
                   ))}
               </LectureList>
             </AccordionDetails>
