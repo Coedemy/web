@@ -96,18 +96,18 @@ const CourseInfoModal = ({ course }) => {
           <Box sx={{ marginBottom: '4px' }} />
           <CourseDescription>{course.description}</CourseDescription>
           <Box sx={{ marginBottom: '4px' }} />
-          <Grid style={{ display: 'flex', flexDirection: 'row' }}>
+          <Box style={{ display: 'flex', flexDirection: 'row' }}>
             <CheckIcon />
             <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Use MongoDB to its full potential in future projects</Typography>
-          </Grid>
-          <Grid style={{ display: 'flex', flexDirection: 'row' }}>
+          </Box>
+          <Box style={{ display: 'flex', flexDirection: 'row' }}>
             <CheckIcon />
             <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Use all features MongoDB offers you to work with data efficiently</Typography>
-          </Grid>
-          <Grid style={{ display: 'flex', flexDirection: 'row' }}>
+          </Box>
+          <Box style={{ display: 'flex', flexDirection: 'row' }}>
             <CheckIcon />
             <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Write efficient and well-performing queries to fetch data in the format you need it</Typography>
-          </Grid>
+          </Box>
         </Box>
       </CardContent>
       <Box>
