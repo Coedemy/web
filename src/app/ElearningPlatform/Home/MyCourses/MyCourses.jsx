@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Switch, Route, Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Switch, Route, Link, useLocation } from 'react-router-dom'
 import { Box, Grid, Typography } from '@mui/material'
 import Tab from '@mui/material/Tab'
 import TabContext from '@mui/lab/TabContext'
@@ -12,10 +11,18 @@ import MyLearning from './MyLearning'
 
 const MyCourses = () => {
   const [value, setValue] = useState('1')
+  const location = useLocation()
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  useEffect(() => {
+    const selectedTab = location.pathname.split('/')[2]
+    setValue(selectedTab === 'learning' ? '1' : '2')
+    console.log(selectedTab)
+  })
+
   return (
     <Box>
       <Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, marginTop: 5, paddingTop: 30 }}>

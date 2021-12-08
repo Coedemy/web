@@ -1,11 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box, Grid, Typography, TextField, Icon } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 
 import CourseItem from '../CourseItem'
 import AppLayout from '../../Layout/AppLayout'
 
-const Wishlist = () => {
+const MyLearning = () => {
   const { myLearning } = useSelector((state) => state.user)
 
   return (
@@ -20,10 +21,7 @@ const Wishlist = () => {
             fullWidth
             InputProps={{
               startAdornment: (
-                <Icon className='mr-3' fontSize='small'>
-                  search
-                </Icon>
-              ),
+                <SearchIcon className='mr-3' fontSize='small' />),
             }}
           />
         </Box>
@@ -45,4 +43,4 @@ const Wishlist = () => {
   )
 }
 
-export default Wishlist
+export default MyLearning

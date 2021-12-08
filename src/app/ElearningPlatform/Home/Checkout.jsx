@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useMutation } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { Box, Checkbox, Divider, Rating, Button, Radio, FormControlLabel, Grid, RadioGroup, MenuItem, Typography, FormControl, Select } from '@mui/material'
@@ -8,6 +9,8 @@ import styled from 'styled-components'
 
 import { orange } from 'app/utils/color'
 import { formatToVND } from 'app/utils/formatter'
+import { checkoutRequest } from 'app/http/course'
+import { checkout } from 'app/redux-toolkit/slices/userSlice'
 
 import AppLayout from '../Layout/AppLayout'
 
@@ -98,6 +101,18 @@ const Checkout = () => {
 	const [curCategory, setCurCategory] = useState('')
 	const userReducer = useSelector(state => state.user)
 	const history = useHistory()
+	const dispatch = useDispatch()
+
+	const { mutate, isLoading } = useMutation(checkoutRequest, {
+		mutationKey: 'checkout'
+	})
+
+	const onCheckoutSuccessfully = async (data) => {
+		console.log({ data })
+		dispatch(checkout(data))
+
+		history.push('/my-courses/learning')
+	}
 
 	useEffect(() => {
 
@@ -106,6 +121,15 @@ const Checkout = () => {
 			if (userReducer.cart.length === 0) history.push('/cart')
 		}
 	}, [userReducer.isLoading])
+
+	const onCheckout = (e) => {
+		console.log('checkout')
+		if (userReducer.cart.length !== 0) {
+			mutate({ cart: userReducer.cart }, {
+				onSuccess: onCheckoutSuccessfully
+			})
+		}
+	}
 
 	const handleChange = (event) => {
 		setCurCategory(event.target.value)
@@ -153,7 +177,7 @@ const Checkout = () => {
 									<MenuItem value=''>
 										Viet Nam
 									</MenuItem>
-									{nations.map(c => <MenuItem sx={{ backgroundColor: 'white' }} value={c.id}>{c.title}</MenuItem>)}
+									{nations.map(c => <MenuItem sx={{ backgroundColor: 'white' }} value={c.id} key={c.id}>{c.title}</MenuItem>)}
 								</Select>
 							</FormControl>
 						</Box>
@@ -306,7 +330,7 @@ const Checkout = () => {
 								</Box>
 								<Typography sx={{ fontSize: 10, display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 1, marginLeft: 4, marginRight: 4 }}>Coedemy is required by law to collect applicable transaction taxes for purchases made in certain tax jurisdictions.</Typography>
 								<Box sx={{ marginBottom: 4 }} />
-								<Button variant='contained' style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 15, marginLeft: 30, width: 285, marginBottom: 5, display: 'block' }}>Complete Payment</Button>
+								<Button variant='contained' style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 15, marginLeft: 30, width: 285, marginBottom: 5, display: 'block' }} onClick={onCheckout}>Complete Payment</Button>
 								<Box sx={{ marginBottom: 4 }} />
 							</Grid>
 						</Grid >
