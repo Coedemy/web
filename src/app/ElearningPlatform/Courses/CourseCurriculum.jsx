@@ -10,7 +10,7 @@ import {
   Typography, List, ListItem, ListItemIcon, ListItemText, ListItemButton,
   Box, Button, Grid
 } from '@mui/material'
-import NoteIcon from '@mui/icons-material/Note'
+import ArticleIcon from '@mui/icons-material/Article'
 import QuizIcon from '@mui/icons-material/Quiz'
 
 // import CourseVideo from './CourseVideo'
@@ -119,13 +119,13 @@ const CourseCurriculum = ({ course }) => {
                     section.lectures.map(lecture => (
                       <Link to={`/courses/${course.slug}/lectures/${lecture._id}`} key={lecture._id}>
                         <LectureItemButton>
-                            <ListItem disablePadding key={lecture._id}>
-                              <ListItemIcon className='item-icon'>
-                                {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : lecture.type === 'ARTICLE' ? <NoteIcon /> : <QuizIcon />}
+                          <ListItem disablePadding key={lecture._id}>
+                            <ListItemIcon className='item-icon'>
+                              {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : (lecture.content.lectureContentType === 'ARTICLE') ? <ArticleIcon /> : <QuizIcon />}
                             </ListItemIcon>
                             <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : 0})`} />
-                              {lecture.canPreview ? <Button size='small' variant='contained'>Preview</Button> : <Button size='small' variant='contained' disabled>Start</Button>}
-                            </ListItem>
+                            {lecture.canPreview ? <Button size='small' variant='contained'>Preview</Button> : <Button size='small' variant='contained' disabled>Start</Button>}
+                          </ListItem>
                         </LectureItemButton>
                       </Link>
                     ))}

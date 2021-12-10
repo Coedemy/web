@@ -39,3 +39,8 @@ export { default as FacebookIcon } from './icons/FacebookIcon'
 export { default as GoogleIcon } from './icons/GoogleIcon'
 
 export { default as NumberField } from './NumberField/NumberField'
+
+export { default as NotificationBar } from './NotificationBar/NotificationBar'
+export { default as WishlistButton } from './WishlistButton/WishlistButton'
+export { default as ShoppingCartButton } from './ShoppingCartButton/ShoppingCartButton'
+export { default as MyLearningButton } from './MyLearningButton/MyLearningButton'

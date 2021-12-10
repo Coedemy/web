@@ -1,30 +1,19 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { Router, Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Router, BrowserRouter } from 'react-router-dom'
 import history from 'history.js'
 
-import { GlobalCss, MatxSuspense, MatxTheme, MatxLayout } from 'app/components'
+import { GlobalCss, MatxTheme } from 'app/components'
 import { SettingsProvider } from 'app/contexts/SettingsContext'
 import AppContext from './contexts/AppContext'
-import routes from './RootRoutes'
 import Store from './redux-toolkit/store'
-import sessionRoutes from './views/sessions/SessionRoutes'
-import AuthGuard from './auth/AuthGuard'
+import routes from './RootRoutes'
+import AppRouter from './AppRouter'
 import '../fake-db'
-import {
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query'
 
 import 'video-react/dist/video-react.css'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
+
 const App = () => {
   return (
     <AppContext.Provider value={{ routes }}>
@@ -32,29 +21,10 @@ const App = () => {
         <SettingsProvider>
           <MatxTheme>
             <GlobalCss />
+
             <BrowserRouter basename={process.env.PUBLIC_URL}>
               <Router history={history}>
-                {/* <AuthProvider> */}
-                <MatxSuspense>
-                  <QueryClientProvider client={queryClient}>
-                    <Switch>
-                      {/* AUTHENTICATION PAGES (SIGNIN, SIGNUP ETC.) */}
-                      {sessionRoutes.map((item, i) => (
-                        <Route
-                          key={i}
-                          path={item.path}
-                          component={item.component}
-                        />
-                      ))}
-                      {/* AUTH PROTECTED DASHBOARD PAGES */}
-                      <AuthGuard>
-                        <MatxLayout />{' '}
-                        {/* RETURNS <Layout1/> component */}
-                      </AuthGuard>
-                    </Switch>
-                  </QueryClientProvider>
-                </MatxSuspense>
-                {/* </AuthProvider> */}
+                <AppRouter />
               </Router>
             </BrowserRouter>
           </MatxTheme>

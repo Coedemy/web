@@ -8,21 +8,15 @@ import { trackTime } from 'app/redux-toolkit/slices/lectureSlice'
 
 const VIDEO_HEIGHT = 600
 
-const PlayerContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  height: `${VIDEO_HEIGHT}px`,
-  backgroundColor: '#f7f7f7'
-}))
 
-const CourseLearnVideo = ({ videoUrl, poster, playerRef }) => {
+
+const CourseLearnVideo = ({ videoUrl, poster, playerRef, visible }) => {
   const dispatch = useDispatch()
   const lectureReducer = useSelector(state => state.lecture)
   useEffect(() => {
     pause()
     playerRef.current.subscribeToStateChange(handleStateChange)
   }, [])
-  console.log(lectureReducer.currentLecture.currentTime)
 
   const handleStateChange = (state, prevState) => {
     if (lectureReducer.currentLecture.isVideo) {
@@ -35,20 +29,12 @@ const CourseLearnVideo = ({ videoUrl, poster, playerRef }) => {
     }
   }
 
-  // const setMuted = (muted) => {
-  //   return () => {
-  //     playerRef.current.muted = muted
-  //   }
-  // }
-
-  // const handleStateChange = (state) => {
-  //   // copy player state to this component's state
-  //   playerRef = state
-  // }
-
-  // const play = () => {
-  //   playerRef.current.play()
-  // }
+  const PlayerContainer = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'center',
+    height: visible ? `${VIDEO_HEIGHT}px` : 0,
+    backgroundColor: '#f7f7f7'
+  }))
 
   const pause = () => {
     playerRef.current.pause()

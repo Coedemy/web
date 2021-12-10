@@ -12,7 +12,7 @@ const categories = [
   { id: 2, title: 'Music' },
   { id: 3, title: 'IT & Software' }]
 
-const HomePage = () => {
+const Home = () => {
   useEffect(() => {
     document.title = 'Coedemy'
   }, [])
@@ -83,4 +83,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default Home

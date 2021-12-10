@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import BestSellerCoursesList from './BestSellerCoursesList'
 import HighRatingCoursesList from './HighRatingCoursesList'
 
-import MyLearning from './MyLearning'
+import MyLearning from './MyCourses/MyLearning'
 
 const gap = 8
 

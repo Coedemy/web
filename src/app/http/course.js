@@ -15,3 +15,8 @@ export const searchCourse = ({ queries }) => {
   console.log('Course Detail')
   return httpRequest({ endpoint: `/courses/detail?${queryString.stringify(queries)}` })
 }
+
+export const checkoutRequest = (payload) => {
+  console.log('Checkout')
+  return httpRequest({ endpoint: `/orders/checkout`, method: 'post', bodyParameters: payload, requireToken: true })
+}

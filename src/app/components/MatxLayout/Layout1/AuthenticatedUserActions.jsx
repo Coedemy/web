@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Icon,
@@ -36,6 +36,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 const AuthenticatedUserActions = ({ user }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const history = useHistory()
 
   return (
     <MatxMenu
@@ -77,6 +78,7 @@ const AuthenticatedUserActions = ({ user }) => {
           console.log('logout')
           dispatch(logout())
           dispatch(loadCart())
+          history.push('/')
         }}
         className={classes.menuItem}
       >

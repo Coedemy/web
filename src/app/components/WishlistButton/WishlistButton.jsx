@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useHistory, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon, Badge, IconButton, Drawer, Button, Box, Typography, Divider } from '@material-ui/core'
+import { Badge, IconButton, Drawer, Button, Box, Typography, Divider } from '@material-ui/core'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import styled from 'styled-components'
 import clsx from 'clsx'
+
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import ClearIcon from '@mui/icons-material/Clear'
 
 import useSettings from 'app/hooks/useSettings'
 import { orange } from 'app/utils/color'
@@ -38,7 +41,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
 
 // let cartListLoaded = false
 
-function Wishlist({ container }) {
+function WishlistButton({ container }) {
 	const [panelOpen, setPanelOpen] = useState(false)
 
 	const classes = useStyles()
@@ -55,7 +58,7 @@ function Wishlist({ container }) {
 	}
 
 	const goToWishlistPage = () => {
-		history.push('/wishlist')
+		history.push('/my-courses/wishlist')
 		setPanelOpen(false)
 	}
 
@@ -68,7 +71,7 @@ function Wishlist({ container }) {
 		<>
 			<IconButton onClick={handleDrawerToggle}>
 				<Badge color='secondary' badgeContent={wishlist.length}>
-					<Icon>favorite</Icon>
+					<FavoriteIcon />
 				</Badge>
 			</IconButton>
 
@@ -87,7 +90,7 @@ function Wishlist({ container }) {
 						className={clsx('flex-column h-full', classes.miniCart)}
 					>
 						<div className='cart__topbar elevation-z6 flex items-center p-1 mb-2 pl-4'>
-							<Icon color='primary'>favorite</Icon>
+							<FavoriteIcon color='primary' />
 							<h5 className='ml-2 my-0 font-medium'>Wishlist</h5>
 						</div>
 
@@ -156,7 +159,7 @@ function Wishlist({ container }) {
 											size='small'
 											onClick={handleRemoveCourseFromWishlist.bind(this, course)}
 										>
-											<Icon fontSize='small'>clear</Icon>
+											<ClearIcon fontSize='small' />
 										</IconButton>
 									</Box>
 									<Divider />
@@ -179,4 +182,4 @@ function Wishlist({ container }) {
 	)
 }
 
-export default Wishlist
+export default WishlistButton

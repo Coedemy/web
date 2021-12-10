@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useHistory, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon, Badge, IconButton, Drawer, Button, Box, Typography, Divider } from '@material-ui/core'
+import { Badge, IconButton, Drawer, Button, Box, Typography, Divider } from '@mui/material'
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import styled from 'styled-components'
 import clsx from 'clsx'
 
+import SchoolIcon from '@mui/icons-material/School'
+import ClearIcon from '@mui/icons-material/Clear'
+
 import useSettings from 'app/hooks/useSettings'
 import { orange } from 'app/utils/color'
-import { removeFromCart } from 'app/redux-toolkit/slices/userSlice'
-import { updateCartRequest } from 'app/http/user'
+import { toggleFavorite } from 'app/redux-toolkit/slices/userSlice'
+import { toggleFavoriteRequest } from 'app/http/user'
 
 const CourseTitle = styled.strong`
   overflow: hidden;
@@ -36,49 +39,39 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
   },
 }))
 
+// let cartListLoaded = false
 
-function ShoppingCart({ container }) {
-  const [totalCost, setTotalCost] = useState(0)
+function MyLearningButton({ container }) {
   const [panelOpen, setPanelOpen] = useState(false)
 
   const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory()
-  const { cart } = useSelector((state) => state.user)
+  const { myLearning } = useSelector((state) => state.user)
   const { settings } = useSettings()
-  const { mutate, isLoading } = useMutation(updateCartRequest, {
-    mutationKey: 'updateCart',
+  const { mutate, isLoading } = useMutation(toggleFavoriteRequest, {
+    mutationKey: 'toggleFavorite',
   })
 
   const handleDrawerToggle = () => {
     setPanelOpen(!panelOpen)
   }
 
-  const handleCheckoutClick = () => {
-    history.push('/cart')
+  const goToWishlistPage = () => {
+    history.push('/my-courses/learning')
     setPanelOpen(false)
   }
 
-  const handleRemoveCourse = (courseId) => {
-    dispatch(removeFromCart({ id: courseId }))
-    mutate({ courseId, updateType: 'remove' })
+  const handleRemoveCourseFromWishlist = (course) => {
+    // dispatch(toggleFavorite({ course }))
+    // mutate({ courseId: course._id })
   }
-
-  useEffect(() => {
-    let total = 0
-
-    cart.forEach((course) => {
-      total += course.price
-    })
-
-    setTotalCost(total)
-  }, [cart])
 
   return (
     <>
       <IconButton onClick={handleDrawerToggle}>
-        <Badge color='secondary' badgeContent={cart.length}>
-          <Icon>shopping_cart</Icon>
+        <Badge color='primary' badgeContent={myLearning.length}>
+          <SchoolIcon />
         </Badge>
       </IconButton>
 
@@ -93,16 +86,14 @@ function ShoppingCart({ container }) {
             keepMounted: true,
           }}
         >
-          <div
-            className={clsx('flex-column h-full', classes.miniCart)}
-          >
+          <div className={clsx('flex-column h-full', classes.miniCart)}>
             <div className='cart__topbar elevation-z6 flex items-center p-1 mb-2 pl-4'>
-              <Icon color='primary'>shopping_cart</Icon>
-              <h5 className='ml-2 my-0 font-medium'>Shopping Cart</h5>
+              <SchoolIcon color='primary' />
+              <h5 className='ml-2 my-0 font-medium'>My Learning</h5>
             </div>
 
             <div className='flex-grow overflow-auto'>
-              {cart.map((course) => (
+              {myLearning.map((course) => (
                 <Box key={course._id}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Link
@@ -164,9 +155,9 @@ function ShoppingCart({ container }) {
                     </Link>
                     <IconButton
                       size='small'
-                      onClick={handleRemoveCourse.bind(this, course._id)}
+                      onClick={handleRemoveCourseFromWishlist.bind(this, course)}
                     >
-                      <Icon fontSize='small'>clear</Icon>
+                      <ClearIcon fontSize='small' />
                     </IconButton>
                   </Box>
                   <Divider />
@@ -174,15 +165,13 @@ function ShoppingCart({ container }) {
               ))}
             </div>
 
-            <Box sx={{ p: 2 }}><h4>Total: ${totalCost}.99</h4></Box>
             <Button
               className='w-full border-radius-0'
               variant='contained'
               color='primary'
-              onClick={handleCheckoutClick}
+              onClick={goToWishlistPage}
             >
-              {/* Checkout (${totalCost.toFixed(2)}) */}
-              Go to cart
+              Go to my courses
             </Button>
           </div>
         </Drawer>
@@ -191,4 +180,4 @@ function ShoppingCart({ container }) {
   )
 }
 
-export default ShoppingCart
+export default MyLearningButton
