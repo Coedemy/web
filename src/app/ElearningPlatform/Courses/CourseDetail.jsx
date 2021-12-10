@@ -11,6 +11,7 @@ import AppLayout from '../Layout/AppLayout'
 import CourseBanner from './CourseBanner'
 import CourseGoal from './CourseGoal'
 import CourseCurriculum from './CourseCurriculum'
+import CourseInfo from './CoursesInfo';
 
 const CourseDetail = () => {
 
@@ -32,10 +33,7 @@ const CourseDetail = () => {
               <CourseCurriculum course={data.course} />
             </Grid>
             <Grid item xs={3}>
-              This is {data.course._id}
-              <Grid item>
-                <img style={{ width: '100%' }} src={data.course.courseImage} />
-              </Grid>
+              <CourseInfo course={data.course} />
             </Grid>
           </Grid>
         )
