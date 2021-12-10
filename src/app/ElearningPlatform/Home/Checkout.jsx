@@ -8,6 +8,8 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { formatToVND } from 'app/utils/formatter'
 
 
+
+
 const RatingNumber = styled.strong`
   font-size: 14px;
   color: ${orange};
@@ -97,7 +99,7 @@ const Checkout = () => {
 
     return (
         <Box>
-            <Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, marginTop: 5, paddingTop: 30 }}>
+            <Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, paddingTop: 30 }}>
 				<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', flexDirection: 'row', marginLeft: 30 }}>Checkout</Typography>
 			</Grid >
             <AppLayout>
@@ -105,7 +107,7 @@ const Checkout = () => {
                     <Grid item xs={8}>
                         <Typography variant='h6' style={{ fontWeight: 'bold', flexDirection: 'row', marginTop: 20 }}>Billing Address</Typography>
                         <Box>
-                            <FormControl sx={{ m: 1, minWidth: 220 }}>
+                            <FormControl sx={{ minWidth: 220, mt:1, nb: 1 }}>
                                 <Select
                                 value={curCategory}
                                 onChange={handleChange}
@@ -116,18 +118,12 @@ const Checkout = () => {
                                 <MenuItem value=''>
                                     Viet Nam
                                 </MenuItem>
-                                {nations.map(c => <MenuItem sx={{ backgroundColor: 'white' }} value={c.id}>{c.title}</MenuItem>)}
+                                {nations.map(c => <MenuItem key={c.id} sx={{ backgroundColor: 'white' }} value={c.id}>{c.title}</MenuItem>)}
                                 </Select>
                             </FormControl>
                         </Box>
-                        <Grid container spacing={2} style={{border: '1px solid lightgray', backgroundColor: 'white', padding: 32, marginTop: 10 }}>
-                            <RadioGroup
-                                className="mb-12"
-                                value={gender || ''}
-                                name="gender"
-                                onChange={handleChangeTick}
-                                row
-                                >
+                        <Box container spacing={2} style={{border: '1px solid lightgray', backgroundColor: 'white', padding: 32, marginTop: 10 }}>
+                            <RadioGroup className="mb-12" value={gender || ''} name="gender" onChange={handleChangeTick} row>
                                 <FormControlLabel
                                     value="New Payment Cart"
                                     control={<Radio color="secondary" />}
@@ -139,81 +135,76 @@ const Checkout = () => {
                                     control={<Radio color="secondary" />}
                                     label="Paypal"
                                     labelPlacement="end"
-                                    marginLeft= "330"
                                 />
                             </RadioGroup>
                             <ValidatorForm onError={() => null}>
                                 <Grid container spacing={6}>
-                                <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <TextValidator
-                                    className="mb-4 w-full"
-                                    label="Name on Card"
-                                    onChange={handleChange}
-                                    type="text"
-                                    name="Name on Card"
-                                    value={username || ''}
-                                    validators={[
-                                        'required',
-                                        'minStringLength: 4',
-                                        'maxStringLength: 9',
-                                    ]}
-                                    errorMessages={['this field is required']}
-                                    />
-                                    <TextValidator
-                                    className="mb-4 w-full"
-                                    label="Cart Number"
-                                    onChange={handleChange}
-                                    type="text"
-                                    name="Cart Number"
-                                    value={firstName || ''}
-                                    validators={['required']}
-                                    errorMessages={['this field is required']}
-                                    />
-                                    <TextValidator
-                                    className="mb-4 w-full"
-                                    label="MM/YY"
-                                    onChange={handleChange}
-                                    type="text"
-                                    name="MM/YY"
-                                    value={email || ''}
-                                    validators={['required', 'isEmail']}
-                                    errorMessages={[
-                                        'this field is required',
-                                    ]}
-                                    />
+                                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                                        <TextValidator
+                                            className="mb-4 w-full"
+                                            label="Name on Card"
+                                            onChange={handleChange}
+                                            type="text"
+                                            name="Name on Card"
+                                            value={username || ''}
+                                            validators={[
+                                                'required',
+                                                'minStringLength: 4',
+                                                'maxStringLength: 9',
+                                            ]}
+                                            errorMessages={['this field is required']}
+                                        />
+                                        <TextValidator
+                                            className="mb-4 w-full"
+                                            label="Cart Number"
+                                            onChange={handleChange}
+                                            type="text"
+                                            name="Cart Number"
+                                            value={firstName || ''}
+                                            validators={['required']}
+                                            errorMessages={['this field is required']}
+                                        />
+                                        <TextValidator
+                                            className="mb-4 w-full"
+                                            label="MM/YY"
+                                            onChange={handleChange}
+                                            type="text"
+                                            name="MM/YY"
+                                            value={email || ''}
+                                            validators={['required', 'isEmail']}
+                                            errorMessages={[
+                                                'this field is required',
+                                            ]}
+                                        />
+                                    </Grid>
+                                    <Grid item lg={6} md={6} sm={12} xs={12}>
+                                        <TextValidator
+                                            className="mb-4 w-full"
+                                            label="Security"
+                                            onChange={handleChange}
+                                            type="text"
+                                            name="Security"
+                                            value={mobile || ''}
+                                            validators={['required']}
+                                            errorMessages={['this field is required']}
+                                        />
+                                        <TextValidator
+                                            className="mb-4 w-full"
+                                            label="Zip/Postal Code"
+                                            onChange={handleChange}
+                                            name="text"
+                                            type="Zip/Postal Code"
+                                            value={password || ''}
+                                            validators={['required']}
+                                            errorMessages={['this field is required']}
+                                        />
+                                    </Grid>
                                 </Grid>
-
-                                <Grid item lg={6} md={6} sm={12} xs={12}>
-                                    <TextValidator
-                                    className="mb-4 w-full"
-                                    label="Security"
-                                    onChange={handleChange}
-                                    type="text"
-                                    name="Security"
-                                    value={mobile || ''}
-                                    validators={['required']}
-                                    errorMessages={['this field is required']}
-                                    />
-                                    <TextValidator
-                                    className="mb-4 w-full"
-                                    label="Zip/Postal Code"
-                                    onChange={handleChange}
-                                    name="text"
-                                    type="Zip/Postal Code"
-                                    value={password || ''}
-                                    validators={['required']}
-                                    errorMessages={['this field is required']}
-                                    />
-                                </Grid>
-                                </Grid>
-                                <FormControlLabel
-                                    control={<Checkbox />}
-                                    label="Remember this card"
-                                />
+                                <FormControlLabel control={<Checkbox />} label="Remember this card"/>
                             </ValidatorForm>
-                        </Grid>
+                        </Box>
                         <Typography variant='h6' style={{ fontWeight: 'bold', flexDirection: 'row', marginTop: 20 }}>Order Detail</Typography> 
-                        <Grid container spacing={2} style={{border: '1px solid lightgray', backgroundColor: 'white', padding: 32, marginTop: 10 }}>
+                        <Box container spacing={2} style={{border: '1px solid lightgray', backgroundColor: 'white', padding: 32, marginTop: 10 }}>
                             <Grid item xs={12}>
                                 <div className="overflow-auto">
                                     <div className="min-w-600">
@@ -224,31 +215,18 @@ const Checkout = () => {
                                                         Product Details
                                                     </h6>
                                                 </Grid>                                               
-                                                <Grid
-                                                    item
-                                                    lg={2}
-                                                    md={2}
-                                                    sm={2}
-                                                    xs={2}
-                                                    className="text-center"
-                                                >
+                                                <Grid item lg={2} md={2} sm={2} xs={2} className="text-center">
                                                     <h6 className="m-0 font-medium">Price</h6>
                                                 </Grid>
                                             </Grid>
                                         </div>
-
                                         <Divider />
-
                                         {dummyProductList.map((product) => (
                                             <div key={product.id} className="py-4">
                                                 <Grid container alignItems="center">
                                                     <Grid item lg={10} md={10} sm={10} xs={10}>
                                                         <div className="flex">
-                                                            <img
-                                                                className="border-radius-4 w-100 mr-3"
-                                                                src={product.imgUrl}
-                                                                alt={product.title}
-                                                            />
+                                                            <img className="border-radius-4 w-100 mr-3" src={product.imgUrl} alt={product.title}/>
                                                             <div className="flex-grow">
                                                                 <h6 className="mt-0 mb-3 text-15 text-primary">
                                                                     {product.title}
@@ -286,16 +264,7 @@ const Checkout = () => {
                                                             </div>
                                                         </div>
                                                     </Grid>
-            
-                                                    
-                                                    <Grid
-                                                        item
-                                                        lg={2}
-                                                        md={2}
-                                                        sm={2}
-                                                        xs={2}
-                                                        className="text-center"
-                                                    >
+                                                    <Grid item lg={2} md={2} sm={2} xs={2} className="text-center">
                                                         <div className="flex justify-end items-center" style={{  display: 'block'}}>
                                                             <Box sx={{ display: 'block', flexDirection: 'row' }}>
                                                                 <Box sx={{ display: 'flex', fontWeight: 'bold', flexDirection: 'row', marginLeft: 5}}>${product.price}</Box>
@@ -309,37 +278,62 @@ const Checkout = () => {
                                     </div>
                                 </div>
                             </Grid>
-                        </Grid > 
+                        </Box > 
                     </Grid>                        
                     <Grid item xs={4}>
-                        <Grid container spacing={0} style={{ border: '1px solid lightgray', marginLeft: 15, marginTop: 60 }}>
-                            <Grid item xs={12}>                          
-                                <Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', marginTop: 10 }}>Summary</Typography>
-                                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Typography sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: 4 }}>
-                                        Original price:
-                                    </Typography>
-                                    <Typography sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: 15 }}>$169.98</Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Typography sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: 4 }}>
-                                        Coupon discounts:
-                                    </Typography>
-                                    <Typography sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: 10 }}>-$150.00</Typography>
-                                </Box>
-                                <Divider />
-                                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Typography sx={{fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: 4 }}>
-                                        Total:
-                                    </Typography>
-                                    <Typography sx={{fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: 22 }}>$19.98</Typography>
-                                </Box>
-                                <Typography sx={{ fontSize: 10 ,display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 1, marginLeft: 4, marginRight: 4 }}>Coedemy is required by law to collect applicable transaction taxes for purchases made in certain tax jurisdictions.</Typography>
-                                <Box sx={{ marginBottom: 4 }} />
-                                <Button variant="contained"  style={{textAlign: 'center', fontWeight: 'bold', paddingLeft: 15, marginLeft: 30, width: 285, marginBottom: 5, display: 'block'}}>Complete Payment</Button>
-                                <Box sx={{ marginBottom: 4 }} />
-                            </Grid>
-                        </Grid >
+                        <Box container spacing={0} style={{ border: '1px solid lightgray', marginTop: 110 }}>
+                            <Box sx={{ m : 3 }}>
+                                <Box item xs={12}>                          
+                                    <Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '20px'}}>Summary</Typography>
+                                    <Grid item xs={12}>
+                                        <div>
+                                            <Grid container>
+                                                <Grid item lg={9} md={9} sm={9} xs={9}>
+                                                    <h6 style={{fontSize: '20px'}}>
+                                                        Original price:
+                                                    </h6>
+                                                </Grid>                                               
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <h6 style={{fontSize: '20px', position: 'right'}}>$169.98</h6>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                        <div>
+                                            <Grid container>
+                                                <Grid item lg={9} md={9} sm={9} xs={9}>
+                                                    <h6 style={{fontSize: '20px'}}>
+                                                        Coupon discounts:
+                                                    </h6>
+                                                </Grid>                                               
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <h6 style={{fontSize: '20px'}}>-$50.00</h6>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </Grid>
+                                    <Divider />
+                                    <Box sx={{ marginTop: 2 }} />
+                                    <Grid item xs={12}>
+                                        <div>
+                                            <Grid container>
+                                                <Grid item lg={9} md={9} sm={9} xs={9}>
+                                                    <h6 style={{fontSize: '20px'}}>
+                                                        Total:
+                                                    </h6>
+                                                </Grid>                                               
+                                                <Grid item lg={3} md={3} sm={3} xs={3}>
+                                                    <h6 style={{fontSize: '20px', position: 'right'}}>$19.98</h6>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </Grid>
+                                    <Typography sx={{ fontSize: 10 ,display: 'flex', flexDirection: 'row', alignItems: 'center'}}>Coedemy is required by law to collect applicable transaction taxes for purchases made in certain tax jurisdictions.</Typography>
+                                    <Box sx={{ marginBottom: 4 }} />
+                                    <Button variant="contained"  style={{textAlign: 'center', fontWeight: 'bold', display: 'block', width: '100%'}}>Complete Payment</Button>
+                                    <Box sx={{ marginBottom: 4 }} />
+                                </Box>            
+                            </Box>
+                        </Box >
                     </Grid>
                 </Grid>
                 <Box sx={{ marginBottom: 4 }} />

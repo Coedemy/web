@@ -3,12 +3,13 @@ import { useMutation } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { styled as muiStyled } from '@mui/material/styles'
-import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom, Icon, IconButton } from '@mui/material'
+import { Card, Grid, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom, Icon, IconButton } from '@mui/material'
 import { tooltipClasses } from '@mui/material/Tooltip'
 import StarIcon from '@mui/icons-material/Star'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import styled from 'styled-components'
+import CheckIcon from '@mui/icons-material/Check'
 
 import { formatToVND } from 'app/utils/formatter'
 import { orange } from 'app/utils/color'
@@ -85,18 +86,39 @@ const CourseInfoModal = ({ course }) => {
   }
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography>{course.description}</Typography>
-      <Box sx={{ m: 4 }} />
+    <Box>
+      <CardContent>
+        <Box>
+          <CourseTitle>{course.title}</CourseTitle>
+          <Box sx={{ marginBottom: '3px' }} />
+          <Typography style={{color: '#03FF78', fontSize: '13px'}}>December 2021</Typography>
+          <Typography style={{ fontSize: '10px', opacity: '50%'}}>All Levels . Subtitles</Typography>
+          <Box sx={{ marginBottom: '4px' }} />
+          <CourseDescription>{course.description}</CourseDescription>
+          <Box sx={{ marginBottom: '4px' }} />
+          <Box style={{ display: 'flex', flexDirection: 'row' }}>
+            <CheckIcon />
+            <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Use MongoDB to its full potential in future projects</Typography>
+          </Box>
+          <Box style={{ display: 'flex', flexDirection: 'row' }}>
+            <CheckIcon />
+            <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Use all features MongoDB offers you to work with data efficiently</Typography>
+          </Box>
+          <Box style={{ display: 'flex', flexDirection: 'row' }}>
+            <CheckIcon />
+            <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Write efficient and well-performing queries to fetch data in the format you need it</Typography>
+          </Box>
+        </Box>
+      </CardContent>
       <Box>
         {
           userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
-            <Link to='/cart'><Button variant='contained'>Go to cart</Button></Link>
+            <Link to='/cart'><Button variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Go to cart</Button></Link>
           ) : (
-            <Button onClick={handleAddToCart} variant='contained'>Add To Cart</Button>
+            <Button onClick={handleAddToCart} variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Add To Cart</Button>
           )
         }
-        <IconButton onClick={toggleFavoriteButton.bind(this, course)}>
+        <IconButton onClick={toggleFavoriteButton.bind(this, course)} style={{ marginBottom: '15px' }}>
           {
             userReducer.wishlist.some(c => c._id === course._id) ? <FavoriteIcon fontSize='large' /> : <FavoriteBorderIcon fontSize='large' />
           }
