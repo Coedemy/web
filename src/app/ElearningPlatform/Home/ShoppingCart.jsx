@@ -46,7 +46,7 @@ const CartItemsList = ({ courses }) => {
 									<Link to={`/courses/${course.slug}`} key={course._id}>
 										<div className='py-4'>
 											<Grid container>
-												<Grid lg={8} md={8} sm={8} xs={8}>
+												<Grid item lg={8} md={8} sm={8} xs={8}>
 													<div className='flex'>
 														<img
 															className='border-radius-4 w-100 mr-3'
@@ -66,9 +66,9 @@ const CartItemsList = ({ courses }) => {
 																	TRAN PHUONG DUY
 																</span>
 															</p>
-															<p className='mt-0 mb-6px text-13'>
+															<div className='mt-0 mb-6px text-13'>
 																<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-																	<RatingNumber>{4}</RatingNumber>
+																	<RatingNumber>{course.averageRating}</RatingNumber>
 																	<Rating
 																		name='text-feedback'
 																		value={course.averageRating}
@@ -79,7 +79,7 @@ const CartItemsList = ({ courses }) => {
 																	/>
 																	<Box sx={{ ml: 1 }}>({formatToVND(course.reviews.length)})</Box>
 																</Box>
-															</p>
+															</div>
 															<p className='mt-0 mb-6px text-13'>
 																<span className='font-medium'>
 																	{' '}
@@ -91,12 +91,12 @@ const CartItemsList = ({ courses }) => {
 														</div>
 													</div>
 												</Grid>
-												<Grid lg={2} md={2} sm={2} xs={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+												<Grid item lg={2} md={2} sm={2} xs={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
 													<Button variant='text' style={{ display: 'flex', fontSize: 12, textTransform: 'capitalize' }} onClick={handleRemoveCourse.bind(this, course._id)}>Remove</Button>
 													<Button variant='text' style={{ display: 'flex', fontSize: 12, textTransform: 'capitalize' }}>Save for Later</Button>
 													<Button variant='text' style={{ display: 'flex', fontSize: 12, textTransform: 'capitalize' }}>Move to Wishlist</Button>
 												</Grid>
-												<Grid lg={2} md={2} sm={2} xs={2}>
+												<Grid item lg={2} md={2} sm={2} xs={2}>
 													<Box sx={{ display: 'flex', fontWeight: 'bold', flexDirection: 'row', marginLeft: 5, fontSize: 18 }}>${course.price}</Box>
 													<Box sx={{ display: 'flex', fontWeight: 'bold', flexDirection: 'row', textDecoration: 'line-through', alignItems: 'center', marginLeft: 5 }}>${course.oldprice}</Box>
 												</Grid>
@@ -130,7 +130,7 @@ const CheckoutCard = () => {
 	}
 
 	return (
-		<Grid xs={12} sx={{ p: 4 }} spacing={4}>
+		<Grid sx={{ p: 4 }}>
 			<Box sx={{ mt: 2 }} />
 			<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center' }}>Total</Typography>
 			<Typography variant='h4' sx={{ fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>$9</Typography>
@@ -165,7 +165,7 @@ const CheckoutCard = () => {
 const NoItemCard = () => {
 	return (
 		<Grid container spacing={2} style={{ border: '1px solid lightgray', backgroundColor: 'white', marginTop: 5 }}>
-			<Card xs={12} sx={{ p: 2, borderRadius: 2, width: '100%' }}>
+			<Card sx={{ p: 2, borderRadius: 2, width: '100%' }}>
 				<CardContent>
 					<Typography variant='h6' style={{ flexDirection: 'row', marginTop: 30 }}>Your cart is empty. Keep shopping to find a course!</Typography>
 					<Box sx={{ mb: 2 }} />
@@ -187,12 +187,12 @@ const ShoppingCart = () => {
 			</Grid >
 			<AppLayout>
 				<Grid container spacing={2}>
-					<Grid xs={9}>
+					<Grid item xs={9}>
 						<Typography variant='h5' style={{ fontWeight: 'bold', flexDirection: 'row', marginTop: 30 }}>{userReducer.cart.length} Courses in Cart</Typography>
 						{userReducer.cart.length === 0 ? <NoItemCard /> : <CartItemsList courses={userReducer.cart} />}
 					</Grid>
 					{userReducer.cart.length === 0 ? <></> :
-						(<Grid xs={3}>
+						(<Grid item xs={3}>
 							<Grid container style={{ border: '1px solid lightgray', marginLeft: 15, marginTop: 66 }}>
 								<CheckoutCard />
 							</Grid >

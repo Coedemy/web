@@ -1,9 +1,9 @@
 import React from 'react'
-import crypto from 'crypto'
-import { Box, Grid, Typography, Rating } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
+import crypto from 'crypto'
 
-const CourseGoal = ({course}) => {
+const CourseGoal = ({ course }) => {
 
   return (
     <Grid container spacing={2} style={{ border: '1px solid lightgray', padding: 32, paddingTop: 16, marginTop: 32 }}>
@@ -13,9 +13,9 @@ const CourseGoal = ({course}) => {
         <Grid container spacing={2}>
           {
             course.learningGoals.map(goal => (
-              <Grid item xs={6} key={crypto.randomBytes(16).toString("hex")} style={{ display: 'flex', flexDirection: 'row' }}>
+              <Grid item xs={6} key={crypto.randomBytes(16).toString('hex')} style={{ display: 'flex', flexDirection: 'row' }}>
                 <CheckIcon />
-                <Typography style={{ wordWrap: "break-word" }}>{goal}</Typography>
+                <Typography style={{ wordWrap: 'break-word' }}>{goal}</Typography>
               </Grid>
             ))
           }

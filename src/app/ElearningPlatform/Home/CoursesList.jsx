@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { Grid, Box } from '@mui/material'
 

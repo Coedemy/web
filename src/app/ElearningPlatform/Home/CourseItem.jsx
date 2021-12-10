@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useMutation } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { styled as muiStyled } from '@mui/material/styles'
-import { Card, Grid, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom, Icon, IconButton } from '@mui/material'
+import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom, IconButton } from '@mui/material'
 import { tooltipClasses } from '@mui/material/Tooltip'
 import StarIcon from '@mui/icons-material/Star'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import styled from 'styled-components'
 import CheckIcon from '@mui/icons-material/Check'
+import crypto from 'crypto'
 
 import { formatToVND } from 'app/utils/formatter'
 import { orange } from 'app/utils/color'
@@ -59,6 +60,7 @@ const LightTooltip = muiStyled(({ className, ...props }) => (
 }))
 
 const CourseInfoModal = ({ course }) => {
+  console.log({ course: course.learningGoals })
   const dispatch = useDispatch()
   const userReducer = useSelector(state => state.user)
   const authReducer = useSelector(state => state.auth)
@@ -85,38 +87,39 @@ const CourseInfoModal = ({ course }) => {
     }
   }
 
+  console.log(course.learningGoals.slice(0, 3))
+
   return (
     <Box>
       <CardContent>
         <Box>
           <CourseTitle>{course.title}</CourseTitle>
           <Box sx={{ marginBottom: '3px' }} />
-          <Typography style={{color: '#03FF78', fontSize: '13px'}}>December 2021</Typography>
-          <Typography style={{ fontSize: '10px', opacity: '50%'}}>All Levels . Subtitles</Typography>
+          <Typography style={{ color: '#03FF78', fontSize: '13px' }}>December 2021</Typography>
+          <Typography style={{ fontSize: '10px', opacity: '50%' }}>All Levels . Subtitles</Typography>
           <Box sx={{ marginBottom: '4px' }} />
           <CourseDescription>{course.description}</CourseDescription>
           <Box sx={{ marginBottom: '4px' }} />
-          <Box style={{ display: 'flex', flexDirection: 'row' }}>
-            <CheckIcon />
-            <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Use MongoDB to its full potential in future projects</Typography>
-          </Box>
-          <Box style={{ display: 'flex', flexDirection: 'row' }}>
-            <CheckIcon />
-            <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Use all features MongoDB offers you to work with data efficiently</Typography>
-          </Box>
-          <Box style={{ display: 'flex', flexDirection: 'row' }}>
-            <CheckIcon />
-            <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>Write efficient and well-performing queries to fetch data in the format you need it</Typography>
-          </Box>
+          {
+            course.learningGoals.slice(0, 3).map(goal => (
+              <Box key={crypto.randomBytes(16).toString('hex')} style={{ display: 'flex', flexDirection: 'row' }}>
+                <CheckIcon />
+                <Typography style={{ fontSize: '13px', opacity: '95%', marginLeft: '5px' }}>{goal}</Typography>
+              </Box>
+            ))
+          }
         </Box>
       </CardContent>
       <Box>
         {
-          userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
-            <Link to='/cart'><Button variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Go to cart</Button></Link>
-          ) : (
-            <Button onClick={handleAddToCart} variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Add To Cart</Button>
-          )
+          userReducer.myLearning.some(learningCourse => course._id === learningCourse._id) ? (
+            <Link to='/my-courses/learning'><Button variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Learn</Button></Link>
+          ) :
+            userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
+              <Link to='/cart'><Button variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Go to cart</Button></Link>
+            ) : (
+              <Button onClick={handleAddToCart} variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Add To Cart</Button>
+            )
         }
         <IconButton onClick={toggleFavoriteButton.bind(this, course)} style={{ marginBottom: '15px' }}>
           {

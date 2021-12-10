@@ -14,7 +14,6 @@ const userSlice = createSlice({
       state.isLoading = true
       const userProps = action.payload
       if (userProps) {
-        console.log({ userProps })
         state.wishlist = userProps.wishlist
         state.myLearning = userProps.myLearning
       }
@@ -23,12 +22,15 @@ const userSlice = createSlice({
       return state
     },
 
-    checkout: (state, action) => {
+    checkoutSucess: (state, action) => {
       state.isLoading = true
       const { myLearning } = action.payload
       state.myLearning = myLearning
       state.cart = []
       state.isLoading = false
+      localStorage.setItem('cart', [])
+
+      return state
     },
 
     loadCart: (state, action) => {
@@ -109,6 +111,6 @@ export const {
   loadCart,
   addToCart,
   removeFromCart,
-  checkout
+  checkoutSucess
 } = actions
 export default reducer
