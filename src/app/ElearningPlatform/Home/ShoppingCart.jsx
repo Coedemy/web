@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
@@ -27,7 +27,6 @@ const CartItemsList = ({ courses }) => {
 	const { mutate, isLoading } = useMutation(updateCartRequest, {
 		mutationKey: 'updateCart',
 	})
-
 	const dispatch = useDispatch()
 
 	const handleRemoveCourse = (courseId) => {
@@ -117,6 +116,7 @@ const CartItemsList = ({ courses }) => {
 }
 
 const CheckoutCard = () => {
+	const [canCheckout, setCanCheckout] = useState(false)
 	const [panelOpen, setPanelOpen] = useState(false)
 	const history = useHistory()
 	const handleCheckoutClick = () => {
@@ -129,6 +129,16 @@ const CheckoutCard = () => {
 		setPanelOpen(false)
 	}
 
+	const authReducer = useSelector(state => state.auth)
+
+	useEffect(() => {
+		console.log(authReducer.isLoading)
+		if (!authReducer.isLoading && authReducer.accessToken) {
+			setCanCheckout(true)
+		}
+		setCanCheckout(false)
+	}, [authReducer.isLoading])
+
 	return (
 		<Grid sx={{ p: 4 }}>
 			<Box sx={{ mt: 2 }} />
@@ -137,7 +147,10 @@ const CheckoutCard = () => {
 			<Typography variant='h6' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', textDecoration: 'line-through' }}>$12</Typography>
 			<Typography variant='h6' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>88% off</Typography>
 			<Box sx={{ mt: 2 }} />
-			<Button variant='contained' style={{ textAlign: 'center', fontWeight: 'bold', width: '100%', display: 'block' }} onClick={handleCheckoutClick}>Checkout</Button>
+			<Button disabled={!canCheckout} variant='contained' style={{ textAlign: 'center', fontWeight: 'bold', width: '100%', display: 'block' }} onClick={handleCheckoutClick}>Checkout</Button>
+			{
+				!canCheckout ? <p className='text-error'>You need to login to checkout!</p> : <></>
+			}
 			<Box sx={{ mt: 2 }} />
 			<Typography variant='h6' style={{ fontWeight: 'bold', flexDirection: 'row' }}>Promotions</Typography>
 			<Box sx={{ display: 'flex', flexDirection: 'row' }}>

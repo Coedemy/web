@@ -110,7 +110,6 @@ const Checkout = () => {
 	})
 
 	const onCheckoutSuccessfully = async (data) => {
-		console.log({ data })
 		dispatch(checkoutSucess(data))
 
 		history.push('/my-courses/learning')

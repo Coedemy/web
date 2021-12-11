@@ -60,7 +60,6 @@ const LightTooltip = muiStyled(({ className, ...props }) => (
 }))
 
 const CourseInfoModal = ({ course }) => {
-  console.log({ course: course.learningGoals })
   const dispatch = useDispatch()
   const userReducer = useSelector(state => state.user)
   const authReducer = useSelector(state => state.auth)
@@ -86,8 +85,6 @@ const CourseInfoModal = ({ course }) => {
       mutateToggleFavorite({ courseId: course._id })
     }
   }
-
-  console.log(course.learningGoals.slice(0, 3))
 
   return (
     <Box>
