@@ -4,15 +4,13 @@ import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Player, ControlBar, BigPlayButton, ReplayControl, VolumeMenuButton } from 'video-react'
 
-import { trackTime } from 'app/redux-toolkit/slices/lectureSlice'
+import { trackTime } from 'app/redux-toolkit/slices/courseSlice'
 
 const VIDEO_HEIGHT = 600
 
-
-
 const CourseLearnVideo = ({ videoUrl, poster, playerRef, visible }) => {
   const dispatch = useDispatch()
-  const lectureReducer = useSelector(state => state.lecture)
+  const lectureReducer = useSelector(state => state.course)
   useEffect(() => {
     pause()
     playerRef.current.subscribeToStateChange(handleStateChange)

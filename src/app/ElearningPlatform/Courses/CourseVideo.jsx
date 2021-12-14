@@ -1,12 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Player, ControlBar } from 'video-react'
 
-// const sources = {
-//   sintelTrailer: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
-//   bunnyTrailer: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
-//   bunnyMovie: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-//   test: 'http://media.w3.org/2010/05/video/movie_300.webm'
-// }
 
 const CourseVideo = ({ videoSrc }) => {
   const playerRef = useRef()
@@ -21,11 +15,6 @@ const CourseVideo = ({ videoSrc }) => {
       playerRef.current.muted = muted
     }
   }
-
-  // const handleStateChange = (state) => {
-  //   // copy player state to this component's state
-  //   playerRef = state
-  // }
 
   const play = () => {
     playerRef.current.play()
@@ -66,12 +55,6 @@ const CourseVideo = ({ videoSrc }) => {
     }
   }
 
-  // const changeSource = (name) => {
-  //   return () => {
-  //     setSource(sources[name])
-  //     playerRef.load()
-  //   }
-  // }
   return (
     <div>
       <Player

@@ -14,7 +14,7 @@ const CourseLearnNotes = () => {
   const [curSearchMode, setCurSearchMode] = useState(searchModeItems[0])
   const [curSortMode, setCurSortMode] = useState(sortModeItems[0])
 
-  const lectureReducer = useSelector(state => state.lecture)
+  const lectureReducer = useSelector(state => state.course)
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>

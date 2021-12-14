@@ -132,11 +132,8 @@ const CheckoutCard = () => {
 	const authReducer = useSelector(state => state.auth)
 
 	useEffect(() => {
-		console.log(authReducer.isLoading)
-		if (!authReducer.isLoading && authReducer.accessToken) {
-			setCanCheckout(true)
-		}
-		setCanCheckout(false)
+		if (!authReducer.isLoading && authReducer.accessToken) setCanCheckout(true)
+		else setCanCheckout(false)
 	}, [authReducer.isLoading])
 
 	return (

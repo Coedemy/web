@@ -76,9 +76,9 @@ const AuthenticatedUserActions = ({ user }) => {
       <MenuItem
         onClick={() => {
           console.log('logout')
+          window.location = '/'
           dispatch(logout())
           dispatch(loadCart())
-          history.push('/')
         }}
         className={classes.menuItem}
       >

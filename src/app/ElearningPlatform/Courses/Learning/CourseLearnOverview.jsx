@@ -2,7 +2,6 @@ import React from 'react'
 import { Box, Typography, Divider, Button } from '@mui/material'
 
 const CourseLearnOverview = ({ course }) => {
-  console.log({course})
   return (
     <Box>
       <Typography variant='h5' gutterBottom component='div' sx={{ fontWeight: 'bold' }}>

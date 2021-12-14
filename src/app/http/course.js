@@ -1,5 +1,6 @@
 import httpRequest from './httpRequest'
 import queryString from 'query-string'
+import { post } from 'qwest'
 
 export const getCoursesList = () => {
   console.log('Courses List')
@@ -11,9 +12,9 @@ export const getCategoriesList = () => {
   return httpRequest({ endpoint: '/courses/categories' })
 }
 
-export const searchCourse = ({ queries }) => {
+export const searchCourse = ({ queries, userId }) => {
   console.log('Course Detail')
-  return httpRequest({ endpoint: `/courses/detail?${queryString.stringify(queries)}` })
+  return httpRequest({ endpoint: `/courses/detail?${queryString.stringify(queries)}`, method: 'post', bodyParameters: { userId } })
 }
 
 export const checkoutRequest = (payload) => {

@@ -281,7 +281,7 @@ const Checkout = () => {
 											</Grid>
 										</div>
 										<Divider />
-										{userReducer.cart.length === 0 ? <></> : userReducer.cart.map((course) => <OrderItem course={course} />)}
+										{userReducer.cart.length === 0 ? <></> : userReducer.cart.map((course) => <OrderItem key={course._id} course={course} />)}
 									</div>
 								</div>
 							</Grid>

@@ -1,12 +1,12 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 
 import authReducer from './slices/authSlice'
-import lectureSlice from './slices/lectureSlice'
+import courseSlice from './slices/courseSlice'
 import userSlice from './slices/userSlice'
 
 const rootReducer = {
   auth: authReducer,
-  lecture: lectureSlice,
+  course: courseSlice,
   user: userSlice
 }
 

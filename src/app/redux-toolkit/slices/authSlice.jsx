@@ -19,12 +19,12 @@ const authSlice = createSlice({
 
     loginSuccess: (state, action) => {
       const { user, accessToken } = action.payload
-      const { username, _id, email, userId, profile } = user
+      const { username, id, email, userId, profile } = user
       state = {
         isLoading: false,
         error: null,
         accessToken,
-        user: { userId: userId || _id, username, email }
+        user: { userId: userId || id, username, email }
       }
 
       return state
