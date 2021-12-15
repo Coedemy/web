@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
   IconButton,
+  Box,
   useMediaQuery
 } from '@mui/material'
 import clsx from 'clsx'
@@ -160,15 +161,19 @@ const Layout1Topbar = () => {
 							<NotificationBar />
 						</NotificationProvider> */}
             {/* <NotificationBar2 /> */}
-            <div className='hide-on-mobile'>
-              <Link to='/instructor'>
-                <IconButton>
-                  <PersonIcon />
-                </IconButton>
-              </Link>
-            </div>
-            {authReducer.accessToken ? <MyLearningButton /> : <></>}
-            {authReducer.accessToken ? <WishlistButton /> : <></>}
+            {authReducer.accessToken ? (
+              <>
+                <div className='hide-on-mobile'>
+                  <Link to='/instructor/courses'>
+                    <IconButton>
+                      <PersonIcon />
+                    </IconButton>
+                  </Link>
+                </div>
+                <MyLearningButton />
+                <WishlistButton />
+              </>
+            ) : <></>}
             <ShoppingCartButton />
 
             {/* show username, wishlist and mylearning with authenticated users */}

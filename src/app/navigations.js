@@ -3,7 +3,7 @@ import { authRoles } from './auth/authRoles'
 export const navigations = [
   {
     name: 'Courses',
-    path: '/instructor/courses',
+    path: '/instructor/course',
     icon: 'ondemand_video'
   }, {
     name: 'Communication',
