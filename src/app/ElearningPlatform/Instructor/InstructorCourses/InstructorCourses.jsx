@@ -8,17 +8,17 @@ import InstructorCreateCourse from './InstructorCreateCourse'
 
 const myTeachingCourses = [
   {
-    id: 1,
+    id: 131244,
     title: 'PHP and Web Development',
     courseImage: 'https://process.fs.teachablecdn.com/ADNupMnWyR7kCWRvm76Laz/resize=width:705/https://www.filepicker.io/api/file/56HSrFc0SF6eyjrGXgVZ'
   },
   {
-    id: 2,
+    id: 213413,
     title: 'Data Analytics',
     courseImage: 'https://process.fs.teachablecdn.com/ADNupMnWyR7kCWRvm76Laz/resize=width:705/https://www.filepicker.io/api/file/56HSrFc0SF6eyjrGXgVZ'
   },
   {
-    id: 3,
+    id: 3415351,
     title: 'Microsoft Office',
     courseImage: 'https://process.fs.teachablecdn.com/ADNupMnWyR7kCWRvm76Laz/resize=width:705/https://www.filepicker.io/api/file/56HSrFc0SF6eyjrGXgVZ'
   },
@@ -52,7 +52,7 @@ const InstructorCourses = () => {
             {
               myTeachingCourses.map(course => (
                 <Box key={course.id} sx={{ mt: 4 }}>
-                  <Link to='/'>
+                  <Link to={`/instructor/courses/${course.id}/manage/goals`}>
                     <Card sx={{ p: 0 }} elevation={4}>
                       {/* <CardContent sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}> */}
                       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

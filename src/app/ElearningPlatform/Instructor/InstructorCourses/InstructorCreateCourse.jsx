@@ -34,7 +34,7 @@ const InstructorCreateCourse = ({ label }) => {
   }
 
   const handleCreateCourse = () => {
-    history.push(`/instructor/courses/41351421/manage`)
+    history.push(`/instructor/courses/41351421/manage/goals`)
   }
 
   return (
