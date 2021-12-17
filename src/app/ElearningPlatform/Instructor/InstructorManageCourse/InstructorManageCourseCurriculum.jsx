@@ -61,7 +61,9 @@ const InstructorManageCourseCurriculum = () => {
           </form>
         )}
       </Formik> */}
-      <Sections />
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', p: 4 }}>
+        <Sections />
+      </Box>
     </Box>
   )
 }

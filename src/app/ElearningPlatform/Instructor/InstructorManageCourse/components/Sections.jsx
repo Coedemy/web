@@ -1,25 +1,26 @@
 import React, { Component } from 'react'
-import AppsIcon from '@mui/icons-material/Apps'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Reorder, getItemStyle, getQuestionListStyle } from './Reorder'
-import Lecture from './Lecture'
+import MenuIcon from '@mui/icons-material/Menu'
+import { Card, Box } from '@mui/material'
+import { Reorder } from './Reorder'
+import Section from './Section'
 
 // fake data generator
-const getQuestions = count =>
+const getSections = count =>
   Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `question-${k}`,
-    content: `question ${k}`,
-    answers: [`answer-1`, `answer-2`, `answer-3`]
+    id: `sections-${k}`,
+    content: `Section ${k}`,
+    lectures: [`lecture-1`, `lecture-2`, `lecture-3`]
   }))
 
 class Sections extends Component {
   constructor(props) {
     super(props)
 
-    console.log(getQuestions(3))
+    console.log(getSections(3))
 
     this.state = {
-      questions: getQuestions(3)
+      sections: getSections(3)
     }
     this.onDragEnd = this.onDragEnd.bind(this)
   }
@@ -33,28 +34,28 @@ class Sections extends Component {
 
     if (result.type === 'QUESTIONS') {
       console.log(result)
-      const questions = Reorder(
-        this.state.questions,
+      const sections = Reorder(
+        this.state.sections,
         result.source.index,
         result.destination.index
       )
 
       this.setState({
-        questions
+        sections
       })
     } else {
-      const answers = Reorder(
-        this.state.questions[parseInt(result.type, 10)].answers,
+      const lectures = Reorder(
+        this.state.sections[parseInt(result.type, 10)].lectures,
         result.source.index,
         result.destination.index
       )
 
-      const questions = JSON.parse(JSON.stringify(this.state.questions))
+      const sections = JSON.parse(JSON.stringify(this.state.sections))
 
-      questions[result.type].answers = answers
+      sections[result.type].lectures = lectures
 
       this.setState({
-        questions
+        sections
       })
     }
   }
@@ -69,37 +70,35 @@ class Sections extends Component {
       >
         <Droppable droppableId='droppable' type='QUESTIONS'>
           {(provided, snapshot) => (
-            <div
+            <Box
               ref={provided.innerRef}
-              style={getQuestionListStyle(snapshot.isDraggingOver)}
+              sx={{ width: '100%', m: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}
+            // style={getQuestionListStyle(snapshot.isDraggingOver)}
             >
-              {this.state.questions.map((question, index) => (
+              {this.state.sections.map((section, index) => (
                 <Draggable
-                  key={question.id}
-                  draggableId={question.id}
+                  key={section.id}
+                  draggableId={section.id}
                   index={index}
                 >
                   {(provided, snapshot) => (
-                    <div
+                    <Card
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
+                      sx={{ p: '2rem', m: '0 0 1rem 0', backgroundColor: '#f7f9fa' }}
                     >
-                      {question.content}
-                      <span {...provided.dragHandleProps}>
-                        <AppsIcon
-                          style={{ float: 'left' }} />
-                      </span>
-                      <Lecture questionNum={index} question={question} />
-                    </div>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} {...provided.dragHandleProps}>
+                        <Box><span style={{ fontWeight: 'bold' }}>Section {index + 1}:</span> {section.content}</Box>
+                        <MenuIcon />
+                      </Box>
+                      <Box sx={{ mb: 4 }} />
+                      <Section sectionIndex={index} section={section} />
+                    </Card>
                   )}
                 </Draggable>
               ))}
               {provided.placeholder}
-            </div>
+            </Box>
           )}
         </Droppable>
       </DragDropContext>
