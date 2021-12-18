@@ -1,12 +1,19 @@
-import React from 'react'
-import { Button, Box } from '@mui/material'
+import React, { useState } from 'react'
+import { Button, Box, TextField, Typography } from '@mui/material'
 
-const AddLectureContent = ({ close }) => {
+const content = ['VIDEO', 'ARTICLE']
+
+const AddLectureContent = () => {
+  const [contentFile, setContentFile] = useState(null)
+
+
   return (
-    <>
-      This is AddLectureContent
-      <Box><Button size='small' variant='outlined' onClick={close}>Save</Button></Box>
-    </>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} >
+      <Typography>Select Video</Typography>
+      <Box>
+        <TextField type='file' size='small' onChange={(e) => setContentFile(e.target.files[0])} />
+      </Box>
+    </Box >
   )
 }
 

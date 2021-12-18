@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useQuery } from 'react-query'
 import { Formik } from 'formik'
-import { Box, Divider, Typography, TextField, FormControl, MenuItem, InputLabel, Select, OutlinedInput } from '@mui/material'
+import { Box, Divider, Typography, TextField, FormControl, MenuItem, InputLabel, Select, OutlinedInput, Button } from '@mui/material'
 
 import { languages } from 'app/utils/languages'
 import { getCategoriesList } from 'app/http/course'
@@ -29,13 +29,14 @@ const InstructorManageCourseLandingPage = () => {
 
   return (
     <Box sx={{ minHeight: '80vh' }}>
-      <Box sx={{ padding: '1rem' }}>
+      <Box sx={{ width: '100%', padding: '1rem', display: 'flex', justifyContent: 'space-between' }}>
         <Typography
           style={{ fontWeight: 600, fontFamily: 'SuisseWorks,Georgia,Times,times new roman,serif,apple color emoji,segoe ui emoji,segoe ui symbol' }}
           variant='h5'
         >
           Course landing page
         </Typography>
+        <Button variant='contained'>Save</Button>
       </Box>
       <Divider />
       {

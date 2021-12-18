@@ -15,13 +15,14 @@ const InstructorManageCoursePricing = () => {
 
   return (
     <Box sx={{ minHeight: '80vh' }}>
-      <Box sx={{ padding: '1rem' }}>
+      <Box sx={{ padding: '1rem', display: 'flex', justifyContent: 'space-between' }}>
         <Typography
           style={{ fontWeight: 600, fontFamily: 'SuisseWorks,Georgia,Times,times new roman,serif,apple color emoji,segoe ui emoji,segoe ui symbol' }}
           variant='h5'
         >
-          Pricing
+          Messages
         </Typography>
+        <Button variant='contained'>Save</Button>
       </Box>
       <Divider />
       <Formik
@@ -65,11 +66,10 @@ const InstructorManageCoursePricing = () => {
                   <Select autoWidth={true} defaultValue={0} onChange={handleChange}>
                     <MenuItem value={0}>Free</MenuItem>
                     {
-                      Array.from(Array(37).keys()).map(price => <MenuItem value={19 + 5 * price}>{19 + 5 * price}.99</MenuItem>)
+                      Array.from(Array(37).keys()).map(price => <MenuItem key={price} value={19 + 5 * price}>{19 + 5 * price}.99</MenuItem>)
                     }
                   </Select>
                 </FormControl>
-                <Button variant='contained'>Save</Button>
               </Box>
             </Box>
           </form>

@@ -11,12 +11,10 @@ import EditIcon from '@mui/icons-material/Edit'
 import { getCategoriesList } from 'app/http/course'
 import { MatxLoading } from 'app/components'
 import AddLectureContent from './AddLectureContent'
-import AddLectureRecourses from './AddLectureRecourses'
+import AddLectureRecourses from './AddLectureResourses'
 
 const EditLecture = ({ lecture }) => {
   const history = useHistory()
-  const [addContentMode, setAddContentMode] = useState(false)
-  const [addResourceMode, setAddResourceMode] = useState(false)
 
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState('')
@@ -68,7 +66,8 @@ const EditLecture = ({ lecture }) => {
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
-                  m: 'auto'
+                  m: 'auto',
+                  height: '700px'
                 }}
               >
                 <Box sx={{ mb: 4 }}>
@@ -82,37 +81,13 @@ const EditLecture = ({ lecture }) => {
                 </Box>
 
                 <Box sx={{ mb: 4 }}>
-                  <Typography variant='h5'>Content</Typography>
-                  {
-                    addContentMode ? <AddLectureContent close={() => setAddContentMode(false)} /> : (
-                      <Button
-                        className='mt-4'
-                        color='primary'
-                        variant='outlined'
-                        size='small'
-                        onClick={() => setAddContentMode(true)}
-                      >
-                        + Content
-                      </Button>
-                    )
-                  }
+                  <Typography variant='h6'>Content</Typography>
+                  <AddLectureContent />
                 </Box>
 
                 <Box sx={{ mb: 4 }}>
-                  <Typography variant='h5'>Resources</Typography>
-                  {
-                    addResourceMode ? <AddLectureRecourses close={() => setAddResourceMode(false)} /> : (
-                      <Button
-                        className='mt-4'
-                        color='primary'
-                        variant='outlined'
-                        size='small'
-                        onClick={() => setAddResourceMode(true)}
-                      >
-                        + Resource
-                      </Button>
-                    )
-                  }
+                  <Typography variant='h6'>Resources</Typography>
+                  <AddLectureRecourses />
                 </Box>
               </Box>
             )
