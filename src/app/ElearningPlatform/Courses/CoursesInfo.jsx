@@ -57,21 +57,21 @@ const CourseInfo = ({ course }) => {
 						<Typography variant='h6' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginLeft: '10px' }}>88% off</Typography>
 					</Box>
 					<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', color: 'red' }}><AccessAlarmsIcon style={{ opacity: 0.55, color: 'red' }} />2 days left at this price!</Box >
-					<Box>
+					<Box sx={{ display: 'flex', flexDirection: 'row', mt: 1, width: '100%'  }}>
 						{
-							userReducer.myLearning.some(learningCourse => course._id === learningCourse._id) ? (
-								<Link to={`/courses/${course.slug}/lectures/${course.firstLecture}`}><Button variant='contained' style={{ width: '200px', marginBottom: '15px' }}>Learn</Button></Link>
-							) :
-								userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
-									<Link to='/cart'><Button variant='contained' style={{ width: '200px', marginBottom: '15px' }}>Go to cart</Button></Link>
-								) : (
-									<Button onClick={handleAddToCart} variant='contained' style={{ width: '200px', marginBottom: '15px' }}>Add To Cart</Button>
-								)
+						userReducer.myLearning.some(learningCourse => course._id === learningCourse._id) ? (
+							<Link to={`/courses/${course.slug}/lectures/${course.firstLecture}`}><Button variant='contained' style={{width: '170px', height: '50px'}}>Learn</Button></Link>
+						) :
+							userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
+							<Link to='/cart'><Button variant='contained' style={{width: '170px', height: '50px'}}>Go to cart</Button></Link>
+							) : (
+							<Button onClick={handleAddToCart} variant='contained' style={{width: '170px', height: '50px'}}>Add To Cart</Button>
+							)
 						}
-						<IconButton onClick={toggleFavoriteButton.bind(this, course)} style={{ marginBottom: '15px' }}>
-							{
-								userReducer.wishlist.some(c => c._id === course._id) ? <FavoriteIcon fontSize='large' /> : <FavoriteBorderIcon fontSize='large' />
-							}
+						<IconButton onClick={toggleFavoriteButton.bind(this, course)} style={{}}>
+						{
+							userReducer.wishlist.some(c => c._id === course._id) ? <FavoriteIcon fontSize='large' /> : <FavoriteBorderIcon fontSize='large' />
+						}
 						</IconButton>
 					</Box>
 					<Typography variant='h8' sx={{ textAlign: 'center', opacity: '95%', fontSize: '13px' }}>30-Day Money-Back Guarantee</Typography>
