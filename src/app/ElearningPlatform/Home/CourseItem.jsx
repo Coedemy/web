@@ -2,9 +2,7 @@ import React from 'react'
 import { useMutation } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { styled as muiStyled } from '@mui/material/styles'
 import { Card, CardContent, CardMedia, Rating, Box, Chip, Button, Typography, Tooltip, Zoom, IconButton } from '@mui/material'
-import { tooltipClasses } from '@mui/material/Tooltip'
 import StarIcon from '@mui/icons-material/Star'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -12,6 +10,7 @@ import styled from 'styled-components'
 import CheckIcon from '@mui/icons-material/Check'
 import crypto from 'crypto'
 
+import { LightTooltip } from 'app/components'
 import { formatToVND } from 'app/utils/formatter'
 import { orange } from 'app/utils/color'
 import { addToCart, toggleFavorite } from 'app/redux-toolkit/slices/userSlice'
@@ -48,16 +47,6 @@ const RatingNumber = styled.strong`
   color: ${orange};
   margin-right: 8px;
 `
-
-const LightTooltip = muiStyled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} arrow />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: 'rgba(0, 0, 0, 0.87)',
-    boxShadow: theme.shadows[3],
-  },
-}))
 
 const CourseInfoModal = ({ course }) => {
   const dispatch = useDispatch()
@@ -131,7 +120,7 @@ const CourseInfoModal = ({ course }) => {
 const CourseItem = ({ course, index }) => {
 
   return (
-    <LightTooltip TransitionComponent={Zoom} placement={`${(index + 1) % 3 === 0 ? 'left' : 'right'}`} title={<CourseInfoModal course={course} />} >
+    <LightTooltip TransitionComponent={Zoom} placement={`${(index + 1) % 3 === 0 ? 'left' : 'right'}`} title={<CourseInfoModal course={course} />}>
       <Link to={`/courses/${course.slug}`}>
         <Button sx={{ padding: '0' }}>
           <Card sx={{ borderRadius: 2 }}>

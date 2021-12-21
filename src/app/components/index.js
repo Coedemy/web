@@ -13,6 +13,7 @@ export { default as MatxSidenav } from './MatxSidenav/MatxSidenav'
 export { default as MatxSidenavContent } from './MatxSidenav/MatxSidenavContent'
 export { default as Chatbox } from './chat-box-2/Chatbox'
 export { default as ChatAvatar } from './ChatAvatar/ChatAvatar'
+export { default as LightTooltip } from './LightTooltip/LightTooltip'
 
 export { MatxLayouts } from './MatxLayout/index'
 export { default as MatxLayout } from './MatxLayout/MatxLayout'
