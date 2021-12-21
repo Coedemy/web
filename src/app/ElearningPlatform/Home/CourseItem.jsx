@@ -110,7 +110,7 @@ const CourseInfoModal = ({ course }) => {
       <Box>
         {
           userReducer.myLearning.some(learningCourse => course._id === learningCourse._id) ? (
-            <Link to='/my-courses/learning'><Button variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Learn</Button></Link>
+            <Link to={`/courses/${course.slug}/lectures/${course.firstLecture}`}><Button variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Learn</Button></Link>
           ) :
             userReducer.cart.some(cartCourse => course._id === cartCourse._id) ? (
               <Link to='/cart'><Button variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Go to cart</Button></Link>

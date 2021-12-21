@@ -193,7 +193,7 @@ const ShoppingCart = () => {
 	return (
 		<Box>
 			<Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, marginTop: 5, paddingTop: 30 }}>
-				<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', flexDirection: 'row', marginLeft: 30 }}>Shopping Cart</Typography>)
+				<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', flexDirection: 'row', marginLeft: 30 }}>Shopping Cart</Typography>
 			</Grid >
 			<AppLayout>
 				<Grid container spacing={2}>

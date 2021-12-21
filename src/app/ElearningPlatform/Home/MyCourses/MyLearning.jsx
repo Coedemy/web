@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Box, Grid, Typography, TextField, Icon } from '@mui/material'
+import { Box, Grid, TextField } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 
 import CourseItem from '../CourseItem'
@@ -9,6 +9,7 @@ import AppLayout from '../../Layout/AppLayout'
 const MyLearning = () => {
   const { myLearning } = useSelector((state) => state.user)
 
+  console.log({ myLearning })
   return (
     <AppLayout>
       <Box sx={{ marginBottom: 4 }} />

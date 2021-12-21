@@ -97,7 +97,7 @@ const CourseCurriculum = ({ course }) => {
       <Box sx={{ mb: 4 }} />
       <Typography variant='h5' style={{ fontWeight: 'bold' }}>Course Curriculum</Typography>
       <Box sx={{ mb: 2 }} />
-      <Typography variant='body2'>2 sections | 3 lectures</Typography>
+      <Typography variant='body2'>{course.sections.length} sections | {course.totalLectures} lectures</Typography>
       <Box sx={{ mb: 2 }} />
       <div>
         {

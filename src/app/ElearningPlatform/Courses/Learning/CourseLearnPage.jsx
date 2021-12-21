@@ -4,24 +4,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useQuery } from 'react-query'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { Player, ControlBar, BigPlayButton, ReplayControl, VolumeMenuButton } from 'video-react'
 
 import { MatxLoading } from 'app/components'
 import { searchCourse } from 'app/http/course'
-import { loadCurrentLecture } from 'app/redux-toolkit/slices/courseSlice'
+import { loadCurrentLecture, trackTime, startVideo, pauseVideo } from 'app/redux-toolkit/slices/courseSlice'
 
 import CourseLearnSections from './CourseLearnSections'
-import CourseLearnVideo from './CourseLearnVideo'
+// import CourseLearnVideo from './CourseLearnVideo'
 import CourseLearnArticle from './CourseLearnArticle'
 import CourseLearnTabs from './CourseLearnTabs'
 import CourseLockedLecture from './CourseLockedLecture'
 import CourseInitialization from './CourseInitialization'
 
-const topbarHeight = 64
-
-const Scrollable = styled(Box)(({ theme }) => ({
-  overflowY: 'scroll',
-  height: `calc(100vh - ${topbarHeight}px)`
-}))
+const TOPBAR_HEIGHT = 64
+const VIDEO_HEIGHT = 600
 
 const LectureStatus = {
   INIT: 'INIT',
@@ -29,6 +26,18 @@ const LectureStatus = {
   ARTICLE: 'ARTICLE',
   LOCKED: 'LOCKED'
 }
+
+const Scrollable = styled(Box)(({ theme }) => ({
+  overflowY: 'scroll',
+  height: `calc(100vh - ${TOPBAR_HEIGHT}px)`
+}))
+
+// const PlayerContainer = styled(Box)(({ theme }) => ({
+//   display: 'flex',
+//   justifyContent: 'center',
+//   height: `${VIDEO_HEIGHT}px`,
+//   backgroundColor: '#f7f7f7'
+// }))
 
 const CourseLearnPage = () => {
   const authReducer = useSelector(state => state.auth)
@@ -45,14 +54,9 @@ const CourseLearnPage = () => {
   const [currentLecture, setCurrentLecture] = useState()
   const [currentCourse, setCurrentCourse] = useState()
 
-  console.log(authReducer)
+  const courseReducer = useSelector(state => state.course)
   const { slug, lectureId } = useParams()
   const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug }, userId: authReducer.user.userId }))
-
-  // const scrollToTop = () => {
-  //   contentContainerRef.current.scrollIntoView({ behavior: 'smooth' })
-  //   sectionsContainerRef.current.scrollIntoView({ behavior: 'smooth' })
-  // }
 
   const loadLecture = (lecture) => {
     if (lecture.isLocked) {
@@ -71,14 +75,23 @@ const CourseLearnPage = () => {
     }
     else {
       setLectureStatus(LectureStatus.VIDEO)
-      setCurrentLecture(lecture)
       setVideoUrl(lecture.content.video.url)
       setPoster(lecture.courseImage)
+      setArticleContent('')
       isVideo = true
     }
+    playerRef.current.load()
     setTimeout(1000)
-    dispatch(loadCurrentLecture({ lectureId: lecture._id, isVideo }))
+    setCurrentLecture(lecture)
+    dispatch(trackTime(0))
+    dispatch(loadCurrentLecture({ lectureId: lecture._id, title: lecture.title, isVideo }))
   }
+
+  useEffect(() => {
+    if (!playerRef) return
+    playerRef.current.pause()
+    playerRef.current.subscribeToStateChange(handleStateChange)
+  }, [])
 
   useEffect(() => {
     if (!isLoading) {
@@ -90,7 +103,33 @@ const CourseLearnPage = () => {
     }
   }, [isLoading])
 
-  const chooseLecture = useCallback((lecture) => {
+  useEffect(() => {
+    const paused = playerRef.current?.getState().player.paused
+    if (paused) {
+      dispatch(pauseVideo())
+    }
+    else {
+      dispatch(startVideo())
+    }
+  }, [playerRef.current?.getState().player.paused])
+
+  useEffect(() => {
+    const pauseVideo = courseReducer.pauseVideo
+    if (pauseVideo) playerRef.current.pause()
+  }, [courseReducer.pauseVideo])
+
+  const handleStateChange = (state, prevState) => {
+    if (courseReducer.currentLecture.isVideo) {
+      const previousTime = courseReducer.currentLecture.currentTime
+      const currentTime = parseInt(state.currentTime)
+      const videoIsPlaying = previousTime !== currentTime
+      if (videoIsPlaying) {
+        dispatch(trackTime(currentTime))
+      }
+    }
+  }
+
+  const chooseLecture = (lecture) => {
     const pathnameArray = location.pathname.split('/')
     pathnameArray.pop()
 
@@ -98,7 +137,7 @@ const CourseLearnPage = () => {
     history.push(lectureUrl)
     // scrollToTop()
     loadLecture(lecture)
-  }, [location])
+  }
 
   const renderLectureContent = () => {
     switch (lectureStatus) {
@@ -117,7 +156,37 @@ const CourseLearnPage = () => {
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       <Scrollable sx={{ flex: 3 }} ref={contentContainerRef}>
         {renderLectureContent()}
-        <CourseLearnVideo videoUrl={videoUrl} playerRef={playerRef} poster={poster} visible={lectureStatus === LectureStatus.VIDEO} />
+        {/* <CourseLearnVideo videoUrl={videoUrl} playerRef={playerRef} poster={poster} visible={lectureStatus === LectureStatus.VIDEO} /> */}
+
+        {/* {
+          lectureStatus === LectureStatus.VIDEO ? ( */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            height: lectureStatus === LectureStatus.VIDEO ? `${VIDEO_HEIGHT}px` : '0px',
+            backgroundColor: '#f7f7f7',
+            opacity: lectureStatus === LectureStatus.VIDEO
+          }}>
+          <Player
+            ref={playerRef}
+            poster={poster}
+            fluid={false}
+            width='100%'
+            height='100%'
+            src={videoUrl}
+            className='react-player'
+          >
+            <ControlBar autoHide={false}>
+              <ReplayControl seconds={10} order={2.2} />
+              <VolumeMenuButton vertical />
+            </ControlBar>
+            <BigPlayButton position='center' />
+          </Player>
+        </Box>
+        {/* } */}
+
+
         <Box sx={{ pl: 3, pr: 3 }}>
           {isLoading ? <MatxLoading /> : <CourseLearnTabs course={data.course} lecture={currentLecture} />}
         </Box>
