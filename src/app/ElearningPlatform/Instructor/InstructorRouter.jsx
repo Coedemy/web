@@ -7,7 +7,7 @@ const instructorRouter = [
     component: React.lazy(() => import('./InstructorCourses/InstructorCourses'))
   },
   {
-    path: '/instructor/courses/:id/manage',
+    path: '/instructor/courses/:courseId/manage',
     component: React.lazy(() => import('./InstructorManageCourse/InstructorManageCourse'))
   },
   {

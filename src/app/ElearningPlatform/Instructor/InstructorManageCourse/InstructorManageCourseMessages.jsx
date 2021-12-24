@@ -1,12 +1,15 @@
 import React, { useRef } from 'react'
 import { Formik } from 'formik'
-import { Box, Divider, Typography, TextField, FormControl, MenuItem, InputLabel, Select, OutlinedInput, Button } from '@mui/material'
+import { Box, Divider, Typography, TextField, Button } from '@mui/material'
+
+import SaveIcon from '@mui/icons-material/Save'
 
 const InstructorManageCourseLandingPage = () => {
 
   const formRef = useRef()
   const initialValues = {
-
+    welcomeMessage: '',
+    congratulationsMessage: ''
   }
 
   const handleSubmit = async (values, { isSubmitting }) => {
@@ -20,9 +23,11 @@ const InstructorManageCourseLandingPage = () => {
           style={{ fontWeight: 600, fontFamily: 'SuisseWorks,Georgia,Times,times new roman,serif,apple color emoji,segoe ui emoji,segoe ui symbol' }}
           variant='h5'
         >
-          Pricing
+          Course Messages
         </Typography>
-        <Button variant='contained'>Save</Button>
+        <Button variant='contained' startIcon={<SaveIcon />} onClick={() => formRef.current.handleSubmit()}>
+          Save
+        </Button>
       </Box>
       <Divider />
       <Formik
@@ -51,11 +56,11 @@ const InstructorManageCourseLandingPage = () => {
               <Typography>
                 Welcome Message
               </Typography>
-              <TextField />
+              <TextField size='small' name='welcomeMessage' onChange={handleChange} multiline rows={6} />
               <Typography>
                 Congratulations Message
               </Typography>
-              <TextField />
+              <TextField size='small' name='congratulationsMessage' onChange={handleChange} multiline rows={6} />
             </Box>
           </form>
         )}

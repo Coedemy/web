@@ -20,3 +20,7 @@ export const toggleFavoriteRequest = (payload) => {
   return httpRequest({ endpoint: '/users/favorite', method: 'patch', bodyParameters: payload, requireToken: true })
 }
 
+export const loadMyTeachingCoursesRequest = () => {
+  console.log('load my teaching courses')
+  return httpRequest({ endpoint: '/users/teaching', requireToken: true })
+}

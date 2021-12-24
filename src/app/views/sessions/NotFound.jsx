@@ -13,7 +13,7 @@ const NotFound = () => {
 			</Helmet>
 			<div className='flex-column justify-center items-center'>
 				<Typography variant='h1'><Box sx={{ fontFamily: 'Courier New, monospace' }}>404</Box></Typography>
-				<Typography variant='h5'><Box sx={{ fontFamily: 'Courier New, monospace' }}>Not found !</Box></Typography>
+				<Typography variant='h5'><Box sx={{ fontFamily: 'Courier New, monospace' }}>We can’t find the page you’re looking for</Box></Typography>
 				<Box sx={{ mb: 4 }} />
 				<Link to='/'>
 					<Button

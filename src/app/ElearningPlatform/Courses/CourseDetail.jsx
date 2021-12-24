@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { Helmet } from 'react-helmet'
 import { Box, Grid } from '@mui/material'
@@ -17,15 +17,16 @@ const CourseDetail = () => {
 
   const { slug } = useParams()
   const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug } }))
+  console.log({ isLoading, data })
 
   return (
     <AppLayout>
       <Helmet>
-        <title>{data ? data.course.title : ''}</title>
+        <title>{data && data.course ? data.course.title : ''}</title>
         <meta name='Course Detail' content='Course Detail' />
       </Helmet>
       {
-        isLoading ? <MatxLoading /> : (
+        isLoading ? <MatxLoading /> : data.course === undefined ? <Redirect to='/404' /> : (
           <Grid container spacing={2}>
             <Grid item xs={9}>
               <CourseBanner course={data.course} />

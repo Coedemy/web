@@ -166,7 +166,7 @@ const CourseLearnPage = () => {
             justifyContent: 'center',
             height: lectureStatus === LectureStatus.VIDEO ? `${VIDEO_HEIGHT}px` : '0px',
             backgroundColor: '#f7f7f7',
-            opacity: lectureStatus === LectureStatus.VIDEO
+            opacity: lectureStatus === LectureStatus.VIDEO ? 1 : 0
           }}>
           <Player
             ref={playerRef}
@@ -175,7 +175,6 @@ const CourseLearnPage = () => {
             width='100%'
             height='100%'
             src={videoUrl}
-            className='react-player'
           >
             <ControlBar autoHide={false}>
               <ReplayControl seconds={10} order={2.2} />

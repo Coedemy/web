@@ -122,8 +122,8 @@ const CourseItem = ({ course, index }) => {
   return (
     <LightTooltip TransitionComponent={Zoom} placement={`${(index + 1) % 3 === 0 ? 'left' : 'right'}`} title={<CourseInfoModal course={course} />}>
       <Link to={`/courses/${course.slug}`}>
-        <Button sx={{ padding: '0' }}>
-          <Card sx={{ borderRadius: 2 }}>
+        <Button sx={{ padding: '0', width: '100%' }}>
+          <Card sx={{ borderRadius: 2, width: '100%' }}>
             <CardMedia
               component='img'
               alt="course's image"

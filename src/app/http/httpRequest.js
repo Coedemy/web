@@ -10,6 +10,7 @@ const httpRequest = async ({
   bodyParameters,
   query,
   requireToken = false,
+  isFormData = false
 }) => {
   let config
 
@@ -21,7 +22,10 @@ const httpRequest = async ({
 
       if (accessToken) {
         config = {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
+          },
           params: query,
         }
       }

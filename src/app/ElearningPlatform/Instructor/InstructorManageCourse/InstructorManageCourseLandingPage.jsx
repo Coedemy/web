@@ -1,11 +1,14 @@
-import React, { useRef } from 'react'
-import { useQuery } from 'react-query'
+import React, { useState, useRef } from 'react'
+import { useQuery, useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 import { Formik } from 'formik'
-import { Box, Divider, Typography, TextField, FormControl, MenuItem, InputLabel, Select, OutlinedInput, Button } from '@mui/material'
+import { Box, Divider, Typography, TextField, FormControl, MenuItem, Select, Button } from '@mui/material'
+import SaveIcon from '@mui/icons-material/Save'
 
 import { languages } from 'app/utils/languages'
-import { getCategoriesList } from 'app/http/course'
+import { getCategoriesList, updateCourseRequest } from 'app/http/course'
 import { MatxLoading } from 'app/components'
+import useUploadImage from 'app/hooks/useUploadImage'
 
 const courseImagePlaceholder = 'https://s.udemycdn.com/course/750x422/placeholder.jpg'
 
@@ -17,14 +20,41 @@ const levels = [
 ]
 
 const InstructorManageCourseLandingPage = () => {
+  const params = useParams()
+  const [promotionVideo, setPromotionVideo] = useState()
+  const { imageUrl: courseImageUrl, imageFile: courseImageFile, handleUploadImage } = useUploadImage({ defaultUrl: courseImagePlaceholder })
+  const { mutate } = useMutation(updateCourseRequest, {
+    mutationKey: 'updateCourseLanding',
+  })
 
   const { data, isLoading } = useQuery('categoriesList', getCategoriesList)
   const formRef = useRef()
   const initialValues = {
-
+    title: '',
+    subtitle: '',
+    description: '',
+    language: '',
+    level: '',
+    category: '',
+    representativeTopic: ''
   }
-  const handleSubmit = async (values, { isSubmitting }) => {
-    console.log({ values })
+
+  const onUpdateSuccessfully = (data) => {
+    console.log({ data })
+  }
+
+  const handleSubmit = async (values) => {
+    console.log({ values, courseImageFile, promotionVideo })
+    const formData = new FormData()
+    for (let [key, value] of Object.entries(values)) {
+      formData.append(key, value)
+      console.log(value)
+    }
+    formData.append('courseImage', courseImageFile)
+    formData.append('promotionVideo', promotionVideo)
+    mutate({ courseId: params.courseId, updatedCourse: formData, isFormData: true }, {
+      onSuccess: onUpdateSuccessfully
+    })
   }
 
   return (
@@ -36,7 +66,9 @@ const InstructorManageCourseLandingPage = () => {
         >
           Course landing page
         </Typography>
-        <Button variant='contained'>Save</Button>
+        <Button variant='contained' startIcon={<SaveIcon />} onClick={() => formRef.current.handleSubmit()}>
+          Save
+        </Button>
       </Box>
       <Divider />
       {
@@ -64,37 +96,37 @@ const InstructorManageCourseLandingPage = () => {
                   <Typography>
                     Course title
                   </Typography>
-                  <TextField size='small' placeholder='Insert your course title' />
+                  <TextField name='title' size='small' placeholder='Insert your course title' onChange={handleChange} />
                   <Typography>
                     Course subtitle
                   </Typography>
-                  <TextField size='small' placeholder='Insert your course subtitle' />
+                  <TextField name='subtitle' size='small' placeholder='Insert your course subtitle' onChange={handleChange} />
                   <Typography>
                     Course description
                   </Typography>
-                  <TextField type='area' size='small' placeholder='Insert your course description' />
+                  <TextField name='description' type='area' size='small' placeholder='Insert your course description' onChange={handleChange} />
                   <Typography>
                     Basic Info
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
                     <FormControl className='w-full' size='small'>
-                      <Select defaultValue={languages[42][1]} onChange={handleChange}>
+                      <Select name='language' defaultValue={languages[42][1]} onChange={handleChange}>
                         {
                           languages.map(lang => <MenuItem key={lang[0]} value={lang[1]}>{lang[0]} ({lang[1]})</MenuItem>)
                         }
                       </Select>
                     </FormControl>
                     <FormControl className='w-full' size='small'>
-                      <Select defaultValue={0} onChange={handleChange}>
-                        <MenuItem value={0}>-- Select Level --</MenuItem>
+                      <Select name='level' defaultValue={0} onChange={handleChange}>
+                        <MenuItem disabled value={0}>-- Select Level --</MenuItem>
                         {
-                          levels.map(level => <MenuItem key={level.id} value={level.id}>{level.title}</MenuItem>)
+                          levels.map(level => <MenuItem key={level.id} value={level.title}>{level.title}</MenuItem>)
                         }
                       </Select>
                     </FormControl>
                     <FormControl className='w-full' size='small'>
-                      <Select defaultValue={0} onChange={handleChange}>
-                        <MenuItem value={0}>-- Select Category --</MenuItem>
+                      <Select name='category' defaultValue={0} onChange={handleChange}>
+                        <MenuItem disabled value={0}>-- Select Category --</MenuItem>
                         {
                           data.courseCategoryList.map(category => <MenuItem key={category._id} value={category._id}>{category.title}</MenuItem>)
                         }
@@ -104,22 +136,20 @@ const InstructorManageCourseLandingPage = () => {
                   <Typography>
                     What is primarily taught in your course?
                   </Typography>
-                  <TextField type='area' size='small' placeholder="e.g. Go: The Complete Developer's Guide (Golang)" />
+                  <TextField name='representativeTopic' size='small' placeholder='e.g. Landscape Photography' onChange={handleChange} />
 
                   <Typography>
                     Course Image
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-                    <img src={courseImagePlaceholder} width='400' height='250' />
-                    <TextField type='file' size='small' placeholder='Insert your course subtitle' />
+                    <img src={courseImageUrl} width='400' height='250' />
+                    <TextField type='file' size='small' onChange={handleUploadImage} inputProps={{ accept: 'image/png, image/gif, image/jpeg' }} />
                   </Box>
 
                   <Typography>
                     Promotional Video
                   </Typography>
-                  <Box>
-                    <TextField type='file' size='small' placeholder='Insert your course subtitle' />
-                  </Box>
+                  <TextField type='file' size='small' onChange={(e) => setPromotionVideo(e.target.files[0])} inputProps={{ accept: 'video/mp4' }} />
                 </Box>
               </form>
             )}

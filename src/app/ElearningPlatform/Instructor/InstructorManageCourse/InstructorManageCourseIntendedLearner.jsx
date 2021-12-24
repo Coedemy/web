@@ -1,18 +1,38 @@
 import React, { useRef } from 'react'
-import { Formik } from 'formik'
-import { Box, Divider, Typography, TextField, Button } from '@mui/material'
+import { useMutation } from 'react-query'
+import { Formik, Field, FieldArray } from 'formik'
+import { Box, Divider, Typography, TextField, Button, IconButton } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import DeleteIcon from '@mui/icons-material/Delete'
+import SaveIcon from '@mui/icons-material/Save'
+
+import { updateCourseRequest } from 'app/http/course'
+
+const placeholders = [
+  'Example: Define the roles and responsibilities of a project manager',
+  'Example: Estimate project timelines and budgets',
+  'Example: Identify and manage project risks',
+  'Example: Identify and manage project risks'
+]
 
 const InstructorManageCourseIntendedLearner = () => {
 
+  const { mutate, isLoading } = useMutation(updateCourseRequest, {
+    mutationKey: 'updateIntendedLearner',
+  })
   const formRef = useRef()
-  const initialValues = {
 
+  const initialValues = {
+    learningGoals: ['', '', '', ''],
+    prerequisites: ['', '', '', ''],
+    target: ''
   }
 
   const handleSubmit = async (values, { isSubmitting }) => {
-    console.log({ values })
+    console.log('save')
+    const result = { ...values, learningGoals: values.learningGoals.filter(goal => goal !== '') }
+    console.log({ result })
   }
-
 
   return (
     <Box sx={{ minHeight: '80vh' }}>
@@ -23,7 +43,9 @@ const InstructorManageCourseIntendedLearner = () => {
         >
           Intended learners
         </Typography>
-        <Button variant='contained'>Save</Button>
+        <Button variant='contained' startIcon={<SaveIcon />} onClick={() => formRef.current.handleSubmit()}>
+          Save
+        </Button>
       </Box>
       <Divider />
       <Formik
@@ -54,11 +76,27 @@ const InstructorManageCourseIntendedLearner = () => {
               <Typography>
                 You must enter at least 4 learning objectives or outcomes that learners can expect to achieve after completing your course.
               </Typography>
-              <TextField size='small' placeholder='Example: Define the roles and responsibilities of a project manager' />
-              <TextField size='small' placeholder='Example: Estimate project timelines and budgets' />
-              <TextField size='small' placeholder='Example: Identify and manage project risks' />
-              <TextField size='small' placeholder='Example: Complete a case study to manage a project from conception to completion' />
+              <FieldArray
+                name='learningGoals'
+                render={arrayHelpers => (
+                  <Box>
+                    {
+                      values.learningGoals && values.learningGoals.length > 0 &&
+                      values.learningGoals.map((goal, index) => (
+                        <Box key={index} sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'row' }}>
+                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`learningGoals.${index}`} placeholder={placeholders[index]} spellCheck={false} />
+                          <IconButton color='error' onClick={() => arrayHelpers.remove(index)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      ))}
 
+                    <Button size='small' variant='outlined' startIcon={<AddIcon />} onClick={() => arrayHelpers.push('')}>
+                      Add
+                    </Button>
+                  </Box>
+                )}
+              />
 
               <Typography style={{ fontWeight: 600 }}>
                 What are the requirements or prerequisites for taking your course?
@@ -67,8 +105,28 @@ const InstructorManageCourseIntendedLearner = () => {
                 List the required skills, experience, tools or equipment learners should have prior to taking your course.
                 If there are no requirements, use this space as an opportunity to lower the barrier for beginners.
               </Typography>
-              <TextField size='small' placeholder='Example: No programming experience needed. You will learn everything you need to know' />
 
+              <FieldArray
+                name='prerequisites'
+                render={arrayHelpers => (
+                  <Box>
+                    {
+                      values.prerequisites && values.prerequisites.length > 0 &&
+                      values.prerequisites.map((goal, index) => (
+                        <Box key={index} sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'row' }}>
+                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`prerequisites.${index}`} placeholder={placeholders[index]} spellCheck={false} />
+                          <IconButton color='error' onClick={() => arrayHelpers.remove(index)}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      ))}
+
+                    <Button size='small' variant='outlined' startIcon={<AddIcon />} onClick={() => arrayHelpers.push('')}>
+                      Add
+                    </Button>
+                  </Box>
+                )}
+              />
               <Typography style={{ fontWeight: 600 }}>
                 Who is this course for?
               </Typography>
@@ -76,7 +134,7 @@ const InstructorManageCourseIntendedLearner = () => {
                 Write a clear description of the intended learners for your course who will find your course content valuable.
                 This will help you attract the right learners to your course.
               </Typography>
-              <TextField size='small' placeholder='Example: Beginner Python developers curious about data science' />
+              <TextField size='small' name='target' onChange={handleChange} placeholder='Example: Beginner Python developers curious about data science' spellCheck={false} />
             </Box>
           </form>
         )}

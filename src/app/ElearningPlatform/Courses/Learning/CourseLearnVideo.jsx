@@ -53,6 +53,7 @@ const CourseLearnVideo = ({ videoUrl, poster, playerRef, visible }) => {
   //     playerRef.load()
   //   }
   // }
+
   return (
     <PlayerContainer>
       <Player
@@ -61,7 +62,6 @@ const CourseLearnVideo = ({ videoUrl, poster, playerRef, visible }) => {
         fluid={false}
         width='100%'
         height='100%'
-        src={videoUrl}
         className='react-player'
       >
         <ControlBar autoHide={false}>

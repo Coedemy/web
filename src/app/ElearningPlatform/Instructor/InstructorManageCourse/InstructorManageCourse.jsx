@@ -28,12 +28,6 @@ const navItems = [
 
   },
   {
-    id: 3,
-    title: 'Captions (optional)',
-    Component: InstructorManageCourseCaptions,
-    to: '/captions'
-  },
-  {
     id: 4,
     title: 'Course landing page',
     Component: InstructorManageCourseLandingPage,

@@ -21,3 +21,12 @@ export const checkoutRequest = (payload) => {
   console.log('Checkout')
   return httpRequest({ endpoint: `/orders/checkout`, method: 'post', bodyParameters: payload, requireToken: true })
 }
+
+export const createCourseRequest = (course) => {
+  return httpRequest({ endpoint: `/courses`, method: 'post', bodyParameters: course, requireToken: true })
+}
+
+export const updateCourseRequest = ({ courseId, updatedCourse, isFormData }) => {
+  console.log('Update Course')
+  return httpRequest({ endpoint: `/courses/${courseId}`, method: 'patch', bodyParameters: updatedCourse, isFormData, requireToken: true })
+}

@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import {
   Button, Dialog, DialogActions, DialogContent, FormControl, DialogTitle,
-  Box, TextField, Typography, Select, MenuItem, useMediaQuery, InputLabel
+  Box, TextField, Typography, Select, MenuItem, useMediaQuery, InputLabel, CircularProgress
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { getCategoriesList } from 'app/http/course'
+import { getCategoriesList, createCourseRequest } from 'app/http/course'
 import { MatxLoading } from 'app/components'
 
 const InstructorCreateCourse = ({ label }) => {
@@ -16,6 +16,9 @@ const InstructorCreateCourse = ({ label }) => {
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState(0)
   const { data, isLoading } = useQuery('categoriesList', getCategoriesList)
+  const { mutate, isLoading: isCreatingCourse } = useMutation(createCourseRequest, {
+    mutationKey: 'createCourse',
+  })
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -33,8 +36,14 @@ const InstructorCreateCourse = ({ label }) => {
     )
   }
 
-  const handleCreateCourse = () => {
-    history.push(`/instructor/courses/41351421/manage/goals`)
+  const handleCreateCourse = async () => {
+    mutate({ title, category }, {
+      onSuccess: onCourseCreated
+    })
+  }
+
+  const onCourseCreated = async (data) => {
+    history.push(`/instructor/courses/${data.course._id}/manage/goals`)
   }
 
   return (
@@ -82,7 +91,7 @@ const InstructorCreateCourse = ({ label }) => {
                   <Select name='category' onChange={handleCategoryChange} defaultValue='0' id='grouped-select' label='Category'>
                     <MenuItem disabled value={0}>None</MenuItem>
                     {
-                      data.courseCategoryList.map((c, index) => <MenuItem value={index + 1} key={c._id}>{c.title}</MenuItem>)
+                      data.courseCategoryList.map(c => <MenuItem value={c._id} key={c._id}>{c.title}</MenuItem>)
                     }
                   </Select>
                 </FormControl>
@@ -93,11 +102,32 @@ const InstructorCreateCourse = ({ label }) => {
         </DialogContent>
         <DialogActions>
           <Button variant='outlined' autoFocus onClick={handleClose}>
-            Exit
+            Cancel
           </Button>
-          <Button disabled={title === '' || category === 0} variant='contained' onClick={handleCreateCourse} autoFocus>
-            Submit
-          </Button>
+
+          <Box sx={{ pl: 2 }}>
+            <Button
+              disabled={title === '' || category === 0}
+              variant='contained'
+              color='primary'
+              type='submit'
+              onClick={handleCreateCourse}
+            >
+              Create
+            </Button>
+            {isCreatingCourse && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  marginTop: -12,
+                  marginLeft: -12,
+                }}
+              />
+            )}
+          </Box>
         </DialogActions>
       </Dialog>
     </div >
