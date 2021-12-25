@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import { styled } from '@mui/material/styles'
@@ -8,7 +9,7 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary'
 import MuiAccordionDetails from '@mui/material/AccordionDetails'
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
 import {
-  Typography, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Box, Button, Zoom
+  Typography, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Box, Button, Zoom, Checkbox
 } from '@mui/material'
 import ArticleIcon from '@mui/icons-material/Article'
 import QuizIcon from '@mui/icons-material/Quiz'
@@ -69,6 +70,7 @@ const LectureList = styled(List)(({ theme }) => ({
 }))
 
 const CourseLearnSections = ({ course, chooseLecture }) => {
+  const userReducer = useSelector(state => state.user)
   const [lectureCode, setLectureCode] = useState('')
   const history = useHistory()
   const location = useLocation()
@@ -96,37 +98,29 @@ const CourseLearnSections = ({ course, chooseLecture }) => {
               <LectureList aria-label='contacts' dense={true} autoFocus={true} >
                 {
                   section.lectures.map((lecture, index) => (
-                    lecture.canPreview ? (
-                      <ListItemButton
-                        selected={lectureCode === `course${course._id}-lecture${lecture._id}`}
-                        onClick={selectLecture.bind(this, { lecture })}
-                        key={lecture._id}
-                      >
-                        <ListItem disablePadding>
-                          <ListItemIcon>
-                            {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : (lecture.content.lectureContentType === 'ARTICLE') ? <ArticleIcon /> : <QuizIcon />}
-                          </ListItemIcon>
-                          <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : 0})`} />
-                        </ListItem>
+                    <ListItemButton
+                      selected={lectureCode === `course${course._id}-lecture${lecture._id}`}
+                      onClick={selectLecture.bind(this, { lecture })}
+                      key={lecture._id}
+                    >
+                      <ListItem disablePadding>
+                        <Checkbox disabled checked={userReducer.learningProcess.includes(lecture._id)} />
+                        <ListItemIcon>
+                          {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : (lecture.content.lectureContentType === 'ARTICLE') ? <ArticleIcon /> : <QuizIcon />}
+                        </ListItemIcon>
+                        <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : '00:00'})`} />
+                      </ListItem>
 
-                        <LightTooltip placement='top' TransitionComponent={Zoom} title={<CourseLearnResources course={course} />}>
-                          <Button variant='outlined' size='small' sx={{ pl: 2, pr: 2 }}>Resources</Button>
-                        </LightTooltip>
-                      </ListItemButton>
-                    ) : (
-                      <ListItemButton
-                        selected={lectureCode === `course${course._id}-lecture${lecture._id}`}
-                        onClick={selectLecture.bind(this, { lecture })}
-                        key={lecture._id}
-                      >
-                        <ListItem disablePadding>
-                          <ListItemIcon>
-                            {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : (lecture.content.lectureContentType === 'ARTICLE') ? <ArticleIcon /> : <QuizIcon />}
-                          </ListItemIcon>
-                          <ListItemText primary={`${lecture.title} (${lecture.content.lectureContentType === 'VIDEO' ? formatTime(lecture.content.video.duration) : '00:00'})`} />
-                        </ListItem>
-                      </ListItemButton>
-                    )
+                      {
+                        lecture.canPreview ? (
+                          <LightTooltip placement='top' TransitionComponent={Zoom} title={<CourseLearnResources course={course} />}>
+                            <Button variant='outlined' size='small' sx={{ pl: 2, pr: 2 }}>Resources</Button>
+                          </LightTooltip>
+                        ) : <></>
+                      }
+
+                    </ListItemButton>
+
                   ))}
               </LectureList>
             </AccordionDetails>

@@ -39,6 +39,7 @@ const AuthGuard = ({ children }) => {
 	}
 
 	const onLoadPropertiesSuccessfully = async (data) => {
+		console.log({ data })
 		dispatch(loadAuthenticatedUserProperties(data))
 	}
 

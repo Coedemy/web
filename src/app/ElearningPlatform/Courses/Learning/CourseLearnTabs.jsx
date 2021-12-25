@@ -12,6 +12,7 @@ import CourseLearnOverview from './CourseLearnOverview'
 import CourseLearnQA from './CourseLearnQA'
 import CourseLearnNotes from './CourseLearnNotes'
 import CourseLearnAnnouncements from './CourseLearnAnnouncements'
+// import CourseLearnProcess from './CourseLearnProcess'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -64,12 +65,13 @@ const CourseLearnTabs = ({ course, lecture }) => {
         indicatorColor='primary'
         textColor='inherit'
         aria-label='full width tabs example'
-        sx={{borderBottom: '2px solid lightgray'}}
+        sx={{ borderBottom: '2px solid lightgray' }}
       >
         <Tab label='Overview' {...a11yProps(0)} />
         <Tab label='Q & A' {...a11yProps(1)} />
         <Tab label='Notes' {...a11yProps(2)} />
         <Tab label='Announcements' {...a11yProps(3)} />
+        <Tab label='Learning Process' {...a11yProps(4)} />
       </Tabs>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -87,6 +89,9 @@ const CourseLearnTabs = ({ course, lecture }) => {
         </TabPanel>
         <TabPanel value={value} index={3} dir={theme.direction}>
           <CourseLearnAnnouncements />
+        </TabPanel>
+        <TabPanel value={value} index={4} dir={theme.direction}>
+          {/* <CourseLearnProcess /> */}
         </TabPanel>
       </SwipeableViews>
     </Box>

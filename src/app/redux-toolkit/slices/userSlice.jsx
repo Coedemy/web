@@ -7,6 +7,7 @@ const userSlice = createSlice({
     cart: [],
     wishlist: [],
     myLearning: [],
+    learningProcess: [],
     error: null,
   },
   reducers: {
@@ -100,6 +101,15 @@ const userSlice = createSlice({
       }
       state.wishlist = filterWishlist
       return state
+    },
+
+    finishALecture: (state, action) => {
+      const { lectureId } = action.payload
+      console.log(lectureId, "Hello")
+      const { learningProcess } = state
+      learningProcess.push(lectureId)
+      state.learningProcess = learningProcess
+      return state
     }
   }
 })
@@ -111,6 +121,7 @@ export const {
   loadCart,
   addToCart,
   removeFromCart,
-  checkoutSucess
+  checkoutSucess,
+  finishALecture
 } = actions
 export default reducer

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useQuery } from 'react-query'
@@ -6,7 +6,7 @@ import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Player, ControlBar, BigPlayButton, ReplayControl, VolumeMenuButton } from 'video-react'
 
-import { MatxLoading } from 'app/components'
+import { MatxLoading, CircularProgressWithLabel } from 'app/components'
 import { searchCourse } from 'app/http/course'
 import { loadCurrentLecture, trackTime, startVideo, pauseVideo } from 'app/redux-toolkit/slices/courseSlice'
 
@@ -16,6 +16,7 @@ import CourseLearnArticle from './CourseLearnArticle'
 import CourseLearnTabs from './CourseLearnTabs'
 import CourseLockedLecture from './CourseLockedLecture'
 import CourseInitialization from './CourseInitialization'
+import { finishALecture } from 'app/redux-toolkit/slices/userSlice'
 
 const TOPBAR_HEIGHT = 64
 const VIDEO_HEIGHT = 600
@@ -41,6 +42,7 @@ const Scrollable = styled(Box)(({ theme }) => ({
 
 const CourseLearnPage = () => {
   const authReducer = useSelector(state => state.auth)
+  const userReducer = useSelector(state => state.user)
   const [lectureStatus, setLectureStatus] = useState(LectureStatus.INIT)
   const playerRef = useRef()
   const contentContainerRef = useRef()
@@ -85,6 +87,12 @@ const CourseLearnPage = () => {
     setCurrentLecture(lecture)
     dispatch(trackTime(0))
     dispatch(loadCurrentLecture({ lectureId: lecture._id, title: lecture.title, isVideo }))
+
+    if (userReducer.myLearning.some(course => course._id === data.course._id)) {
+      setTimeout(() => {
+        dispatch(finishALecture({ lectureId }))
+      }, 1000)
+    }
   }
 
   useEffect(() => {
@@ -196,7 +204,10 @@ const CourseLearnPage = () => {
             <MatxLoading />
           ) : (
             <Box>
-              <Box sx={{ p: 2, fontSize: '1.2rem' }}><b>Course Content</b></Box>
+              <Box sx={{ p: 2, fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <b>Course Content</b>
+                <CircularProgressWithLabel value={userReducer.learningProcess.length * 100 / data.course.totalLectures < 100 ? userReducer.learningProcess.length * 100 / data.course.totalLectures : 100} />
+              </Box>
               <CourseLearnSections chooseLecture={chooseLecture} course={data.course} />
             </Box>
           )
