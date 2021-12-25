@@ -157,7 +157,7 @@ const InstructorCommunication = () => {
                       <Box>{note.value}</Box>
                     </Box>
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', mt: 1 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
                     {
                       addReplyMode ? (
                         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mt: 1, width: '100%'  }}>
@@ -175,12 +175,12 @@ const InstructorCommunication = () => {
                       {
                         replyList.map((note, index) => (
                           <ListItem key={note._id} sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
-                            <Box sx={{ display: 'flex', flexDirection: 'row', mt: 1 }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', mt: 1, width: '100%' }}>
                               <Avatar
                                 className='cursor-pointer'
                                 src={canAvatar}
                               />
-                              <Box sx={{ ml: '2rem', p: '1rem', border: '1px solid black', width: '900px' }}>
+                              <Box sx={{ ml: '2rem', p: '1rem', border: '1px solid black', width: '100%' }}>
                                 <Box sx={{ fontWeight: 'bold'}}>{note.lectureTitle}</Box>
                                 <Box>{note.value}</Box>
                               </Box>
