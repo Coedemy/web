@@ -156,7 +156,7 @@ const Layout1Topbar = () => {
             </div>
           </div>
           <div className='flex items-center'>
-            <MatxSearchBox />
+            {/* <MatxSearchBox /> */}
             {/* <NotificationProvider>
 							<NotificationBar />
 						</NotificationProvider> */}

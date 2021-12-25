@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 import { Formik, Field, FieldArray } from 'formik'
 import { Box, Divider, Typography, TextField, Button, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
@@ -15,23 +16,30 @@ const placeholders = [
   'Example: Identify and manage project risks'
 ]
 
-const InstructorManageCourseIntendedLearner = () => {
+const InstructorManageCourseIntendedLearner = ({ course }) => {
 
+  const params = useParams()
   const { mutate, isLoading } = useMutation(updateCourseRequest, {
     mutationKey: 'updateIntendedLearner',
   })
   const formRef = useRef()
 
   const initialValues = {
-    learningGoals: ['', '', '', ''],
-    prerequisites: ['', '', '', ''],
-    target: ''
+    learningGoals: course.learningGoals ?? [],
+    prerequisites: course.prerequisites ?? [],
+    target: course.target ?? ''
+  }
+
+  const onUpdateSuccessfully = (data) => {
+    console.log('intended learner', data)
   }
 
   const handleSubmit = async (values, { isSubmitting }) => {
-    console.log('save')
-    const result = { ...values, learningGoals: values.learningGoals.filter(goal => goal !== '') }
-    console.log({ result })
+    values.learningGoals = values.learningGoals.filter(goal => goal !== '')
+
+    mutate({ courseId: params.courseId, updatedCourse: values }, {
+      onSuccess: onUpdateSuccessfully
+    })
   }
 
   return (
@@ -84,7 +92,7 @@ const InstructorManageCourseIntendedLearner = () => {
                       values.learningGoals && values.learningGoals.length > 0 &&
                       values.learningGoals.map((goal, index) => (
                         <Box key={index} sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'row' }}>
-                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`learningGoals.${index}`} placeholder={placeholders[index]} spellCheck={false} />
+                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`learningGoals.${index}`} defaultValue={goal} spellCheck={false} />
                           <IconButton color='error' onClick={() => arrayHelpers.remove(index)}>
                             <DeleteIcon />
                           </IconButton>
@@ -112,9 +120,9 @@ const InstructorManageCourseIntendedLearner = () => {
                   <Box>
                     {
                       values.prerequisites && values.prerequisites.length > 0 &&
-                      values.prerequisites.map((goal, index) => (
+                      values.prerequisites.map((prerequisites, index) => (
                         <Box key={index} sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'row' }}>
-                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`prerequisites.${index}`} placeholder={placeholders[index]} spellCheck={false} />
+                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`prerequisites.${index}`} defaultValue={prerequisites} spellCheck={false} />
                           <IconButton color='error' onClick={() => arrayHelpers.remove(index)}>
                             <DeleteIcon />
                           </IconButton>
@@ -134,7 +142,7 @@ const InstructorManageCourseIntendedLearner = () => {
                 Write a clear description of the intended learners for your course who will find your course content valuable.
                 This will help you attract the right learners to your course.
               </Typography>
-              <TextField size='small' name='target' onChange={handleChange} placeholder='Example: Beginner Python developers curious about data science' spellCheck={false} />
+              <TextField size='small' name='target' onChange={handleChange} defaultValue={values.target} spellCheck={false} />
             </Box>
           </form>
         )}

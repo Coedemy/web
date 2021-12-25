@@ -1,8 +1,10 @@
 import React from 'react'
-import { Box, Card } from '@mui/material'
+import { useQuery } from 'react-query'
 import { Switch, Route, useParams } from 'react-router-dom'
+import { Box, Card } from '@mui/material'
 
 import AppLayout from 'app/ElearningPlatform/Layout/AppLayout'
+import { searchCourse } from 'app/http/course'
 
 import IntructorManageSidebar from './InstructorManageSidebar'
 import InstructorManageCourseIntendedLearner from './InstructorManageCourseIntendedLearner'
@@ -12,6 +14,7 @@ import InstructorManageCourseLandingPage from './InstructorManageCourseLandingPa
 import InstructorManageCoursePricing from './InstructorManageCoursePricing'
 import InstructorManageCoursePromotions from './InstructorManageCoursePromotions'
 import InstructorManageCourseMessages from './InstructorManageCourseMessages'
+import { MatxLoading } from 'app/components'
 
 const navItems = [
   {
@@ -54,7 +57,8 @@ const navItems = [
 ]
 
 const InstructorManageCourse = () => {
-
+  const { courseId } = useParams()
+  const { data, isLoading } = useQuery(`searchCourse${courseId}`, searchCourse.bind(this, { queries: { _id: courseId } }))
 
   return (
     <AppLayout>
@@ -63,13 +67,18 @@ const InstructorManageCourse = () => {
           <IntructorManageSidebar navItems={navItems} />
         </Box>
         <Card sx={{ flex: 8, mb: 4 }} elevation={3}>
-          <Switch>
-            {
-              navItems.map(item => (
-                <Route key={item.id} path={`/instructor/courses/:courseId/manage${item.to}`} component={item.Component} />
-              ))
-            }
-          </Switch>
+          {
+            isLoading ? <MatxLoading /> : (
+              <Switch>
+                {
+                  navItems.map(item => (
+                    <Route key={item.id} path={`/instructor/courses/:courseId/manage${item.to}`} component={(props) => <item.Component course={data.course} {...props} />} />
+                  ))
+                }
+              </Switch>
+            )
+          }
+
         </Card>
       </Box>
     </AppLayout >

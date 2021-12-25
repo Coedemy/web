@@ -19,24 +19,25 @@ const levels = [
   { id: 4, title: 'All Levels' }
 ]
 
-const InstructorManageCourseLandingPage = () => {
+const InstructorManageCourseLandingPage = ({ course }) => {
   const params = useParams()
   const [promotionVideo, setPromotionVideo] = useState()
-  const { imageUrl: courseImageUrl, imageFile: courseImageFile, handleUploadImage } = useUploadImage({ defaultUrl: courseImagePlaceholder })
+  const { imageUrl: courseImageUrl, imageFile: courseImageFile, handleUploadImage } = useUploadImage({ defaultUrl: course.courseImage ?? courseImagePlaceholder })
   const { mutate } = useMutation(updateCourseRequest, {
     mutationKey: 'updateCourseLanding',
   })
 
   const { data, isLoading } = useQuery('categoriesList', getCategoriesList)
   const formRef = useRef()
+  console.log(course.language)
   const initialValues = {
-    title: '',
-    subtitle: '',
-    description: '',
-    language: '',
+    title: course.title ?? '',
+    subtitle: course.title ?? '',
+    description: course.title ?? '',
+    language: languages[42][0],
     level: '',
-    category: '',
-    representativeTopic: ''
+    category: course.category ? course.category._id : '',
+    representativeTopic: course.representativeTopic ?? ''
   }
 
   const onUpdateSuccessfully = (data) => {
@@ -44,11 +45,10 @@ const InstructorManageCourseLandingPage = () => {
   }
 
   const handleSubmit = async (values) => {
-    console.log({ values, courseImageFile, promotionVideo })
+    console.log(values)
     const formData = new FormData()
     for (let [key, value] of Object.entries(values)) {
       formData.append(key, value)
-      console.log(value)
     }
     formData.append('courseImage', courseImageFile)
     formData.append('promotionVideo', promotionVideo)
@@ -56,6 +56,8 @@ const InstructorManageCourseLandingPage = () => {
       onSuccess: onUpdateSuccessfully
     })
   }
+
+  console.log(course.language)
 
   return (
     <Box sx={{ minHeight: '80vh' }}>
@@ -96,28 +98,28 @@ const InstructorManageCourseLandingPage = () => {
                   <Typography>
                     Course title
                   </Typography>
-                  <TextField name='title' size='small' placeholder='Insert your course title' onChange={handleChange} />
+                  <TextField name='title' size='small' placeholder='Insert your course title' defaultValue={values.title} onChange={handleChange} />
                   <Typography>
                     Course subtitle
                   </Typography>
-                  <TextField name='subtitle' size='small' placeholder='Insert your course subtitle' onChange={handleChange} />
+                  <TextField name='subtitle' size='small' placeholder='Insert your course subtitle' defaultValue={values.subtitle} onChange={handleChange} />
                   <Typography>
                     Course description
                   </Typography>
-                  <TextField name='description' type='area' size='small' placeholder='Insert your course description' onChange={handleChange} />
+                  <TextField name='description' type='area' size='small' placeholder='Insert your course description' defaultValue={values.description} onChange={handleChange} />
                   <Typography>
                     Basic Info
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
                     <FormControl className='w-full' size='small'>
-                      <Select name='language' defaultValue={languages[42][1]} onChange={handleChange}>
+                      <Select name='language' defaultValue={languages[42][0]} onChange={handleChange}>
                         {
-                          languages.map(lang => <MenuItem key={lang[0]} value={lang[1]}>{lang[0]} ({lang[1]})</MenuItem>)
+                          languages.map(lang => <MenuItem key={lang[0]} value={lang[0]}>{lang[0]} ({lang[1]})</MenuItem>)
                         }
                       </Select>
                     </FormControl>
                     <FormControl className='w-full' size='small'>
-                      <Select name='level' defaultValue={0} onChange={handleChange}>
+                      <Select name='level' defaultValue={levels[0].title} onChange={handleChange}>
                         <MenuItem disabled value={0}>-- Select Level --</MenuItem>
                         {
                           levels.map(level => <MenuItem key={level.id} value={level.title}>{level.title}</MenuItem>)
@@ -125,7 +127,7 @@ const InstructorManageCourseLandingPage = () => {
                       </Select>
                     </FormControl>
                     <FormControl className='w-full' size='small'>
-                      <Select name='category' defaultValue={0} onChange={handleChange}>
+                      <Select name='category' defaultValue={data.courseCategoryList[0]._id} onChange={handleChange}>
                         <MenuItem disabled value={0}>-- Select Category --</MenuItem>
                         {
                           data.courseCategoryList.map(category => <MenuItem key={category._id} value={category._id}>{category.title}</MenuItem>)

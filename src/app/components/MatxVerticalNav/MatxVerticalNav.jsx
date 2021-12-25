@@ -80,24 +80,24 @@ const MatxVerticalNav = ({ items }) => {
 							[classes.navItem]: true,
 							[classes.compactNavItem]: mode === 'compact',
 						})}
-						rel="noopener noreferrer"
-						target="_blank"
+						rel='noopener noreferrer'
+						target='_blank'
 					>
 						<TouchRipple
 							key={item.name}
-							name="child"
-							className="w-full"
+							name='child'
+							className='w-full'
 						>
 							{(() => {
 								if (item.icon) {
 									return (
-										<Icon className="text-18 align-middle px-4">
+										<Icon className='text-18 align-middle px-4'>
 											{item.icon}
 										</Icon>
 									)
 								} else {
 									return (
-										<span className="item-icon icon-text">
+										<span className='item-icon icon-text'>
 											{item.iconText}
 										</span>
 									)
@@ -111,7 +111,7 @@ const MatxVerticalNav = ({ items }) => {
 							>
 								{item.name}
 							</span>
-							<div className="mx-auto"></div>
+							<div className='mx-auto'></div>
 							{item.badge && (
 								<div
 									className={`rounded bg-${item.badge.color} px-1 py-1px`}
@@ -136,11 +136,11 @@ const MatxVerticalNav = ({ items }) => {
 					>
 						<TouchRipple
 							key={item.name}
-							name="child"
-							className="w-full"
+							name='child'
+							className='w-full'
 						>
 							{item?.icon ? (
-								<Icon className="text-18 align-middle w-36 px-4">
+								<Icon className='text-18 align-middle w-36 px-4'>
 									{item.icon}
 								</Icon>
 							) : (
@@ -170,7 +170,7 @@ const MatxVerticalNav = ({ items }) => {
 							>
 								{item.name}
 							</span>
-							<div className="mx-auto"></div>
+							<div className='mx-auto'></div>
 							{item.badge && (
 								<div
 									className={clsx(
@@ -189,7 +189,7 @@ const MatxVerticalNav = ({ items }) => {
 		})
 	}
 
-	return <div className="navigation">{renderLevels(items)}</div>
+	return <div className='navigation'>{renderLevels(items)}</div>
 }
 
 export default React.memo(MatxVerticalNav)

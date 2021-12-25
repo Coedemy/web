@@ -50,7 +50,7 @@ const InstructorCourses = () => {
                             <CardMedia
                               component='img'
                               alt="course's image"
-                              image={data ? data.myTeaching[index].courseImage : defaultCourseImageUrl}
+                              image={data.myTeaching[index].courseImage ? data.myTeaching[index].courseImage : defaultCourseImageUrl}
                               sx={{ border: '1px solid lightgray', width: '150px', height: '100px' }}
                             />
                           </Box>
