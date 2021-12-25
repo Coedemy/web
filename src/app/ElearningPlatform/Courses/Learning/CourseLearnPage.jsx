@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useQuery } from 'react-query'
+import { useQuery, useMutation } from 'react-query'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Player, ControlBar, BigPlayButton, ReplayControl, VolumeMenuButton } from 'video-react'
 
 import { MatxLoading, CircularProgressWithLabel } from 'app/components'
 import { searchCourse } from 'app/http/course'
+import { finishLectureRequest } from 'app/http/user'
 import { loadCurrentLecture, trackTime, startVideo, pauseVideo } from 'app/redux-toolkit/slices/courseSlice'
 
 import CourseLearnSections from './CourseLearnSections'
@@ -59,6 +60,11 @@ const CourseLearnPage = () => {
   const courseReducer = useSelector(state => state.course)
   const { slug, lectureId } = useParams()
   const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug }, userId: authReducer.user.userId }))
+  const { mutate } = useMutation(finishLectureRequest, {
+    onSuccess: () => {
+
+    }
+  })
 
   const loadLecture = (lecture) => {
     if (lecture.isLocked) {
@@ -91,6 +97,7 @@ const CourseLearnPage = () => {
     if (userReducer.myLearning.some(course => course._id === data.course._id)) {
       setTimeout(() => {
         dispatch(finishALecture({ lectureId }))
+        mutate({ lectureId })
       }, 1000)
     }
   }
@@ -206,7 +213,12 @@ const CourseLearnPage = () => {
             <Box>
               <Box sx={{ p: 2, fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <b>Course Content</b>
-                <CircularProgressWithLabel value={userReducer.learningProcess.length * 100 / data.course.totalLectures < 100 ? userReducer.learningProcess.length * 100 / data.course.totalLectures : 100} />
+                {
+                  userReducer.myLearning.some(c => c._id === data.course._id) ? (
+                    <CircularProgressWithLabel value={userReducer.learningProcess.length * 100 / data.course.totalLectures < 100 ? userReducer.learningProcess.length * 100 / data.course.totalLectures : 100} />
+                  ) : <Box />
+                }
+
               </Box>
               <CourseLearnSections chooseLecture={chooseLecture} course={data.course} />
             </Box>

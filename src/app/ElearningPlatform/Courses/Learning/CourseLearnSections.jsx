@@ -104,7 +104,9 @@ const CourseLearnSections = ({ course, chooseLecture }) => {
                       key={lecture._id}
                     >
                       <ListItem disablePadding>
-                        <Checkbox disabled checked={userReducer.learningProcess.includes(lecture._id)} />
+                        {
+                          userReducer.myLearning.some(c => c._id === course._id) ? <Checkbox disabled checked={userReducer.learningProcess.includes(lecture._id)} /> : <Box />
+                        }
                         <ListItemIcon>
                           {lecture.content.lectureContentType === 'VIDEO' ? <PlayCircleOutlineIcon /> : (lecture.content.lectureContentType === 'ARTICLE') ? <ArticleIcon /> : <QuizIcon />}
                         </ListItemIcon>

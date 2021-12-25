@@ -24,3 +24,8 @@ export const loadMyTeachingCoursesRequest = () => {
   console.log('load my teaching courses')
   return httpRequest({ endpoint: '/users/teaching', requireToken: true })
 }
+
+export const finishLectureRequest = ({ lectureId }) => {
+  console.log('learn lecture')
+  return httpRequest({ endpoint: `/users/learn/${lectureId}`, method: 'post', requireToken: true })
+}

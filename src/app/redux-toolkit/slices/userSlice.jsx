@@ -17,6 +17,7 @@ const userSlice = createSlice({
       if (userProps) {
         state.wishlist = userProps.wishlist
         state.myLearning = userProps.myLearning
+        state.learningProcess = userProps.myLearningProcess
       }
       state.isLoading = false
 
@@ -105,9 +106,8 @@ const userSlice = createSlice({
 
     finishALecture: (state, action) => {
       const { lectureId } = action.payload
-      console.log(lectureId, "Hello")
       const { learningProcess } = state
-      learningProcess.push(lectureId)
+      if (!learningProcess.includes(lectureId)) learningProcess.push(lectureId)
       state.learningProcess = learningProcess
       return state
     }
