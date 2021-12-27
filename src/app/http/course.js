@@ -30,3 +30,8 @@ export const updateCourseRequest = ({ courseId, updatedCourse, isFormData }) => 
   console.log('Update Course')
   return httpRequest({ endpoint: `/courses/${courseId}`, method: 'patch', bodyParameters: updatedCourse, isFormData, requireToken: true })
 }
+
+export const reviewCourseRequest = ({ courseId, numberOfStars, comment }) => {
+  console.log('review course')
+  return httpRequest({ endpoint: `/courses/${courseId}/review`, method: 'post', bodyParameters: { numberOfStars, comment }, requireToken: true })
+}

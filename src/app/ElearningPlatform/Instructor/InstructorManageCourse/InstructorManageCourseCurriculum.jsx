@@ -27,41 +27,6 @@ const InstructorManageCourseCurriculum = () => {
         <Button variant='contained'>Save</Button>
       </Box>
       <Divider />
-      {/* <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        enableReinitialize={true}
-        innerRef={formRef}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setSubmitting,
-          setFieldValue,
-        }) => (
-          <form onSubmit={handleSubmit}>
-
-            <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <Typography>
-                Write messages to your students (optional) that will be sent automatically when they join or complete your course to encourage students to engage with course content. If you do not wish to send a welcome or congratulations message, leave the text box blank.
-              </Typography>
-              <Typography>
-                Welcome Message
-              </Typography>
-              <TextField />
-              <Typography>
-                Congratulations Message
-              </Typography>
-              <TextField />
-            </Box>
-          </form>
-        )}
-      </Formik> */}
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', p: 4 }}>
         <Sections />
       </Box>

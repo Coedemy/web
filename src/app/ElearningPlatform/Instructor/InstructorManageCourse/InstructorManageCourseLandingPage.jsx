@@ -10,8 +10,6 @@ import { getCategoriesList, updateCourseRequest } from 'app/http/course'
 import { MatxLoading } from 'app/components'
 import useUploadImage from 'app/hooks/useUploadImage'
 
-const courseImagePlaceholder = 'https://s.udemycdn.com/course/750x422/placeholder.jpg'
-
 const levels = [
   { id: 1, title: 'Beginner Level' },
   { id: 2, title: 'Intermediate Level' },
@@ -22,14 +20,13 @@ const levels = [
 const InstructorManageCourseLandingPage = ({ course }) => {
   const params = useParams()
   const [promotionVideo, setPromotionVideo] = useState()
-  const { imageUrl: courseImageUrl, imageFile: courseImageFile, handleUploadImage } = useUploadImage({ defaultUrl: course.courseImage ?? courseImagePlaceholder })
+  const { imageUrl: courseImageUrl, imageFile: courseImageFile, handleUploadImage } = useUploadImage({ defaultUrl: course.courseImage })
   const { mutate } = useMutation(updateCourseRequest, {
     mutationKey: 'updateCourseLanding',
   })
 
   const { data, isLoading } = useQuery('categoriesList', getCategoriesList)
   const formRef = useRef()
-  console.log(course.language)
   const initialValues = {
     title: course.title ?? '',
     subtitle: course.title ?? '',
@@ -50,8 +47,8 @@ const InstructorManageCourseLandingPage = ({ course }) => {
     for (let [key, value] of Object.entries(values)) {
       formData.append(key, value)
     }
-    formData.append('courseImage', courseImageFile)
-    formData.append('promotionVideo', promotionVideo)
+    if (courseImageFile) formData.append('courseImage', courseImageFile)
+    if (promotionVideo) formData.append('promotionVideo', promotionVideo)
     mutate({ courseId: params.courseId, updatedCourse: formData, isFormData: true }, {
       onSuccess: onUpdateSuccessfully
     })
@@ -98,28 +95,28 @@ const InstructorManageCourseLandingPage = ({ course }) => {
                   <Typography>
                     Course title
                   </Typography>
-                  <TextField name='title' size='small' placeholder='Insert your course title' defaultValue={values.title} onChange={handleChange} />
+                  <TextField name='title' size='small' placeholder='Insert your course title' value={values.title} onChange={handleChange} />
                   <Typography>
                     Course subtitle
                   </Typography>
-                  <TextField name='subtitle' size='small' placeholder='Insert your course subtitle' defaultValue={values.subtitle} onChange={handleChange} />
+                  <TextField name='subtitle' size='small' placeholder='Insert your course subtitle' value={values.subtitle} onChange={handleChange} />
                   <Typography>
                     Course description
                   </Typography>
-                  <TextField name='description' type='area' size='small' placeholder='Insert your course description' defaultValue={values.description} onChange={handleChange} />
+                  <TextField name='description' type='area' size='small' placeholder='Insert your course description' value={values.description} onChange={handleChange} />
                   <Typography>
                     Basic Info
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
                     <FormControl className='w-full' size='small'>
-                      <Select name='language' defaultValue={languages[42][0]} onChange={handleChange}>
+                      <Select name='language' value={languages[42][0]} onChange={handleChange}>
                         {
                           languages.map(lang => <MenuItem key={lang[0]} value={lang[0]}>{lang[0]} ({lang[1]})</MenuItem>)
                         }
                       </Select>
                     </FormControl>
                     <FormControl className='w-full' size='small'>
-                      <Select name='level' defaultValue={levels[0].title} onChange={handleChange}>
+                      <Select name='level' value={levels[0].title} onChange={handleChange}>
                         <MenuItem disabled value={0}>-- Select Level --</MenuItem>
                         {
                           levels.map(level => <MenuItem key={level.id} value={level.title}>{level.title}</MenuItem>)
@@ -127,7 +124,7 @@ const InstructorManageCourseLandingPage = ({ course }) => {
                       </Select>
                     </FormControl>
                     <FormControl className='w-full' size='small'>
-                      <Select name='category' defaultValue={data.courseCategoryList[0]._id} onChange={handleChange}>
+                      <Select name='category' value={data.courseCategoryList[0]._id} onChange={handleChange}>
                         <MenuItem disabled value={0}>-- Select Category --</MenuItem>
                         {
                           data.courseCategoryList.map(category => <MenuItem key={category._id} value={category._id}>{category.title}</MenuItem>)
@@ -138,7 +135,7 @@ const InstructorManageCourseLandingPage = ({ course }) => {
                   <Typography>
                     What is primarily taught in your course?
                   </Typography>
-                  <TextField name='representativeTopic' size='small' placeholder='e.g. Landscape Photography' onChange={handleChange} />
+                  <TextField name='representativeTopic' value={values.representativeTopic} size='small' placeholder='e.g. Landscape Photography' onChange={handleChange} />
 
                   <Typography>
                     Course Image

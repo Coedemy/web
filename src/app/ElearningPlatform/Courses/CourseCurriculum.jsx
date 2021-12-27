@@ -15,7 +15,6 @@ import QuizIcon from '@mui/icons-material/Quiz'
 
 // import CourseVideo from './CourseVideo'
 import { formatTime } from 'app/utils/time'
-import { calculateTotalHoursOfSection } from './services/duration'
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />

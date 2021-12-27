@@ -12,7 +12,7 @@ import CourseLearnOverview from './CourseLearnOverview'
 import CourseLearnQA from './CourseLearnQA'
 import CourseLearnNotes from './CourseLearnNotes'
 import CourseLearnAnnouncements from './CourseLearnAnnouncements'
-// import CourseLearnProcess from './CourseLearnProcess'
+import CourseLearnRating from './CourseLearnRating'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -71,7 +71,7 @@ const CourseLearnTabs = ({ course, lecture }) => {
         <Tab label='Q & A' {...a11yProps(1)} />
         <Tab label='Notes' {...a11yProps(2)} />
         <Tab label='Announcements' {...a11yProps(3)} />
-        <Tab label='Learning Process' {...a11yProps(4)} />
+        <Tab label='Rating' {...a11yProps(4)} />
       </Tabs>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -91,7 +91,7 @@ const CourseLearnTabs = ({ course, lecture }) => {
           <CourseLearnAnnouncements />
         </TabPanel>
         <TabPanel value={value} index={4} dir={theme.direction}>
-          {/* <CourseLearnProcess /> */}
+          <CourseLearnRating course={course} />
         </TabPanel>
       </SwipeableViews>
     </Box>

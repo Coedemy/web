@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { Box, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import { Box, List, ListItemButton, ListItemIcon, ListItemText, Button } from '@mui/material'
 
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
@@ -37,6 +37,9 @@ const IntructorManageSidebar = ({ navItems }) => {
           ))
         }
       </List>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button variant='contained' sx={{ flex: 1 }}>Publish</Button>
+      </Box>
     </Box>
   )
 }

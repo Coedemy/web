@@ -5,6 +5,7 @@ import { useQuery, useMutation } from 'react-query'
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Player, ControlBar, BigPlayButton, ReplayControl, VolumeMenuButton } from 'video-react'
+import Hls from 'hls.js';
 
 import { MatxLoading, CircularProgressWithLabel } from 'app/components'
 import { searchCourse } from 'app/http/course'
@@ -21,6 +22,45 @@ import { finishALecture } from 'app/redux-toolkit/slices/userSlice'
 
 const TOPBAR_HEIGHT = 64
 const VIDEO_HEIGHT = 600
+
+
+class HLSSource extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.hls = new Hls();
+  }
+
+  componentDidMount() {
+    // `src` is the property get from this component
+    // `video` is the property insert from `Video` component
+    // `video` is the html5 video element
+    const { src, video } = this.props;
+    // load hls video source base on hls.js
+    if (Hls.isSupported()) {
+      this.hls.loadSource(src);
+      this.hls.attachMedia(video);
+      this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    // destroy hls video source
+    if (this.hls) {
+      this.hls.destroy();
+    }
+  }
+
+  render() {
+    return (
+      <source
+        src={this.props.src}
+        type={this.props.type || 'application/x-mpegURL'}
+      />
+    );
+  }
+}
 
 const LectureStatus = {
   INIT: 'INIT',
@@ -55,15 +95,13 @@ const CourseLearnPage = () => {
   const [videoUrl, setVideoUrl] = useState()
   const [articleContent, setArticleContent] = useState('')
   const [currentLecture, setCurrentLecture] = useState()
-  const [currentCourse, setCurrentCourse] = useState()
+  const [videoEnded, setVideoEnded] = useState(false)
 
   const courseReducer = useSelector(state => state.course)
   const { slug, lectureId } = useParams()
   const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug }, userId: authReducer.user.userId }))
   const { mutate } = useMutation(finishLectureRequest, {
-    onSuccess: () => {
-
-    }
+    onSuccess: autoChangeLecture
   })
 
   const loadLecture = (lecture) => {
@@ -90,16 +128,10 @@ const CourseLearnPage = () => {
     }
     playerRef.current.load()
     setTimeout(1000)
+    setVideoEnded(false)
     setCurrentLecture(lecture)
     dispatch(trackTime(0))
     dispatch(loadCurrentLecture({ lectureId: lecture._id, title: lecture.title, isVideo }))
-
-    if (userReducer.myLearning.some(course => course._id === data.course._id)) {
-      setTimeout(() => {
-        dispatch(finishALecture({ lectureId }))
-        mutate({ lectureId })
-      }, 1000)
-    }
   }
 
   useEffect(() => {
@@ -133,14 +165,31 @@ const CourseLearnPage = () => {
     if (pauseVideo) playerRef.current.pause()
   }, [courseReducer.pauseVideo])
 
+  useEffect(() => {
+    if (!videoEnded) return
+    if (userReducer.myLearning.some(course => course._id === data.course._id)) {
+      console.log('ended')
+      mutate({ lectureId })
+      dispatch(finishALecture({ lectureId }))
+    }
+  }, [videoEnded])
+
+  const autoChangeLecture = () => {
+
+  }
+
   const handleStateChange = (state, prevState) => {
-    if (courseReducer.currentLecture.isVideo) {
-      const previousTime = courseReducer.currentLecture.currentTime
-      const currentTime = parseInt(state.currentTime)
-      const videoIsPlaying = previousTime !== currentTime
-      if (videoIsPlaying) {
-        dispatch(trackTime(currentTime))
-      }
+    if (!courseReducer.currentLecture.isVideo) return
+    const previousTime = courseReducer.currentLecture.currentTime
+    const currentTime = parseInt(state.currentTime)
+    const videoIsPlaying = previousTime !== currentTime
+    if (videoIsPlaying) {
+      dispatch(trackTime(currentTime))
+    }
+
+    //if this course was purchased, show learning progress
+    if (state.ended && !videoEnded) {
+      setVideoEnded(true)
     }
   }
 
@@ -171,10 +220,6 @@ const CourseLearnPage = () => {
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       <Scrollable sx={{ flex: 3 }} ref={contentContainerRef}>
         {renderLectureContent()}
-        {/* <CourseLearnVideo videoUrl={videoUrl} playerRef={playerRef} poster={poster} visible={lectureStatus === LectureStatus.VIDEO} /> */}
-
-        {/* {
-          lectureStatus === LectureStatus.VIDEO ? ( */}
         <Box
           sx={{
             display: 'flex',
@@ -183,7 +228,7 @@ const CourseLearnPage = () => {
             backgroundColor: '#f7f7f7',
             opacity: lectureStatus === LectureStatus.VIDEO ? 1 : 0
           }}>
-          <Player
+          {/* <Player
             ref={playerRef}
             poster={poster}
             fluid={false}
@@ -196,6 +241,12 @@ const CourseLearnPage = () => {
               <VolumeMenuButton vertical />
             </ControlBar>
             <BigPlayButton position='center' />
+          </Player> */}
+          <Player ref={playerRef}>
+            <HLSSource
+              isVideoChild
+              src="//d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8"
+            />
           </Player>
         </Box>
         {/* } */}

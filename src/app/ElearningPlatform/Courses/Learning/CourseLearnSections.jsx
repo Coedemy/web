@@ -71,9 +71,14 @@ const LectureList = styled(List)(({ theme }) => ({
 
 const CourseLearnSections = ({ course, chooseLecture }) => {
   const userReducer = useSelector(state => state.user)
+  const [expanded, setExpanded] = useState('panel0')
   const [lectureCode, setLectureCode] = useState('')
   const history = useHistory()
   const location = useLocation()
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  }
 
   useEffect(() => {
     const pathnameArray = location.pathname.split('/')
@@ -89,8 +94,8 @@ const CourseLearnSections = ({ course, chooseLecture }) => {
   return (
     <Box>
       {
-        course.sections.map(section => (
-          <Accordion expanded={true} key={section._id}>
+        course.sections.map((section, index) => (
+          <Accordion expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)} key={section._id}>
             <AccordionSummary sx={{ backgroundColor: '#e8e8e8' }}>
               <Typography><b>{section.title}</b></Typography>
             </AccordionSummary>

@@ -107,11 +107,15 @@ const CourseInfoModal = ({ course }) => {
               <Button onClick={handleAddToCart} variant='contained' style={{ marginLeft: '20px', width: '200px', marginBottom: '15px' }}>Add To Cart</Button>
             )
         }
-        <IconButton onClick={toggleFavoriteButton.bind(this, course)} style={{ marginBottom: '15px' }}>
-          {
-            userReducer.wishlist.some(c => c._id === course._id) ? <FavoriteIcon fontSize='large' /> : <FavoriteBorderIcon fontSize='large' />
-          }
-        </IconButton>
+        {
+          authReducer.accessToken ? (
+            <IconButton onClick={toggleFavoriteButton.bind(this, course)} style={{ marginBottom: '15px' }}>
+              {
+                userReducer.wishlist.some(c => c._id === course._id) ? <FavoriteIcon fontSize='large' /> : <FavoriteBorderIcon fontSize='large' />
+              }
+            </IconButton>
+          ) : <></>
+        }
       </Box>
     </Box>
   )

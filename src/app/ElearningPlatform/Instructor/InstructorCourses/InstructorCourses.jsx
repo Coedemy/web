@@ -9,8 +9,6 @@ import { MatxLoading } from 'app/components'
 import { loadMyTeachingCoursesRequest } from 'app/http/user'
 import InstructorCreateCourse from './InstructorCreateCourse'
 
-const defaultCourseImageUrl = 'https://s.udemycdn.com/course/200_H/placeholder.jpg'
-
 const InstructorCourses = () => {
   const { data, isLoading } = useQuery('myTeaching', loadMyTeachingCoursesRequest)
 
@@ -44,13 +42,12 @@ const InstructorCourses = () => {
                   <Box key={course._id} sx={{ mt: 4 }}>
                     <Link to={`/instructor/courses/${course._id}/manage/goals`}>
                       <Card sx={{ p: 0 }} elevation={4}>
-                        {/* <CardContent sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}> */}
                         <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                           <Box sx={{ mr: 4 }}>
                             <CardMedia
                               component='img'
                               alt="course's image"
-                              image={data.myTeaching[index].courseImage ? data.myTeaching[index].courseImage : defaultCourseImageUrl}
+                              image={data.myTeaching[index].courseImage}
                               sx={{ border: '1px solid lightgray', width: '150px', height: '100px' }}
                             />
                           </Box>
@@ -59,7 +56,6 @@ const InstructorCourses = () => {
                             <Box sx={{ fontWeight: 'bold' }}>DRAFT</Box>
                           </Box>
                         </Box>
-                        {/* </CardContent> */}
                       </Card>
                     </Link>
                   </Box>

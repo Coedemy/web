@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { TextField, Box, Icon, Button, FormControl, Select, MenuItem, List, ListItem, Chip } from '@mui/material'
 
 import { formatTime } from 'app/utils/time'
-import { pauseVideo } from 'app/redux-toolkit/slices/courseSlice'
+import { pauseVideo, startVideo } from 'app/redux-toolkit/slices/courseSlice'
 
 import CourseLearnTextEditor from './CourseLearnTextEditor'
 
@@ -51,7 +51,7 @@ const CourseLearnNotes = () => {
   }
 
   const onAddNote = () => {
-    setNotesList(notes => [...notes, { _id: notes.length, value: curNote, time: currentTime, lectureTitle: courseReducer.currentLecture.title, lectureId: courseReducer.currentLecture.lectureId }])
+    setNotesList(notes => [{ _id: notes.length, value: curNote, time: currentTime, lectureTitle: courseReducer.currentLecture.title, lectureId: courseReducer.currentLecture.lectureId }, ...notes])
     setAddNoteMode(false)
     setCurNote('')
   }

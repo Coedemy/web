@@ -1,21 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
-import { Card, Box } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { Card, Box, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 
-import { getItemStyle, getSectionListStyle } from './Reorder'
 import Lecture from './Lecture'
 
-const Section = ({ section, sectionIndex }) => {
+const Section = ({ section, sectionIndex, addLecture }) => {
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [lectureTitle, setLectureTitle] = useState('')
+  const theme = useTheme()
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
+
+  const handleDialogClose = () => {
+    setLectureTitle('')
+    setDialogOpen(false)
+  }
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true)
+  }
+
   return (
     <Droppable droppableId={`droppable${section.id}`} type={`${sectionIndex}`}>
       {(provided, snapshot) => (
         <Box
           ref={provided.innerRef}
-          sx={{ p: '20px', width: '100%' }}
-        // sx={{ width: '1m00%', m: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}
-        // style={getSectionListStyle(snapshot.isDraggingOver)}
+          sx={{ p: '.5rem', width: '100%', }}
         >
           {section.lectures.map((lecture, index) => {
             return (
@@ -29,8 +40,8 @@ const Section = ({ section, sectionIndex }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     sx={{
-                      p: '20px',
-                      m: '0 0 10px 0',
+                      p: '.5rem',
+                      m: '0 0 1rem 0',
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between'
                     }}
                     {...provided.dragHandleProps}
@@ -42,6 +53,31 @@ const Section = ({ section, sectionIndex }) => {
             )
           })}
           {provided.placeholder}
+          <Button variant='outlined' onClick={handleDialogOpen}>+ Add</Button>
+          <Dialog
+            fullWidth={true}
+            width='lg'
+            open={dialogOpen}
+            aria-labelledby='responsive-dialog-title'
+          >
+            <DialogTitle id='responsive-dialog-title'>
+              Create New Lecture
+            </DialogTitle>
+            <DialogContent>
+              <TextField size='small' sx={{ width: '100%' }} value={lectureTitle} onChange={(e) => setLectureTitle(e.target.value)} />
+            </DialogContent>
+            <DialogActions>
+              <Button variant='outlined' autoFocus onClick={handleDialogClose}>
+                Cancel
+              </Button>
+              <Button variant='contained' autoFocus onClick={() => {
+                addLecture({ sectionIndex, lectureTitle })
+                handleDialogClose()
+              }}>
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       )}
     </Droppable>

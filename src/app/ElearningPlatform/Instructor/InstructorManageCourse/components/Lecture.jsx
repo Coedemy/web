@@ -19,7 +19,7 @@ const Lecture = ({ lecture, index }) => {
         <IconButton aria-label='add an alarm'>
           <DeleteOutlineIcon />
         </IconButton>
-        <MenuIcon />
+        <MenuIcon sx={{ cursor: 'move' }} />
       </Box>
     </>
   )
