@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { orange } from 'app/utils/color'
 import { formatToVND } from 'app/utils/formatter'
 import { checkoutRequest } from 'app/http/course'
-import { checkoutSucess } from 'app/redux-toolkit/slices/userSlice'
+import { checkoutSuccess } from 'app/redux-toolkit/slices/userSlice'
 
 import AppLayout from '../Layout/AppLayout'
 
@@ -110,7 +110,7 @@ const Checkout = () => {
 	})
 
 	const onCheckoutSuccessfully = async (data) => {
-		dispatch(checkoutSucess(data))
+		dispatch(checkoutSuccess(data))
 
 		history.push('/my-courses/learning')
 	}

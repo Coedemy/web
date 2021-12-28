@@ -24,7 +24,7 @@ const userSlice = createSlice({
       return state
     },
 
-    checkoutSucess: (state, action) => {
+    checkoutSuccess: (state, action) => {
       state.isLoading = true
       const { myLearning } = action.payload
       state.myLearning = myLearning
@@ -121,7 +121,7 @@ export const {
   loadCart,
   addToCart,
   removeFromCart,
-  checkoutSucess,
+  checkoutSuccess,
   finishALecture
 } = actions
 export default reducer

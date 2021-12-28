@@ -19,7 +19,6 @@ const CourseDetail = () => {
 
   const { slug } = useParams()
   const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug } }))
-  console.log({ isLoading, data })
 
   return (
     <AppLayout>

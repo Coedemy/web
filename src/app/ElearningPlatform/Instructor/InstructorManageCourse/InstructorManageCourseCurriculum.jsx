@@ -1,19 +1,13 @@
-import React, { useRef } from 'react'
-import { Formik } from 'formik'
-import { Box, Divider, Typography, Button } from '@mui/material'
+import React from 'react'
+import { useQuery } from 'react-query'
+import { Box, Divider, Typography } from '@mui/material'
 
+import { getCourseSectionsRequest } from 'app/http/course'
+import { MatxLoading } from 'app/components'
 import Sections from './components/Sections'
 
-const InstructorManageCourseCurriculum = () => {
-
-  const formRef = useRef()
-  const initialValues = {
-
-  }
-
-  const handleSubmit = async (values, { isSubmitting }) => {
-    console.log({ values })
-  }
+const InstructorManageCourseCurriculum = ({ course }) => {
+  const { data, isLoading } = useQuery('initSections', getCourseSectionsRequest.bind(this, { courseId: course._id }))
 
   return (
     <Box sx={{ minHeight: '80vh' }}>
@@ -24,12 +18,15 @@ const InstructorManageCourseCurriculum = () => {
         >
           Curriculum
         </Typography>
-        <Button variant='contained'>Save</Button>
       </Box>
       <Divider />
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', p: 4 }}>
-        <Sections />
-      </Box>
+      {
+        isLoading ? <MatxLoading /> : (
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', p: 4 }}>
+            <Sections courseId={course._id} initSections={data.courseSections} />
+          </Box>
+        )
+      }
     </Box>
   )
 }

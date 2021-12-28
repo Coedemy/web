@@ -22,7 +22,7 @@ const Section = ({ section, sectionIndex, addLecture }) => {
   }
 
   return (
-    <Droppable droppableId={`droppable${section.id}`} type={`${sectionIndex}`}>
+    <Droppable droppableId={`droppable${section._id}`} type={`${sectionIndex}`}>
       {(provided, snapshot) => (
         <Box
           ref={provided.innerRef}
@@ -32,7 +32,7 @@ const Section = ({ section, sectionIndex, addLecture }) => {
             return (
               <Draggable
                 key={`${sectionIndex}${index}`}
-                draggableId={`${sectionIndex}${index}`}
+                draggableId={`${section._id}_${index}`}
                 index={index}
               >
                 {(provided, snapshot) => (
@@ -53,7 +53,7 @@ const Section = ({ section, sectionIndex, addLecture }) => {
             )
           })}
           {provided.placeholder}
-          <Button variant='outlined' onClick={handleDialogOpen}>+ Add</Button>
+          <Button variant='outlined' onClick={handleDialogOpen}>+ Add Lecture</Button>
           <Dialog
             fullWidth={true}
             width='lg'
@@ -71,7 +71,7 @@ const Section = ({ section, sectionIndex, addLecture }) => {
                 Cancel
               </Button>
               <Button variant='contained' autoFocus onClick={() => {
-                addLecture({ sectionIndex, lectureTitle })
+                addLecture({ sectionId: section._id, lectureTitle })
                 handleDialogClose()
               }}>
                 Add

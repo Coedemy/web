@@ -12,7 +12,7 @@ const Lecture = ({ lecture, index }) => {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-        <CheckCircleIcon fontSize='small' />Lecture {index + 1}: {lecture}
+        <CheckCircleIcon fontSize='small' />Lecture {index + 1}: {lecture.title}
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
         <EditLecture lecture={lecture} />

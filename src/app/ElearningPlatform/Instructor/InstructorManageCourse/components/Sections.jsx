@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
+import { useMutation } from 'react-query'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import MenuIcon from '@mui/icons-material/Menu'
 import { Box, Accordion, AccordionDetails, AccordionSummary, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme } from '@mui/material/styles'
 
+import { createSectionRequest, createLectureRequest, updateSectionsOrderRequest, updateLecturesOrderRequest } from 'app/http/course'
 import { Reorder } from './Reorder'
 import Section from './Section'
-
 
 const getSections = count =>
   Array.from({ length: count }, (v, k) => k).map(k => ({
@@ -18,12 +17,15 @@ const getSections = count =>
     lectures: [`Build a blog`, `Research a document`, `Connect to database`]
   }))
 
-const Sections = () => {
+const Sections = ({ courseId, initSections }) => {
   const [expanded, setExpanded] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [sections, setSections] = useState(getSections(3))
+  const [sections, setSections] = useState(initSections)
   const [sectionTitle, setSectionTitle] = useState('')
-  const theme = useTheme()
+  const { mutate: mutateCreateSection } = useMutation(createSectionRequest)
+  const { mutate: mutateCreateLecture } = useMutation(createLectureRequest)
+  const { mutate: mutateUpdateSectionsOrder } = useMutation(updateSectionsOrderRequest)
+  const { mutate: mutateUpdateLecturesOrder } = useMutation(updateLecturesOrderRequest)
 
   const handleExpandChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -41,50 +43,64 @@ const Sections = () => {
   const onDragEnd = (result) => {
     if (!result.destination) return
 
-    if (result.type === 'QUESTIONS') {
+    if (result.type === 'SECTIONS') {
       const reorderedSections = Reorder(
         sections,
         result.source.index,
         result.destination.index
       )
       setSections(reorderedSections)
+      mutateUpdateSectionsOrder({ courseId, sourceIndex: result.source.index, destIndex: result.destination.index })
     } else {
+      const sectionIndex = parseInt(result.type, 10)
       const lectures = Reorder(
-        sections[parseInt(result.type, 10)].lectures,
+        sections[sectionIndex].lectures,
         result.source.index,
         result.destination.index
       )
+      const sectionId = result.draggableId.split('_')[0]
 
       const reorderedSections = JSON.parse(JSON.stringify(sections))
       reorderedSections[result.type].lectures = lectures
       setSections(reorderedSections)
+      mutateUpdateLecturesOrder({ sectionId, sourceIndex: result.source.index, destIndex: result.destination.index })
     }
   }
 
-  const addSection = ({ title }) => {
-    setSections(sections => [...sections, { id: `section${sections.length}`, title: sectionTitle, lectures: [] }])
-    handleDialogClose()
-  }
-
-  const addLecture = ({ sectionIndex, lectureTitle }) => {
-    const tempSections = [...sections]
-    tempSections[sectionIndex].lectures.push(lectureTitle)
-    setSections(tempSections)
+  const addSection = () => {
+    mutateCreateSection({ courseId, title: sectionTitle }, { onSuccess: onSectionCreated })
   }
 
   const deleteSection = () => {
 
   }
 
+  const onSectionCreated = (data) => {
+    const { newSection } = data
+    const { _id, title } = newSection
+    setSections(sections => [...sections, { _id, title, lectures: [] }])
+    handleDialogClose()
+  }
+
+  const addLecture = ({ sectionId, lectureTitle }) => {
+    mutateCreateLecture({ sectionId, title: lectureTitle }, { onSuccess: onLectureCreated })
+  }
+
   const deleteLecture = () => {
 
   }
 
+  const onLectureCreated = (data) => {
+    const { section, newLecture } = data
+    const tempSections = [...sections]
+    tempSections.find(sec => sec._id === section._id).lectures.push({ _id: newLecture._id, title: newLecture.title })
+    setSections(tempSections)
+  }
   return (
     <DragDropContext
       onDragEnd={onDragEnd}
     >
-      <Droppable droppableId='droppable' type='QUESTIONS'>
+      <Droppable droppableId='droppable' type='SECTIONS'>
         {(provided, snapshot) => (
           <Box
             ref={provided.innerRef}
@@ -92,8 +108,8 @@ const Sections = () => {
           >
             {sections.map((section, index) => (
               <Draggable
-                key={section.id}
-                draggableId={section.id}
+                key={section._id}
+                draggableId={section._id}
                 index={index}
               >
                 {(provided, snapshot) => (
@@ -123,7 +139,7 @@ const Sections = () => {
               </Draggable>
             ))}
             {provided.placeholder}
-            <Button variant='outlined' onClick={handleDialogOpen}>+ Add</Button>
+            <Button variant='outlined' onClick={handleDialogOpen}>+ Add Section</Button>
             <Dialog
               fullWidth={true}
               width='lg'
