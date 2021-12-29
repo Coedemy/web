@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { Helmet } from 'react-helmet'
 import { Box, FormControl, Select, MenuItem, TextField, Icon } from '@mui/material'
 
-import { getCategoriesList } from 'app/http/course'
+import { getCategoriesListRequest } from 'app/http/course'
 
 import CoursesList from './CoursesList'
 import SearchBar from './SearchBar'
@@ -12,7 +12,7 @@ import AppLayout from '../Layout/AppLayout'
 const Home = () => {
   const [filterCategory, setFilterCategory] = useState('')
   const [searchKeyword, setSearchKeyword] = useState('')
-  const { data, isLoading } = useQuery('categoriesList', getCategoriesList)
+  const { data, isLoading } = useQuery('categoriesList', getCategoriesListRequest)
 
   const handleChange = (event) => {
     setSearchKeyword('')

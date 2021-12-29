@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Tab, Tabs, Box, TextField, Typography, Button } from '@mui/material'
 import FeedIcon from '@mui/icons-material/Feed'
-import InsertLinkIcon from '@mui/icons-material/InsertLink';
-import { v4 as uuidv4 } from 'uuid'
+import InsertLinkIcon from '@mui/icons-material/InsertLink'
 
 const ContentType = {
-  DOWNLOADABLE: 'DOWNLOADABLE',
-  EXTERNAL: 'ARTICLE'
+  EMPTY: 'EMPTY',
+  DOWNLOADABLE_FILE: 'DOWNLOADABLE_FILE',
+  EXTERNAL_RESOURCE: 'EXTERNAL_RESOURCE'
 }
 
 const TabPanel = ({ children, value, index, ...other }) => {
@@ -35,9 +35,8 @@ const a11yProps = (index) => {
   }
 }
 
-const AddLectureResourses = () => {
+const AddLectureResourses = ({ resource, setResource }) => {
   const [addMode, setAddMode] = useState(false)
-  const [resource, setResource] = useState(null)
   const [tabIndex, setTabIndex] = useState(0)
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
@@ -48,7 +47,7 @@ const AddLectureResourses = () => {
 
   const onSaveExternalUrl = () => {
     setResource({
-      type: ContentType.EXTERNAL,
+      lectureResourceType: ContentType.EXTERNAL_RESOURCE,
       content: { title, url }
     })
     setAddMode(false)
@@ -56,7 +55,7 @@ const AddLectureResourses = () => {
 
   const uploadFile = (e) => {
     setResource({
-      type: ContentType.DOWNLOADABLE,
+      lectureResourceType: ContentType.DOWNLOADABLE_FILE,
       content: e.target.files[0]
     })
     setAddMode(false)
@@ -76,10 +75,10 @@ const AddLectureResourses = () => {
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pb: 2 }}>
                 {
-                  resource.type === ContentType.DOWNLOADABLE ? (
+                  resource.lectureResourceType === ContentType.DOWNLOADABLE_FILE ? (
                     <><FeedIcon fontSize='small' />&nbsp;{resource.content.name}</>
                   ) : (
-                    <><InsertLinkIcon fontSize='small' />&nbsp;{resource.content.title}</>
+                    <><InsertLinkIcon fontSize='small' />&nbsp;<a href={resource.content.url} target='_blank'>{resource.content.title}</a></>
                   )
                 }
               </Box>
@@ -108,7 +107,7 @@ const AddLectureResourses = () => {
                     <Typography>URL</Typography>
                     <TextField sx={{ width: '100%' }} size='small' onChange={(e) => setUrl(e.target.value)} />
                   </Box>
-                  <Box><Button variant='contained' onClick={onSaveExternalUrl}>Add</Button></Box>
+                  <Box><Button variant='contained' disabled={title === '' || url === ''} onClick={onSaveExternalUrl}>Add</Button></Box>
                 </Box>
               </TabPanel>
             </Box>

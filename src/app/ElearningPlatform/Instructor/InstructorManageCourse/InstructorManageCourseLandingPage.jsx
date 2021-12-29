@@ -6,7 +6,7 @@ import { Box, Divider, Typography, TextField, FormControl, MenuItem, Select, But
 import SaveIcon from '@mui/icons-material/Save'
 
 import { languages } from 'app/utils/languages'
-import { getCategoriesList, updateCourseRequest } from 'app/http/course'
+import { getCategoriesListRequest, updateCourseRequest } from 'app/http/course'
 import { MatxLoading } from 'app/components'
 import useUploadImage from 'app/hooks/useUploadImage'
 
@@ -25,7 +25,7 @@ const InstructorManageCourseLandingPage = ({ course }) => {
     mutationKey: 'updateCourseLanding',
   })
 
-  const { data, isLoading } = useQuery('categoriesList', getCategoriesList)
+  const { data, isLoading } = useQuery('categoriesList', getCategoriesListRequest)
   const formRef = useRef()
   const initialValues = {
     title: course.title ?? '',
@@ -42,7 +42,6 @@ const InstructorManageCourseLandingPage = ({ course }) => {
   }
 
   const handleSubmit = async (values) => {
-    console.log(values)
     const formData = new FormData()
     for (let [key, value] of Object.entries(values)) {
       formData.append(key, value)

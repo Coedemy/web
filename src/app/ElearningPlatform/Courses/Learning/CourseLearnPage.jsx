@@ -8,7 +8,7 @@ import { Player, ControlBar, BigPlayButton, ReplayControl, VolumeMenuButton } fr
 import Hls from 'hls.js';
 
 import { MatxLoading, CircularProgressWithLabel } from 'app/components'
-import { searchCourse } from 'app/http/course'
+import { searchCourseRequest } from 'app/http/course'
 import { finishLectureRequest } from 'app/http/user'
 import { loadCurrentLecture, trackTime, startVideo, pauseVideo } from 'app/redux-toolkit/slices/courseSlice'
 
@@ -99,7 +99,7 @@ const CourseLearnPage = () => {
 
   const courseReducer = useSelector(state => state.course)
   const { slug, lectureId } = useParams()
-  const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug }, userId: authReducer.user.userId }))
+  const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourseRequest.bind(this, { queries: { slug }, userId: authReducer.user.userId }))
   const { mutate } = useMutation(finishLectureRequest, {
     onSuccess: autoChangeLecture
   })

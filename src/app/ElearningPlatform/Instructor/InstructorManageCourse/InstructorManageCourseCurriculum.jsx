@@ -7,7 +7,7 @@ import { MatxLoading } from 'app/components'
 import Sections from './components/Sections'
 
 const InstructorManageCourseCurriculum = ({ course }) => {
-  const { data, isLoading } = useQuery('initSections', getCourseSectionsRequest.bind(this, { courseId: course._id }))
+  const { data, isLoading } = useQuery(`initSections${course._id}`, getCourseSectionsRequest.bind(this, { courseId: course._id }))
 
   return (
     <Box sx={{ minHeight: '80vh' }}>

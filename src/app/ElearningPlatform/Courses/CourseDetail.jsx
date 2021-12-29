@@ -6,7 +6,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import crypto from 'crypto'
 
-import { searchCourse } from 'app/http/course'
+import { searchCourseRequest } from 'app/http/course'
 import { MatxLoading } from 'app/components'
 
 import AppLayout from '../Layout/AppLayout'
@@ -18,7 +18,7 @@ import CourseInfo from './CoursesInfo';
 const CourseDetail = () => {
 
   const { slug } = useParams()
-  const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourse.bind(this, { queries: { slug } }))
+  const { data, isLoading } = useQuery(`searchCourse${slug}`, searchCourseRequest.bind(this, { queries: { slug } }))
 
   return (
     <AppLayout>

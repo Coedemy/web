@@ -7,7 +7,7 @@ import {
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import { getCategoriesList, createCourseRequest } from 'app/http/course'
+import { getCategoriesListRequest, createCourseRequest } from 'app/http/course'
 import { MatxLoading } from 'app/components'
 
 const InstructorCreateCourse = ({ label }) => {
@@ -15,7 +15,7 @@ const InstructorCreateCourse = ({ label }) => {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState(0)
-  const { data, isLoading } = useQuery('categoriesList', getCategoriesList)
+  const { data, isLoading } = useQuery('categoriesList', getCategoriesListRequest)
   const { mutate, isLoading: isCreatingCourse } = useMutation(createCourseRequest, {
     mutationKey: 'createCourse',
   })

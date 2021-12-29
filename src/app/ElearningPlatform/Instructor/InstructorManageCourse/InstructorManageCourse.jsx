@@ -4,7 +4,7 @@ import { Switch, Route, useParams } from 'react-router-dom'
 import { Box, Card } from '@mui/material'
 
 import AppLayout from 'app/ElearningPlatform/Layout/AppLayout'
-import { searchCourse } from 'app/http/course'
+import { searchCourseRequest } from 'app/http/course'
 
 import IntructorManageSidebar from './InstructorManageSidebar'
 import InstructorManageCourseIntendedLearner from './InstructorManageCourseIntendedLearner'
@@ -58,13 +58,13 @@ const navItems = [
 
 const InstructorManageCourse = () => {
   const { courseId } = useParams()
-  const { data, isLoading } = useQuery(`searchCourse${courseId}`, searchCourse.bind(this, { queries: { _id: courseId } }))
+  const { data, isLoading } = useQuery(`searchCourse${courseId}`, searchCourseRequest.bind(this, { queries: { _id: courseId } }))
 
   return (
     <AppLayout>
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: '2rem', mt: 4 }}>
         <Box sx={{ flex: 2 }}>
-          <IntructorManageSidebar navItems={navItems} />
+          <IntructorManageSidebar navItems={navItems} course={data?.course} />
         </Box>
         <Card sx={{ flex: 8, mb: 4 }} elevation={3}>
           {

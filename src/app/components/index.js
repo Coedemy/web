@@ -19,6 +19,7 @@ export { MatxLayouts } from './MatxLayout/index'
 export { default as MatxLayout } from './MatxLayout/MatxLayout'
 export { default as MatxTheme } from './MatxTheme/MatxTheme'
 export { default as CircularProgressWithLabel } from './CircularProgressWithLabel/CircularProgressWithLabel'
+export { default as LoadingButton } from './LoadingButton/LoadingButton'
 
 export { default as RectangleAvatar } from './RectangleAvatar/RectangleAvatar'
 export { default as MatxListItem1 } from './MatxListItem1/MatxListItem1'

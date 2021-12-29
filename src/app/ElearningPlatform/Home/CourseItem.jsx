@@ -123,6 +123,7 @@ const CourseInfoModal = ({ course }) => {
 
 const CourseItem = ({ course, index }) => {
 
+  console.log({ course })
   return (
     <LightTooltip TransitionComponent={Zoom} placement={`${(index + 1) % 3 === 0 ? 'left' : 'right'}`} title={<CourseInfoModal course={course} />}>
       <Link to={`/courses/${course.slug}`}>
@@ -157,7 +158,7 @@ const CourseItem = ({ course, index }) => {
               <Box sx={{ marginBottom: '8px' }} />
               <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 {/* <Box>{course.instructor}</Box> */}
-                <Typography>Tran Phuong Duy</Typography>
+                <Typography>{course.instructor ? course.instructor.username : 'Tran Phuong Duy'}</Typography>
                 <CoursePrice>
                   {
                     course.price === 0 ? <Chip label='Free' color='success' /> : `$${course.price}.99`

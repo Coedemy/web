@@ -7,12 +7,12 @@ export const getCoursesList = () => {
   return httpRequest({ endpoint: '/courses' })
 }
 
-export const getCategoriesList = () => {
+export const getCategoriesListRequest = () => {
   console.log('Categories List')
   return httpRequest({ endpoint: '/courses/categories' })
 }
 
-export const searchCourse = ({ queries, userId }) => {
+export const searchCourseRequest = ({ queries, userId }) => {
   console.log('Course Detail')
   return httpRequest({ endpoint: `/courses/detail?${queryString.stringify(queries)}`, method: 'post', bodyParameters: { userId } })
 }
@@ -65,9 +65,9 @@ export const deleteLectureRequest = () => {
   console.log('delete lecture request')
 }
 
-export const updateLecureContentRequest = () => {
+export const updateLecureContentRequest = ({ lectureId, lectureContent, isFormData }) => {
   console.log('update lecture content request')
-
+  return httpRequest({ endpoint: `/courses/lectures/${lectureId}`, method: 'post', bodyParameters: lectureContent, isFormData: true, requireToken: true })
 }
 
 export const updateLecturesOrderRequest = ({ sectionId, sourceIndex, destIndex }) => {
@@ -77,5 +77,10 @@ export const updateLecturesOrderRequest = ({ sectionId, sourceIndex, destIndex }
 
 export const getCourseSectionsRequest = ({ courseId }) => {
   console.log('get course section request')
-  return httpRequest({ endpoint: `/courses/${courseId}/sections`, })
+  return httpRequest({ endpoint: `/courses/${courseId}/sections` })
+}
+
+export const publishCourseRequest = ({ courseId }) => {
+  console.log('publish course')
+  return httpRequest({ endpoint: `/courses/${courseId}/publish`, method: 'post', requireToken: true })
 }
