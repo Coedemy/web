@@ -41,9 +41,10 @@ export const createSectionRequest = ({ courseId, title }) => {
   return httpRequest({ endpoint: `/courses/${courseId}/sections`, method: 'post', bodyParameters: { title }, requireToken: true })
 }
 
-export const deleteSectionRequest = () => {
-  console.log('delete section request')
-
+export const removeSectionRequest = ({ courseId, sectionId }) => {
+  console.log('remove section request')
+  console.log({ courseId, sectionId })
+  return httpRequest({ endpoint: `/courses/${courseId}/sections/${sectionId}`, method: 'delete', requireToken: true })
 }
 
 export const updateSectionContentRequest = () => {
@@ -52,7 +53,6 @@ export const updateSectionContentRequest = () => {
 
 export const updateSectionsOrderRequest = ({ courseId, sourceIndex, destIndex }) => {
   console.log('update sections order request')
-  console.log({ courseId, sourceIndex, destIndex })
   return httpRequest({ endpoint: `/courses/${courseId}/reorder`, method: 'patch', bodyParameters: { sourceIndex, destIndex }, requireToken: true })
 }
 
@@ -61,8 +61,10 @@ export const createLectureRequest = ({ sectionId, title }) => {
   return httpRequest({ endpoint: `/courses/sections/${sectionId}/lectures`, method: 'post', bodyParameters: { title }, requireToken: true })
 }
 
-export const deleteLectureRequest = () => {
-  console.log('delete lecture request')
+export const removeLectureRequest = ({ sectionId, lectureId }) => {
+  console.log({ sectionId, lectureId })
+  console.log('remove lecture request')
+  return httpRequest({ endpoint: `/courses/sections/${sectionId}/lectures/${lectureId}`, method: 'delete', requireToken: true })
 }
 
 export const updateLecureContentRequest = ({ lectureId, lectureContent, isFormData }) => {

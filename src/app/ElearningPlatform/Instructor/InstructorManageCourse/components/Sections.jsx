@@ -4,18 +4,12 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Box, Accordion, AccordionDetails, AccordionSummary, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 
-import { createSectionRequest, createLectureRequest, updateSectionsOrderRequest, updateLecturesOrderRequest } from 'app/http/course'
+import { createSectionRequest, createLectureRequest, updateSectionsOrderRequest, updateLecturesOrderRequest, removeSectionRequest, removeLectureRequest } from 'app/http/course'
+import { ConfirmDeleteDialog } from 'app/components'
 import { Reorder } from './Reorder'
 import Section from './Section'
-
-const getSections = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `sections-${k}`,
-    title: `SECTION ${k}`,
-    content: `Section ${k}`,
-    lectures: [`Build a blog`, `Research a document`, `Connect to database`]
-  }))
 
 const Sections = ({ courseId, initSections }) => {
   const [expanded, setExpanded] = useState(false)
@@ -26,6 +20,9 @@ const Sections = ({ courseId, initSections }) => {
   const { mutate: mutateCreateLecture } = useMutation(createLectureRequest)
   const { mutate: mutateUpdateSectionsOrder } = useMutation(updateSectionsOrderRequest)
   const { mutate: mutateUpdateLecturesOrder } = useMutation(updateLecturesOrderRequest)
+  const { mutate: mutateRemoveSection, isLoading: isRemovingSection } = useMutation(removeSectionRequest)
+  const { mutate: mutateRemoveLecture, isLoading: isRemovingLecture } = useMutation(removeLectureRequest)
+
 
   const handleExpandChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -71,8 +68,18 @@ const Sections = ({ courseId, initSections }) => {
     mutateCreateSection({ courseId, title: sectionTitle }, { onSuccess: onSectionCreated })
   }
 
-  const deleteSection = () => {
 
+  const onSectionRemoved = (data) => {
+    const { sectionId, courseId } = data
+    setSections(sections => {
+      const newSections = sections.filter(sec => sec._id !== sectionId)
+      return newSections
+    })
+  }
+
+  const removeSection = (e, id) => {
+    e.stopPropagation()
+    mutateRemoveSection({ sectionId: id, courseId }, { onSuccess: onSectionRemoved })
   }
 
   const onSectionCreated = (data) => {
@@ -86,8 +93,14 @@ const Sections = ({ courseId, initSections }) => {
     mutateCreateLecture({ sectionId, title: lectureTitle }, { onSuccess: onLectureCreated })
   }
 
-  const deleteLecture = () => {
+  const onLectureRemoved = (data) => {
+    const { lectureId, sectionId } = data
+    setSections(sections => sections.map(section => section._id === sectionId ? ({ ...section, lectures: section.lectures.filter(lec => lec._id !== lectureId) }) : section))
+  }
 
+  const removeLecture = (e, { lectureId, sectionId }) => {
+    e.stopPropagation()
+    mutateRemoveLecture({ lectureId, sectionId }, { onSuccess: onLectureRemoved })
   }
 
   const onLectureCreated = (data) => {
@@ -122,17 +135,26 @@ const Sections = ({ courseId, initSections }) => {
                     sx={{ p: '.2rem', m: '0 0 .2rem 0', backgroundColor: '#f7f9fa' }}
                   >
                     <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1bh-content"
-                      id="panel1bh-header"
+                      expandIcon={<ExpandMoreIcon sx={{
+                        pointerEvents: 'auto'
+                      }} />}
+                      aria-controls='panel1bh-content'
+                      id='panel1bh-header'
                     >
                       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }} {...provided.dragHandleProps}>
                         <Box><span style={{ fontWeight: 'bold' }}>Section {index + 1}:</span> {section.title}</Box>
-                        <MenuIcon sx={{ cursor: 'move' }} />
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <MenuIcon sx={{ cursor: 'move' }} />
+                          <ConfirmDeleteDialog
+                            title='Remove Section'
+                            content='Do you want to remove this section?'
+                            onSubmit={(e) => removeSection(e, section._id)}
+                          />
+                        </Box>
                       </Box>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Section sectionIndex={index} section={section} addLecture={addLecture} />
+                      <Section sectionIndex={index} section={section} addLecture={addLecture} removeLecture={removeLecture} />
                     </AccordionDetails>
                   </Accordion>
                 )}

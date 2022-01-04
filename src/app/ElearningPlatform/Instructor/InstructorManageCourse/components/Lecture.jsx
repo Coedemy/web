@@ -5,10 +5,11 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import MenuIcon from '@mui/icons-material/Menu'
 
+import { ConfirmDeleteDialog } from 'app/components'
+
 import EditLecture from './EditLecture'
 
-const Lecture = ({ lecture, index }) => {
-
+const Lecture = ({ lecture, section, removeLecture, index }) => {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
@@ -16,9 +17,11 @@ const Lecture = ({ lecture, index }) => {
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
         <EditLecture lecture={lecture} />
-        <IconButton aria-label='add an alarm'>
-          <DeleteOutlineIcon />
-        </IconButton>
+        <ConfirmDeleteDialog
+          title='Remove Lecture'
+          content='Do you want to remove this lecture?'
+          onSubmit={(e) => removeLecture(e, { lectureId: lecture._id, sectionId: section._id })}
+        />
         <MenuIcon sx={{ cursor: 'move' }} />
       </Box>
     </>

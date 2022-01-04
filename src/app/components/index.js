@@ -36,6 +36,7 @@ export { default as RichTextEditor } from './RichTextEditor/RichTextEditor'
 export { default as ConfirmationDialog } from './ConfirmationDialog/ConfirmationDialog'
 export { default as MatxProgressBar } from './MatxProgressBar/MatxProgressBar'
 export { default as SimpleCard } from './cards/SimpleCard'
+export { default as ConfirmDeleteDialog } from './ConfirmDeleteDialog/ConfirmDeleteDialog'
 
 export { default as MatxLogo } from './MatxLogo/MatxLogo'
 export { default as FacebookIcon } from './icons/FacebookIcon'

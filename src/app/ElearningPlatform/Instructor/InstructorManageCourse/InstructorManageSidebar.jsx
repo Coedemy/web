@@ -46,6 +46,8 @@ const IntructorManageSidebar = ({ navItems, course }) => {
     setCanPublish(canPublish => !canPublish)
   }
 
+  console.log({ canPublish })
+
   return (
     <Box sx={{ bgcolor: 'background.paper' }}>
       <List component='nav' aria-label='main mailbox folders'>
@@ -66,7 +68,7 @@ const IntructorManageSidebar = ({ navItems, course }) => {
         }
       </List>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button disabled={!course || isLoading} variant='contained' sx={{ flex: 1 }} onClick={publishCourse}>{canPublish ? 'Unpublish' : 'Publish'}</Button>
+        <Button disabled={!course || isLoading} variant='contained' sx={{ flex: 1 }} onClick={publishCourse}>{canPublish ? 'Publish' : 'Unpublish'}</Button>
       </Box>
       <Dialog
         fullWidth={true}

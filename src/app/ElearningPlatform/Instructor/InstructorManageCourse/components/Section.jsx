@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 
 import Lecture from './Lecture'
 
-const Section = ({ section, sectionIndex, addLecture }) => {
+const Section = ({ section, sectionIndex, addLecture, removeLecture }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [lectureTitle, setLectureTitle] = useState('')
   const theme = useTheme()
@@ -46,7 +46,7 @@ const Section = ({ section, sectionIndex, addLecture }) => {
                     }}
                     {...provided.dragHandleProps}
                   >
-                    <Lecture index={index} lecture={lecture} />
+                    <Lecture index={index} lecture={lecture} section={section} removeLecture={removeLecture} />
                   </Card>
                 )}
               </Draggable>

@@ -13,16 +13,27 @@ import AddLectureContent from './AddLectureContent'
 import AddLectureResourses from './AddLectureResourses'
 
 const EditLecture = ({ lecture }) => {
-  console.log({ lecture })
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState(lecture.title || '')
   const [canPreview, setCanPreview] = useState(lecture.canPreview || false)
   // const [content, setContent] = useState()
   const [content, setContent] = useState(lecture.content ? (
-    lecture.content.lectureContentType === 'VIDEO' ? { lectureContentType: 'VIDEO', content: { name: lecture.content.video.title } } : null
+    lecture.content.lectureContentType === 'VIDEO' ? { lectureContentType: 'VIDEO', content: { name: lecture.content.video.title.split('-')[1] } } : null
   ) : null)
   const [resource, setResource] = useState(lecture.resource ? (
-    lecture.resource.lectureResourceType === 'DOWNLOADABLE_FILE' ? { lectureResourceType: 'DOWNLOADABLE_FILE', content: { name: lecture.resource.title, url: lecture.resource.resourceUrl } } : null
+    lecture.resource.lectureResourceType === 'DOWNLOADABLE_FILE' ? {
+      lectureResourceType: 'DOWNLOADABLE_FILE',
+      content: {
+        name: lecture.resource.title.split('-')[1],
+        url: lecture.resource.resourceUrl
+      }
+    } : {
+      lectureResourceType: 'EXTERNAL_RESOURCE',
+      content: {
+        title: lecture.resource.title,
+        url: lecture.resource.resourceUrl
+      }
+    }
   ) : null)
   const [category, setCategory] = useState(0)
   const { data, isLoading } = useQuery('categoriesList', getCategoriesListRequest)
@@ -50,11 +61,15 @@ const EditLecture = ({ lecture }) => {
     formData.append('title', title)
     formData.append('canPreview', canPreview)
     formData.append('resourceType', resource?.lectureResourceType)
-    if (resource?.lectureResourceType === 'EXTERNAL_RESOURCE') formData.append('resourceContent', content?.content)
+    if (resource?.lectureResourceType === 'EXTERNAL_RESOURCE') {
+      formData.append('resourceTitle', resource?.content.title)
+      formData.append('resourceUrl', resource?.content.url)
+    }
+    else {
+      formData.append('resourceFile', resource?.content)
+    }
     formData.append('contentType', content?.lectureContentType)
-
     formData.append('contentFile', content?.content)
-    formData.append('resourceFile', resource?.content)
     mutate({ lectureId: lecture._id, lectureContent: formData, isFormData: true }, { onSuccess: handleClose })
   }
 
