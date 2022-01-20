@@ -28,6 +28,7 @@ export const createCourseRequest = (course) => {
 
 export const updateCourseRequest = ({ courseId, updatedCourse, isFormData }) => {
   console.log('Update Course')
+  console.log({ updatedCourse })
   return httpRequest({ endpoint: `/courses/${courseId}`, method: 'patch', bodyParameters: updatedCourse, isFormData, requireToken: true })
 }
 

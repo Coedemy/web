@@ -42,12 +42,12 @@ const navItems = [
     Component: InstructorManageCoursePricing,
     to: '/pricing'
   },
-  {
-    id: 6,
-    title: 'Promotions',
-    Component: InstructorManageCoursePromotions,
-    to: '/promotions'
-  },
+  // {
+  //   id: 6,
+  //   title: 'Promotions',
+  //   Component: InstructorManageCoursePromotions,
+  //   to: '/promotions'
+  // },
   {
     id: 7,
     title: 'Course messages',

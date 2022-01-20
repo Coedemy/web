@@ -1,19 +1,48 @@
-import React, { useRef } from 'react'
+import React, { useState, useRef } from 'react'
+import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 import { Formik } from 'formik'
 import { Box, Divider, Typography, TextField, Button } from '@mui/material'
 
-import SaveIcon from '@mui/icons-material/Save'
+import { LoadingButton } from 'app/components'
+import { updateCourseRequest } from 'app/http/course'
 
-const InstructorManageCourseLandingPage = () => {
+const message = {
+  title: 'Course Messages',
+  description: 'Write messages to your students (optional) that will be sent automatically when they join or complete your course to encourage students to engage with course content. If you do not wish to send a welcome or congratulations message, leave the text box blank.',
+  welcomeSubtitle: 'Welcome Message',
+  congratulationsSubtitle: 'Congratulations Message'
+}
 
+const InstructorManageCourseLandingPage = ({ course }) => {
+
+  const params = useParams()
+  const [canSave, setCanSave] = useState(false)
   const formRef = useRef()
+
+  const { mutate, isLoading } = useMutation(updateCourseRequest, {
+    mutationKey: 'updateCourseMessage',
+  })
   const initialValues = {
-    welcomeMessage: '',
-    congratulationsMessage: ''
+    welcomeMessage: course.welcomeMessage,
+    congratulationsMessage: course.congratulationsMessage
   }
 
   const handleSubmit = async (values, { isSubmitting }) => {
-    console.log({ values })
+    mutate({ courseId: params.courseId, updatedCourse: values }, {
+      onSuccess: onUpdateSuccessfully
+    })
+  }
+
+  const onUpdateSuccessfully = (data) => {
+    setCanSave(false)
+  }
+
+  const onChange = (handleChange) => {
+    return (e) => {
+      handleChange(e)
+      setCanSave(true)
+    }
   }
 
   return (
@@ -23,11 +52,9 @@ const InstructorManageCourseLandingPage = () => {
           style={{ fontWeight: 600, fontFamily: 'SuisseWorks,Georgia,Times,times new roman,serif,apple color emoji,segoe ui emoji,segoe ui symbol' }}
           variant='h5'
         >
-          Course Messages
+          {message.title}
         </Typography>
-        <Button variant='contained' startIcon={<SaveIcon />} onClick={() => formRef.current.handleSubmit()}>
-          Save
-        </Button>
+        <LoadingButton disabled={!canSave} loading={isLoading} label={isLoading ? 'Saving' : canSave ? 'Save' : 'Saved'} onClick={() => formRef.current.handleSubmit()} />
       </Box>
       <Divider />
       <Formik
@@ -51,16 +78,16 @@ const InstructorManageCourseLandingPage = () => {
 
             <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <Typography>
-                Write messages to your students (optional) that will be sent automatically when they join or complete your course to encourage students to engage with course content. If you do not wish to send a welcome or congratulations message, leave the text box blank.
+                {message.description}
               </Typography>
               <Typography>
-                Welcome Message
+                {message.welcomeSubtitle}
               </Typography>
-              <TextField size='small' name='welcomeMessage' onChange={handleChange} multiline rows={6} />
+              <TextField size='small' name='welcomeMessage' onChange={onChange(handleChange)} defaultValue={values.welcomeMessage} multiline rows={6} />
               <Typography>
-                Congratulations Message
+                {message.congratulationsSubtitle}
               </Typography>
-              <TextField size='small' name='congratulationsMessage' onChange={handleChange} multiline rows={6} />
+              <TextField size='small' name='congratulationsMessage' onChange={onChange(handleChange)} defaultValue={values.congratulationsMessage} multiline rows={6} />
             </Box>
           </form>
         )}

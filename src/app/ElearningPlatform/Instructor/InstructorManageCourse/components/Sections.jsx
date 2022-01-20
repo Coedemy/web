@@ -4,10 +4,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Box, Accordion, AccordionDetails, AccordionSummary, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 
 import { createSectionRequest, createLectureRequest, updateSectionsOrderRequest, updateLecturesOrderRequest, removeSectionRequest, removeLectureRequest } from 'app/http/course'
-import { ConfirmDeleteDialog } from 'app/components'
+import { ConfirmDeleteDialog, LoadingButton } from 'app/components'
 import { Reorder } from './Reorder'
 import Section from './Section'
 

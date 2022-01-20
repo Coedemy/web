@@ -1,23 +1,17 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { Formik, Field, FieldArray } from 'formik'
 import { Box, Divider, Typography, TextField, Button, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
-import SaveIcon from '@mui/icons-material/Save'
 
 import { updateCourseRequest } from 'app/http/course'
-
-const placeholders = [
-  'Example: Define the roles and responsibilities of a project manager',
-  'Example: Estimate project timelines and budgets',
-  'Example: Identify and manage project risks',
-  'Example: Identify and manage project risks'
-]
+import { LoadingButton, FormikInput } from 'app/components'
 
 const InstructorManageCourseIntendedLearner = ({ course }) => {
 
+  const [canSave, setCanSave] = useState(false)
   const params = useParams()
   const { mutate, isLoading } = useMutation(updateCourseRequest, {
     mutationKey: 'updateIntendedLearner',
@@ -31,7 +25,7 @@ const InstructorManageCourseIntendedLearner = ({ course }) => {
   }
 
   const onUpdateSuccessfully = (data) => {
-    console.log('intended learner', data)
+    setCanSave(false)
   }
 
   const handleSubmit = async (values, { isSubmitting }) => {
@@ -40,6 +34,13 @@ const InstructorManageCourseIntendedLearner = ({ course }) => {
     mutate({ courseId: params.courseId, updatedCourse: values }, {
       onSuccess: onUpdateSuccessfully
     })
+  }
+
+  const onChange = (handleChange) => {
+    return (e) => {
+      handleChange(e)
+      setCanSave(true)
+    }
   }
 
   return (
@@ -51,9 +52,7 @@ const InstructorManageCourseIntendedLearner = ({ course }) => {
         >
           Intended learners
         </Typography>
-        <Button variant='contained' startIcon={<SaveIcon />} onClick={() => formRef.current.handleSubmit()}>
-          Save
-        </Button>
+        <LoadingButton disabled={!canSave} loading={isLoading} label={isLoading ? 'Saving' : canSave ? 'Save' : 'Saved'} onClick={() => formRef.current.handleSubmit()} />
       </Box>
       <Divider />
       <Formik
@@ -92,8 +91,8 @@ const InstructorManageCourseIntendedLearner = ({ course }) => {
                       values.learningGoals && values.learningGoals.length > 0 &&
                       values.learningGoals.map((goal, index) => (
                         <Box key={index} sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'row' }}>
-                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`learningGoals.${index}`} defaultValue={goal} spellCheck={false} />
-                          <IconButton color='error' onClick={() => arrayHelpers.remove(index)}>
+                          <Field component={FormikInput} size='small' sx={{ flex: 1 }} onChange={onChange(handleChange)} name={`learningGoals.${index}`} spellCheck={false} />
+                          <IconButton color='error' onClick={onChange(() => arrayHelpers.remove(index))}>
                             <DeleteIcon />
                           </IconButton>
                         </Box>
@@ -122,8 +121,8 @@ const InstructorManageCourseIntendedLearner = ({ course }) => {
                       values.prerequisites && values.prerequisites.length > 0 &&
                       values.prerequisites.map((prerequisites, index) => (
                         <Box key={index} sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'row' }}>
-                          <TextField size='small' sx={{ flex: 1 }} onChange={handleChange} name={`prerequisites.${index}`} defaultValue={prerequisites} spellCheck={false} />
-                          <IconButton color='error' onClick={() => arrayHelpers.remove(index)}>
+                          <Field component={FormikInput} size='small' sx={{ flex: 1 }} onChange={onChange(handleChange)} name={`prerequisites.${index}`} spellCheck={false} />
+                          <IconButton color='error' onClick={onChange(() => arrayHelpers.remove(index))}>
                             <DeleteIcon />
                           </IconButton>
                         </Box>
@@ -142,7 +141,7 @@ const InstructorManageCourseIntendedLearner = ({ course }) => {
                 Write a clear description of the intended learners for your course who will find your course content valuable.
                 This will help you attract the right learners to your course.
               </Typography>
-              <TextField size='small' name='target' onChange={handleChange} defaultValue={values.target} spellCheck={false} />
+              <TextField size='small' name='target' onChange={onChange(handleChange)} defaultValue={values.target} spellCheck={false} />
             </Box>
           </form>
         )}

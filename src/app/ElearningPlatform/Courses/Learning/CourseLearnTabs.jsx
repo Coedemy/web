@@ -45,9 +45,10 @@ function a11yProps(index) {
   }
 }
 
-const CourseLearnTabs = ({ course, lecture }) => {
+const CourseLearnTabs = ({ course, isPurchasedByUser, lecture }) => {
   const theme = useTheme()
   const [value, setValue] = React.useState(0)
+  console.log({ course })
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -57,22 +58,41 @@ const CourseLearnTabs = ({ course, lecture }) => {
     setValue(index)
   }
 
+  console.log({ isPurchasedByUser })
+
   return (
     <Box sx={{ bgcolor: 'background.paper' }}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor='primary'
-        textColor='inherit'
-        aria-label='full width tabs example'
-        sx={{ borderBottom: '2px solid lightgray' }}
-      >
-        <Tab label='Overview' {...a11yProps(0)} />
-        <Tab label='Q & A' {...a11yProps(1)} />
-        <Tab label='Notes' {...a11yProps(2)} />
-        <Tab label='Announcements' {...a11yProps(3)} />
-        <Tab label='Rating' {...a11yProps(4)} />
-      </Tabs>
+      <>
+        {
+          isPurchasedByUser ? (
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor='primary'
+              textColor='inherit'
+              aria-label='full width tabs example'
+              sx={{ borderBottom: '2px solid lightgray' }}
+            >
+              <Tab label='Overview' {...a11yProps(0)} />
+              <Tab label='Q & A' {...a11yProps(1)} />
+              <Tab label='Notes' {...a11yProps(2)} />
+              <Tab label='Announcements' {...a11yProps(3)} />
+              <Tab label='Rating' {...a11yProps(4)} />
+            </Tabs>
+          ) : (
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor='primary'
+              textColor='inherit'
+              aria-label='full width tabs example'
+              sx={{ borderBottom: '2px solid lightgray' }}
+            >
+              <Tab label='Overview' {...a11yProps(0)} />
+            </Tabs>
+          )
+        }
+      </>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}

@@ -1,18 +1,60 @@
-import React, { useRef } from 'react'
+import React, { useState, useRef } from 'react'
+import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 import { Formik } from 'formik'
 import { Box, Divider, Typography, Button, FormControl, Select, MenuItem } from '@mui/material'
-import SaveIcon from '@mui/icons-material/Save'
 
-const InstructorManageCoursePricing = () => {
+import { LoadingButton } from 'app/components'
+import { updateCourseRequest } from 'app/http/course'
 
+const message = {
+  title: 'Pricing',
+  subtitle: 'Course Price Tier',
+  description1: "Please select the price tier for your course below and click 'Save'. The list price that students will see in other currencies is determined using the price tier matrix.",
+  description2: 'If you intend to offer your course for free, the total length of video content must be less than 2 hours.',
+}
+
+const InstructorManageCoursePricing = ({ course }) => {
+
+  const params = useParams()
+  const [canSave, setCanSave] = useState(false)
   const formRef = useRef()
   const initialValues = {
     currency: 'USD',
-    price: 0
+    price: course.price || 0
   }
 
+  const { mutate, isLoading } = useMutation(updateCourseRequest, {
+    mutationKey: 'updateCoursePricing',
+  })
+
   const handleSubmit = async (values, { isSubmitting }) => {
-    console.log({ values })
+    mutate({ courseId: params.courseId, updatedCourse: values }, {
+      onSuccess: onUpdateSuccessfully
+    })
+  }
+
+  const onUpdateSuccessfully = (data) => {
+    setCanSave(false)
+  }
+
+  const onChange = (handleChange) => {
+    return (e) => {
+      handleChange(e)
+      setCanSave(true)
+    }
+  }
+
+  const renderPricingList = () => {
+    const NUMBER_OF_GENERATED_PRICE = 37
+    const MIN_PRICE = 19
+    const STEP = 5
+    const PROMOTION = 0.99
+
+    const pricingList = Array.from(Array(NUMBER_OF_GENERATED_PRICE).keys())
+    const calculatePrice = (price) => MIN_PRICE + STEP * price + PROMOTION
+
+    return pricingList.map(price => <MenuItem key={price} value={calculatePrice(price)}>{calculatePrice(price)}</MenuItem>)
   }
 
   return (
@@ -22,11 +64,9 @@ const InstructorManageCoursePricing = () => {
           style={{ fontWeight: 600, fontFamily: 'SuisseWorks,Georgia,Times,times new roman,serif,apple color emoji,segoe ui emoji,segoe ui symbol' }}
           variant='h5'
         >
-          Pricing
+          {message.title}
         </Typography>
-        <Button variant='contained' startIcon={<SaveIcon />} onClick={() => formRef.current.handleSubmit()}>
-          Save
-        </Button>
+        <LoadingButton disabled={!canSave} loading={isLoading} label={isLoading ? 'Saving' : canSave ? 'Save' : 'Saved'} onClick={() => formRef.current.handleSubmit()} />
       </Box>
       <Divider />
       <Formik
@@ -49,30 +89,24 @@ const InstructorManageCoursePricing = () => {
           <form onSubmit={handleSubmit}>
             <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <Typography>
-                Course Price Tier
+                {message.subtitle}
               </Typography>
               <Typography>
-                Please select the price tier for your course below and click 'Save'. The list price that students will see in other currencies is determined using the price tier matrix.
+                {message.description1}
               </Typography>
               <Typography>
-                If you intend to offer your course for free, the total length of video content must be less than 2 hours.
+                {message.description2}
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem' }}>
                 <FormControl size='small'>
-                  <Select name='currency' defaultValue='USD' onChange={handleChange}>
-                    <MenuItem value='VND'>VND</MenuItem>
-                    <MenuItem value='USD'>USD</MenuItem>
-                    <MenuItem value='EUR'>EUR</MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl size='small'>
-                  <Select name='price' defaultValue={0} onChange={handleChange}>
+                  <Select name='price' value={values.price} onChange={onChange(handleChange)}>
                     <MenuItem value={0}>Free</MenuItem>
                     {
-                      Array.from(Array(37).keys()).map(price => <MenuItem key={price} value={19 + 5 * price + 0.99}>{19 + 5 * price + 0.99}</MenuItem>)
+                      renderPricingList()
                     }
                   </Select>
                 </FormControl>
+                <Box>VND</Box>
               </Box>
             </Box>
           </form>

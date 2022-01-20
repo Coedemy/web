@@ -37,6 +37,7 @@ export { default as ConfirmationDialog } from './ConfirmationDialog/Confirmation
 export { default as MatxProgressBar } from './MatxProgressBar/MatxProgressBar'
 export { default as SimpleCard } from './cards/SimpleCard'
 export { default as ConfirmDeleteDialog } from './ConfirmDeleteDialog/ConfirmDeleteDialog'
+export { default as FormikInput } from './FormikInput/FormikInput'
 
 export { default as MatxLogo } from './MatxLogo/MatxLogo'
 export { default as FacebookIcon } from './icons/FacebookIcon'

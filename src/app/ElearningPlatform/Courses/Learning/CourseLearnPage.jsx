@@ -228,7 +228,7 @@ const CourseLearnPage = () => {
             backgroundColor: '#f7f7f7',
             opacity: lectureStatus === LectureStatus.VIDEO ? 1 : 0
           }}>
-          {/* <Player
+          <Player
             ref={playerRef}
             poster={poster}
             fluid={false}
@@ -241,19 +241,19 @@ const CourseLearnPage = () => {
               <VolumeMenuButton vertical />
             </ControlBar>
             <BigPlayButton position='center' />
-          </Player> */}
-          <Player ref={playerRef}>
+          </Player>
+          {/* <Player ref={playerRef}>
             <HLSSource
               isVideoChild
               src="//d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8"
             />
-          </Player>
+          </Player> */}
         </Box>
         {/* } */}
 
 
         <Box sx={{ pl: 3, pr: 3 }}>
-          {isLoading ? <MatxLoading /> : <CourseLearnTabs course={data.course} lecture={currentLecture} />}
+          {isLoading ? <MatxLoading /> : <CourseLearnTabs course={data.course} lecture={currentLecture} isPurchasedByUser={data.isPurchasedByUser} />}
         </Box>
       </Scrollable>
       <Scrollable sx={{ flex: 1, backgroundColor: 'white', padding: '2px', }} ref={sectionsContainerRef}>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Button, CircularProgress } from '@mui/material'
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
   buttonProgress: {
@@ -12,14 +12,15 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
   }
 }))
 
-const LoadingButton = ({ loading, label, onClick }) => {
+const LoadingButton = (props) => {
+  const { loading, label, onClick } = props
   const classes = useStyles()
   return (
     <div className='relative'>
       <Button
         variant='contained'
         color='primary'
-        disabled={loading}
+        disabled={label === 'Saved'}
         onClick={onClick}
       >
         {label}
