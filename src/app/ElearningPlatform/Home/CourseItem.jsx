@@ -160,7 +160,7 @@ const CourseItem = ({ course, index }) => {
                 <Typography>{course.instructor ? course.instructor.username : 'Tran Phuong Duy'}</Typography>
                 <CoursePrice>
                   {
-                    course.price === 0 ? <Chip label='Free' color='success' /> : `$${course.price}.99`
+                    (course.price === 0 || !course.price) ? <Chip label='Free' color='success' /> : `$${course.price}`
                   }
                 </CoursePrice>
               </Box>

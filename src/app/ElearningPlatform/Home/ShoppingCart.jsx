@@ -22,8 +22,9 @@ const RatingNumber = styled.strong`
   margin-right: 8px;
 `
 
-const CartItemsList = ({ courses }) => {
+const CartItemsList = ({ courses, setTotalCost }) => {
 
+	const [total, setTotal] = useState(0)
 	const { mutate, isLoading } = useMutation(updateCartRequest, {
 		mutationKey: 'updateCart',
 	})
@@ -33,6 +34,20 @@ const CartItemsList = ({ courses }) => {
 		dispatch(removeFromCart({ id: courseId }))
 		mutate({ courseId, updateType: 'remove' })
 	}
+
+	const calculateTotalCost = () => {
+		if (courses.length < 1) return 0
+		if (courses.length === 1) return courses[0].price
+
+		const totalCost = courses.reduce((a, b) => a.price + b.price, 0)
+		return totalCost
+	}
+
+	useEffect(() => {
+		if (courses.length > 0) {
+			setTotalCost(calculateTotalCost())
+		}
+	}, [courses.length])
 
 	return (
 		<Grid container spacing={2} style={{ border: '1px solid lightgray', backgroundColor: 'white', marginTop: 5 }}>
@@ -97,7 +112,7 @@ const CartItemsList = ({ courses }) => {
 												</Grid>
 												<Grid item lg={2} md={2} sm={2} xs={2}>
 													<Box sx={{ display: 'flex', fontWeight: 'bold', flexDirection: 'row', marginLeft: 5, fontSize: 18 }}>${course.price}</Box>
-													<Box sx={{ display: 'flex', fontWeight: 'bold', flexDirection: 'row', textDecoration: 'line-through', alignItems: 'center', marginLeft: 5 }}>${course.oldprice}</Box>
+													{/* <Box sx={{ display: 'flex', fontWeight: 'bold', flexDirection: 'row', textDecoration: 'line-through', alignItems: 'center', marginLeft: 5 }}>${course.oldprice}</Box> */}
 												</Grid>
 											</Grid>
 
@@ -115,7 +130,7 @@ const CartItemsList = ({ courses }) => {
 	)
 }
 
-const CheckoutCard = () => {
+const CheckoutCard = ({ total }) => {
 	const [canCheckout, setCanCheckout] = useState(false)
 	const [panelOpen, setPanelOpen] = useState(false)
 	const history = useHistory()
@@ -137,19 +152,19 @@ const CheckoutCard = () => {
 	}, [authReducer.isLoading])
 
 	return (
-		<Grid sx={{ p: 4 }}>
+		<Grid sx={{ p: 4, width: '100%' }}>
 			<Box sx={{ mt: 2 }} />
-			<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center' }}>Total</Typography>
-			<Typography variant='h4' sx={{ fontWeight: 'bold', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>$9</Typography>
-			<Typography variant='h6' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', textDecoration: 'line-through' }}>$12</Typography>
-			<Typography variant='h6' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>88% off</Typography>
+			<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center' }}>Pricing</Typography>
+			<Typography variant='h4' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mt: 2 }}><Box sx={{ fontWeight: 'bold', textAlign: 'center', mr: 2 }}>Total: </Box>${total}</Typography>
+			{/* <Typography variant='h6' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', textDecoration: 'line-through' }}>$12</Typography>
+			<Typography variant='h6' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>88% off</Typography> */}
 			<Box sx={{ mt: 2 }} />
 			<Button disabled={!canCheckout} variant='contained' style={{ textAlign: 'center', fontWeight: 'bold', width: '100%', display: 'block' }} onClick={handleCheckoutClick}>Checkout</Button>
 			{
 				!canCheckout ? <p className='text-error'>You need to login to checkout!</p> : <></>
 			}
 			<Box sx={{ mt: 2 }} />
-			<Typography variant='h6' style={{ fontWeight: 'bold', flexDirection: 'row' }}>Promotions</Typography>
+			{/* <Typography variant='h6' style={{ fontWeight: 'bold', flexDirection: 'row' }}>Promotions</Typography>
 			<Box sx={{ display: 'flex', flexDirection: 'row' }}>
 				<Typography sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					<IconButton>
@@ -158,15 +173,15 @@ const CheckoutCard = () => {
 					CYBER21
 				</Typography>
 				<Typography sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>&nbsp;is applied</Typography>
-			</Box>
+			</Box> */}
 			<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-				<TextField
+				{/* <TextField
 					sx={{ flex: 1, mr: 2 }}
 					variant='outlined'
 					placeholder='Code'
 					size='small'
 				/>
-				<Button variant='contained' style={{ textAlign: 'center', fontWeight: 'bold' }}>Apply</Button>
+				<Button variant='contained' style={{ textAlign: 'center', fontWeight: 'bold' }}>Apply</Button> */}
 			</Box>
 		</Grid>
 	)
@@ -190,6 +205,7 @@ const ShoppingCart = () => {
 	const [totalCost, setTotalCost] = useState(0)
 	const userReducer = useSelector(state => state.user)
 
+	// console.log(totalCost)
 	return (
 		<Box>
 			<Grid style={{ backgroundColor: '#212944', color: 'white', height: 150, marginTop: 5, paddingTop: 30 }}>
@@ -199,12 +215,12 @@ const ShoppingCart = () => {
 				<Grid container spacing={2}>
 					<Grid item xs={9}>
 						<Typography variant='h5' style={{ fontWeight: 'bold', flexDirection: 'row', marginTop: 30 }}>{userReducer.cart.length} Courses in Cart</Typography>
-						{userReducer.cart.length === 0 ? <NoItemCard /> : <CartItemsList courses={userReducer.cart} />}
+						{userReducer.cart.length === 0 ? <NoItemCard /> : <CartItemsList courses={userReducer.cart} setTotalCost={setTotalCost} />}
 					</Grid>
 					{userReducer.cart.length === 0 ? <></> :
 						(<Grid item xs={3}>
 							<Grid container style={{ border: '1px solid lightgray', marginLeft: 15, marginTop: 66 }}>
-								<CheckoutCard />
+								<CheckoutCard total={totalCost} />
 							</Grid >
 						</Grid>)}
 				</Grid>

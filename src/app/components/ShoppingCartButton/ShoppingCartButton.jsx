@@ -161,7 +161,7 @@ function ShoppingCartButton({ container }) {
                         </CourseTitle>
                         <Typography className='text-left mb-1'>Tran Phuong Duy</Typography>
                         <h6 className='text-left text-14' style={{ color: orange }}>
-                          ${course.price}.99
+                          ${course.price}
                         </h6>
                       </div>
                     </Link>
@@ -177,7 +177,7 @@ function ShoppingCartButton({ container }) {
               ))}
             </div>
 
-            <Box sx={{ p: 2 }}><h4>Total: ${totalCost}.99</h4></Box>
+            <Box sx={{ p: 2 }}><h4>Total: ${totalCost}</h4></Box>
             <Button
               className='w-full border-radius-0'
               variant='contained'

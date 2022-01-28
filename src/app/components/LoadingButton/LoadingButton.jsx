@@ -18,6 +18,7 @@ const LoadingButton = (props) => {
   return (
     <div className='relative'>
       <Button
+        {...props}
         variant='contained'
         color='primary'
         disabled={label === 'Saved'}

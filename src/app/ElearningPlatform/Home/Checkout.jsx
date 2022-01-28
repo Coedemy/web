@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useMutation } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
-import { Box, Checkbox, Divider, Rating, Button, Radio, FormControlLabel, Grid, RadioGroup, MenuItem, Typography, FormControl, Select } from '@mui/material'
+import { Box, Checkbox, Divider, Rating, Button, TextField, Grid, RadioGroup, MenuItem, Typography, FormControl, Select } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import styled from 'styled-components'
 
@@ -13,6 +13,7 @@ import { checkoutRequest } from 'app/http/course'
 import { checkoutSuccess } from 'app/redux-toolkit/slices/userSlice'
 
 import AppLayout from '../Layout/AppLayout'
+import { LoadingButton } from 'app/components'
 
 
 
@@ -95,15 +96,21 @@ const OrderItem = ({ course }) => {
 					</div>
 				</Grid>
 			</Grid>
-		</div>
+		</div >
 	)
 }
 
 const Checkout = () => {
 	const [curCategory, setCurCategory] = useState('')
+	const [totalCost, setTotalCost] = useState(0)
+	const [checking, setChecking] = useState(false)
 	const userReducer = useSelector(state => state.user)
 	const history = useHistory()
 	const dispatch = useDispatch()
+
+	const [nameOnCard, setNameOnCard] = useState('')
+	const [postalCode, setPostalCode] = useState('')
+	const [cardNumber, setCardNumber] = useState('')
 
 	const { mutate, isLoading } = useMutation(checkoutRequest, {
 		mutationKey: 'checkout'
@@ -115,6 +122,7 @@ const Checkout = () => {
 		history.push('/my-courses/learning')
 	}
 
+
 	useEffect(() => {
 
 		//redirect if there is no item in cart
@@ -123,12 +131,22 @@ const Checkout = () => {
 		}
 	}, [userReducer.isLoading])
 
+	useEffect(() => {
+		if (userReducer.cart.length > 0) {
+			setTotalCost(calculateTotalCost(userReducer.cart))
+		}
+		else setTotalCost(0)
+	}, [userReducer.cart.length])
+
 	const onCheckout = (e) => {
-		console.log('checkout')
 		if (userReducer.cart.length !== 0) {
-			mutate({ cart: userReducer.cart }, {
-				onSuccess: onCheckoutSuccessfully
-			})
+			setChecking(true)
+			setTimeout(() => {
+				mutate({ cart: userReducer.cart }, {
+					onSuccess: onCheckoutSuccessfully
+				})
+				setChecking(false)
+			}, 2000)
 		}
 	}
 
@@ -142,6 +160,14 @@ const Checkout = () => {
 			[event.target.name]: event.target.value,
 		})
 	}
+
+	const calculateTotalCost = (courses) => {
+		if (!courses || courses.length === 0) return 0
+		if (courses.length === 1) return courses[0].price
+		const totalCost = courses.reduce((a, b) => a.price + b.price)
+		return totalCost
+	}
+
 	const [state, setState] = useState({
 		date: new Date(),
 	})
@@ -167,7 +193,7 @@ const Checkout = () => {
 					<Grid item xs={8}>
 						<Typography variant='h6' style={{ fontWeight: 'bold', flexDirection: 'row', marginTop: 20 }}>Billing Address</Typography>
 						<Box>
-							<FormControl sx={{ minWidth: 220, mt: 1, nb: 1 }}>
+							{/* <FormControl sx={{ minWidth: 220, mt: 1, nb: 1 }}>
 								<Select
 									value={curCategory}
 									onChange={handleChange}
@@ -180,10 +206,10 @@ const Checkout = () => {
 									</MenuItem>
 									{nations.map(c => <MenuItem key={c.id} sx={{ backgroundColor: 'white' }} value={c.id}>{c.title}</MenuItem>)}
 								</Select>
-							</FormControl>
+							</FormControl> */}
 						</Box>
 						<Box container spacing={2} style={{ border: '1px solid lightgray', backgroundColor: 'white', padding: 32, marginTop: 10 }}>
-							<RadioGroup className='mb-12' value={gender || ''} name='gender' onChange={handleChangeTick} row>
+							{/* <RadioGroup className='mb-12' value={gender || ''} name='gender' onChange={handleChangeTick} row>
 								<FormControlLabel
 									value='New Payment Cart'
 									control={<Radio color='secondary' />}
@@ -196,72 +222,77 @@ const Checkout = () => {
 									label='Paypal'
 									labelPlacement='end'
 								/>
-							</RadioGroup>
-							<ValidatorForm onError={() => null}>
+							</RadioGroup> */}
+							<Box>
 								<Grid container spacing={6}>
 									<Grid item lg={6} md={6} sm={12} xs={12}>
-										<TextValidator
+										<TextField
+											size='small'
 											className='mb-4 w-full'
 											label='Name on Card'
-											onChange={handleChange}
+											onChange={(e) => {
+												setNameOnCard(e.target.value)
+											}}
+											spellCheck={false}
 											type='text'
 											name='Name on Card'
-											value={username || ''}
-											validators={[
-												'required',
-												'minStringLength: 4',
-												'maxStringLength: 9',
-											]}
-											errorMessages={['this field is required']}
+											value={nameOnCard}
+										// validators={[
+										// 	'required',
+										// 'minStringLength: 4',
+										// 'maxStringLength: 9',
+										// ]}
+										// errorMessages={['this field is required']}
 										/>
-										<TextValidator
+										<TextField
+											size='small'
 											className='mb-4 w-full'
-											label='Cart Number'
-											onChange={handleChange}
+											label='Credit Card Number'
+											onChange={(e) => {
+												setCardNumber(e.target.value)
+											}}
+											spellCheck={false}
 											type='text'
-											name='Cart Number'
-											value={firstName || ''}
-											validators={['required']}
-											errorMessages={['this field is required']}
+											name='Card Number'
+											value={cardNumber}
+										// validators={['required']}
+										// errorMessages={['this field is required']}
 										/>
-										<TextValidator
-											className='mb-4 w-full'
-											label='MM/YY'
-											onChange={handleChange}
-											type='text'
-											name='MM/YY'
-											value={email || ''}
-											validators={['required', 'isEmail']}
-											errorMessages={[
-												'this field is required',
-											]}
-										/>
+
 									</Grid>
 									<Grid item lg={6} md={6} sm={12} xs={12}>
-										<TextValidator
-											className='mb-4 w-full'
-											label='Security'
-											onChange={handleChange}
-											type='text'
-											name='Security'
-											value={mobile || ''}
-											validators={['required']}
-											errorMessages={['this field is required']}
-										/>
-										<TextValidator
+										<TextField
+											size='small'
 											className='mb-4 w-full'
 											label='Zip/Postal Code'
-											onChange={handleChange}
+											onChange={(e) => {
+												setPostalCode(e.target.value)
+											}}
+											spellCheck={false}
 											name='text'
 											type='Zip/Postal Code'
-											value={password || ''}
-											validators={['required']}
-											errorMessages={['this field is required']}
+											value={postalCode}
+										// validators={['required']}
+										// errorMessages={['this field is required']}
+										/>
+										<TextField
+											size='small'
+											className='mb-4 w-full'
+											label='MM/YY'
+											type='text'
+											name='MM/YY'
+											disabled
+											spellCheck={false}
+											value={(new Date()).toLocaleDateString()}
+										// validators={['required', 'isEmail']}
+										// errorMessages={[
+										// 	'this field is required',
+										// ]}
 										/>
 									</Grid>
 								</Grid>
-								<FormControlLabel control={<Checkbox />} label='Remember this card' />
-							</ValidatorForm>
+								{/* <FormControlLabel control={<Checkbox />} label='Remember this card' /> */}
+							</Box>
 						</Box>
 						<Typography variant='h6' style={{ fontWeight: 'bold', flexDirection: 'row', marginTop: 20 }}>Order Detail</Typography>
 						<Box container spacing={2} style={{ border: '1px solid lightgray', backgroundColor: 'white', padding: 32, marginTop: 10 }}>
@@ -288,7 +319,7 @@ const Checkout = () => {
 						</Box >
 					</Grid>
 					<Grid item xs={4}>
-						<Box container spacing={0} style={{ border: '1px solid lightgray', marginTop: 110 }}>
+						<Box container spacing={0} style={{ border: '1px solid lightgray', marginTop: 60 }}>
 							<Box sx={{ m: 3 }}>
 								<Box item xs={12}>
 									<Typography variant='h3' style={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '20px' }}>Summary</Typography>
@@ -297,15 +328,15 @@ const Checkout = () => {
 											<Grid container>
 												<Grid item lg={9} md={9} sm={9} xs={9}>
 													<h6 style={{ fontSize: '20px' }}>
-														Original price:
+														Price:
 													</h6>
 												</Grid>
 												<Grid item lg={3} md={3} sm={3} xs={3}>
-													<h6 style={{ fontSize: '20px', position: 'right' }}>$169.98</h6>
+													<h6 style={{ fontSize: '20px', position: 'right' }}>${calculateTotalCost(userReducer.cart)}</h6>
 												</Grid>
 											</Grid>
 										</div>
-										<div>
+										{/* <div>
 											<Grid container>
 												<Grid item lg={9} md={9} sm={9} xs={9}>
 													<h6 style={{ fontSize: '20px' }}>
@@ -316,7 +347,7 @@ const Checkout = () => {
 													<h6 style={{ fontSize: '20px' }}>-$50.00</h6>
 												</Grid>
 											</Grid>
-										</div>
+										</div> */}
 									</Grid>
 									<Divider />
 									<Box sx={{ marginTop: 2 }} />
@@ -329,14 +360,16 @@ const Checkout = () => {
 													</h6>
 												</Grid>
 												<Grid item lg={3} md={3} sm={3} xs={3}>
-													<h6 style={{ fontSize: '20px', position: 'right' }}>$19.98</h6>
+													<h6 style={{ fontSize: '20px', position: 'right' }}>${calculateTotalCost(userReducer.cart)}</h6>
 												</Grid>
 											</Grid>
 										</div>
 									</Grid>
 									<Typography sx={{ fontSize: 10, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>Coedemy is required by law to collect applicable transaction taxes for purchases made in certain tax jurisdictions.</Typography>
 									<Box sx={{ marginBottom: 4 }} />
-									<Button variant='contained' style={{ textAlign: 'center', fontWeight: 'bold', display: 'block', width: '100%' }} onClick={onCheckout}>Complete Payment</Button>
+									{/* <Button variant='contained' style={{ textAlign: 'center', fontWeight: 'bold', display: 'block', width: '100%' }} onClick={onCheckout}>Complete Payment</Button> */}
+
+									<LoadingButton loading={checking} label='Complete Payment' onClick={onCheckout} style={{ width: '100%' }} />
 									<Box sx={{ marginBottom: 4 }} />
 								</Box>
 							</Box>
