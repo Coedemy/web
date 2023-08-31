@@ -3,7 +3,7 @@ import React from 'react'
 const InstructorCommunication = () => {
   return (
     <div>
-      This is InstructorCommunity
+      This is page is under developed
     </div>
   )
 }

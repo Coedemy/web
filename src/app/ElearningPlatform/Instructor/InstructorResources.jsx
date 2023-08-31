@@ -3,7 +3,7 @@ import React from 'react'
 const InstructorResources = () => {
   return (
     <div>
-      This is InstructorResources
+      This page is under developed
     </div>
   )
 }

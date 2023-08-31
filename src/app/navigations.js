@@ -10,11 +10,11 @@ export const navigations = [
     path: '/instructor/communication',
     icon: 'comment'
   },
-  {
-    name: 'Performance',
-    path: '/instructor/performance',
-    icon: 'bar_chart'
-  },
+  // {
+  //   name: 'Performance',
+  //   path: '/instructor/performance',
+  //   icon: 'bar_chart'
+  // },
   {
     name: 'Tools',
     path: '/instructor/tools',

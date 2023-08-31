@@ -15,11 +15,11 @@ const instructorRouter = [
     exact: true,
     component: React.lazy(() => import('./InstructorCommunication'))
   },
-  {
-    path: '/instructor/performances',
-    exact: true,
-    component: React.lazy(() => import('./InstructorPerformance'))
-  },
+  // {
+  //   path: '/instructor/performances',
+  //   exact: true,
+  //   component: React.lazy(() => import('./InstructorPerformance'))
+  // },
   {
     path: '/instructor/resources',
     exact: true,
